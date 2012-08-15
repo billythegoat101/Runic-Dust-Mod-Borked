@@ -1,0 +1,32 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.minecraft.src.dustmod;
+
+import net.minecraft.src.Entity;
+import net.minecraft.src.RenderFallingSand;
+import net.minecraft.src.RenderManager;
+
+/**
+ *
+ * @author billythegoat101
+ */
+public class RenderEntityBlock extends RenderFallingSand
+{
+	
+	public RenderEntityBlock() {
+    	this.setRenderManager(RenderManager.instance);
+	}
+    @Override
+    public void doRender(Entity ent, double par2, double par4, double par6, float par8, float par9)
+    {
+        if (!((EntityBlock)ent).lingering) //dont want it to be visible if lingering
+        {
+            if (((EntityBlock)ent).blockID != 0)
+            {
+                super.doRender(ent, par2, par4, par6, par8, par9);
+            }
+        }
+    }
+}
