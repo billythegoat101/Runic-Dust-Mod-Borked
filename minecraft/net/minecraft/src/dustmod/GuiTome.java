@@ -89,7 +89,11 @@ public class GuiTome extends GuiScreen
     }
 
 
-    String[] derp = new String[]{"Hi", "I should get rid of this page...", "Hope you enjoy!", "Make some runes!","Space for rent.", "Modders: Make custom runes!", "Insert joke here.","Direwolf20 is cool!","Notch is cool!","Jeb_ is cool!", "Stop annoying LexManos!","Go play Thaumcraft.", "Don't play tekkit!"};
+    String[] derp = new String[]{"Hi", "I should get rid of this page...", 
+    		"Hope you enjoy!", "Make some runes!","Space for rent.", 
+    		"Modders: Make custom runes!", "Insert joke here.","Direwolf20 is cool!",
+    		"Notch is cool!","Jeb_ is cool!", "Stop annoying LexManos!","Go play Thaumcraft.", 
+    		"Don't play tekkit!", "I don't understand GITHUB"};
     int randAuthor = (int)(Math.random()*derp.length);
     /**
      * Draw the foreground layer for the GuiContainer (everythin in front of the items)
