@@ -93,7 +93,7 @@ public class GuiTome extends GuiScreen
     		"Hope you enjoy!", "Make some runes!","Space for rent.", 
     		"Modders: Make custom runes!", "Insert joke here.","Direwolf20 is cool!",
     		"Notch is cool!","Jeb_ is cool!", "Stop annoying LexManos!","Go play Thaumcraft.", 
-    		"Don't play tekkit!", "I don't understand GITHUB"};
+    		"Don't play tekkit!"};
     int randAuthor = (int)(Math.random()*derp.length);
     /**
      * Draw the foreground layer for the GuiContainer (everythin in front of the items)

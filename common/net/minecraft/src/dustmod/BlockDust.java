@@ -680,7 +680,7 @@ public class BlockDust extends BlockContainer {
 		}
 
 		// System.out.println("ASNASO " + Arrays.deepToString(map));
-		DustMod.proxy.callShape(p.worldObj, (double) sx + (double) dx / 2
+		DustManager.callShape(p.worldObj, (double) sx + (double) dx / 2
 				+ 0.5D, j + 1D, (double) sz + (double) dz / 2 + 0.5D, map, n,
 				(p == null) ? null : p.username);
 	}

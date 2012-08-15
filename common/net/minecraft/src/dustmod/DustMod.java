@@ -222,7 +222,7 @@ public class DustMod {
 //		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		
         proxy.registerRenderInformation();
-        proxy.registerAllShapes();
+        DustManager.registerDefaultShapes();
         
         MinecraftForge.EVENT_BUS.register(this);
 	}
