@@ -71,44 +71,6 @@ public class CommonProxy implements IGuiHandler{
 	public void registerRenderInformation() {
 	}
 
-	protected HashMap<Long, EntityDust> entMap;
-	protected long nextDustEntID;
-
-	public Long getNextDustEntityID() {
-//		System.out.println("Get dust id!");
-		nextDustEntID++;
-		if (DustMod.propGeneral == null) {
-			System.out.println("[DustMod] General property file is null!");
-		}
-		DustMod.propGeneral.setProperty("entDustNID", "" + nextDustEntID);
-
-		try {
-			DustMod.propGeneral.store(new FileOutputStream(DustMod.generalFS),
-					null);
-		} catch (Exception e) {
-			FMLLog.log(Level.SEVERE, e,
-					"[DustMod]: Error loading world properties.");
-		}
-
-		return nextDustEntID - 1;
-	}
-
-	public void registerEntityDust(EntityDust ent, long id) {
-		entMap.put(id, ent);
-	}
-
-	public EntityDust getDustAtID(long id) {
-		if (entMap.containsKey(id)) {
-			return entMap.get(id);
-		} else {
-			return null;
-		}
-	}
-
-	public boolean extendsPoweredEvent(DustEvent eventInstance) {
-		return false;
-	}
-
 	public void resetPlayerTomePage() {
 	}
 

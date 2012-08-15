@@ -111,7 +111,7 @@ public class EntityBlock extends EntityFallingSand
 
         if (justBorn && hasParentDust && parentDust == null)
         {
-            parentDust = DustMod.proxy.getDustAtID(parentDustID);
+            parentDust = EntityDustManager.getDustAtID(parentDustID);
 
             if (parentDust != null)
             {
@@ -175,7 +175,7 @@ public class EntityBlock extends EntityFallingSand
         }
         else if (hasParentDust && parentDust == null)
         {
-            parentDust = DustMod.proxy.getDustAtID(parentDustID);
+            parentDust = EntityDustManager.getDustAtID(parentDustID);
 
             if (parentDust != null)
             {

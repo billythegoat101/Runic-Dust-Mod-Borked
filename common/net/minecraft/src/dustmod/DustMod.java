@@ -95,10 +95,6 @@ public class DustMod {
     public static Item runicPaper;
     
 
-    public static String worldName = "";
-    public static Properties propGeneral;
-    public static File generalFS;
-
     public static int prevVoidSize;
     public static HashMap<String, ArrayList<ItemStack>> voidInventory;
     public static ArrayList<int[]> voidNetwork;
@@ -131,7 +127,6 @@ public class DustMod {
 			ENTITY_FireSpriteID = config.getOrCreateIntProperty("FireSpriteEntityID", Configuration.CATEGORY_GENERAL, ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
 			ENTITY_BlockEntityID = config.getOrCreateIntProperty("BlockEntityID", Configuration.CATEGORY_GENERAL, ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
 			
-			proxy.entMap = new HashMap<Long, EntityDust>();
 			dust = new BlockDust(BLOCK_DustID, 164);
 			idust = (new ItemDust(ITEM_DustID, dust)).setItemName("idust").setTabToDisplayOn(CreativeTabs.tabDeco);
 			dustTable = ((Block)new BlockDustTable(BLOCK_DustTableID)).setCreativeTab(CreativeTabs.tabDeco);
@@ -251,45 +246,7 @@ public class DustMod {
 		
 		VoidStorageManager.load(savePath);
 		VoidTeleManager.load(savePath);
-		
-        propGeneral = new Properties();
-        if (generalFS == null || !generalFS.exists())
-        {
-            try
-            {
-                generalFS = new File((new StringBuilder()).append(savePath).append("dustmodgeneral.dat").toString());
-
-                if (generalFS.createNewFile())
-                {
-                    if (propGeneral == null)
-                    {
-                        propGeneral = new Properties();
-                    }
-
-                    propGeneral.store(new FileOutputStream(generalFS), null);
-                }
-            }
-            catch (IOException ioexception)
-            {
-                FMLLog.log(Level.SEVERE, null, ioexception);
-            }
-        }
-
-        try
-        {
-            propGeneral.load(new FileInputStream(generalFS));
-            proxy.entMap = new HashMap<Long, EntityDust>();
-            proxy.nextDustEntID = Long.valueOf(propGeneral.getProperty("entDustNID"));
-        }
-        catch (IOException ex)
-        {
-        	FMLLog.log(Level.SEVERE, null, ex);
-        }
-        catch (NumberFormatException ex)
-        {
-            proxy.nextDustEntID = 0;
-            propGeneral.setProperty("entDustNID", "" + proxy.nextDustEntID);
-        }
+		EntityDustManager.load(savePath);
 	}
 	
 

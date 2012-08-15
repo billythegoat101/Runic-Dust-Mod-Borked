@@ -103,8 +103,8 @@ public class DustManager
         }
 
         EntityDust result = new EntityDust(world);
-        result.entityDustID = DustMod.proxy.getNextDustEntityID();
-        DustMod.proxy.registerEntityDust(result, result.entityDustID);
+        result.entityDustID = EntityDustManager.getNextDustEntityID();
+        EntityDustManager.registerEntityDust(result, result.entityDustID);
         result.setPosition(x, y - 0.8, z);
 //        result.posX = x;
 //        result.posY = y-0.8;//EntityDust.yOffset;

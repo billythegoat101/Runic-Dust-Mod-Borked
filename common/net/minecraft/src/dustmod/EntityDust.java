@@ -241,7 +241,7 @@ public class EntityDust extends Entity
         if (tag.hasKey("entityDustID"))
         {
             entityDustID = tag.getLong("entityDustID");
-            DustMod.proxy.registerEntityDust(this, entityDustID);
+            EntityDustManager.registerEntityDust(this, entityDustID);
         } else
         {
             entityDustID = -1L;
