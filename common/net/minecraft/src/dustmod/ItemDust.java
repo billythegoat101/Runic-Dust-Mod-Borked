@@ -215,20 +215,8 @@ public class ItemDust extends ItemReed
     @Override
     public String getItemNameIS(ItemStack itemstack)
     {
-        switch (itemstack.getItemDamage())
-        {
-            case 1:
-                return "tile.plantdust";
-
-            case 2:
-                return "tile.gundust";
-
-            case 3:
-                return "tile.lapisdust";
-
-            case 4:
-                return "tile.blazedust";
-        }
+    	String id = DustItemManager.ids[itemstack.getItemDamage()];
+    	if(id != null) return "tile." + DustItemManager.ids[itemstack.getItemDamage()];
 
         return "tile.dust";
     }
@@ -236,20 +224,8 @@ public class ItemDust extends ItemReed
     @Override
     public String getLocalItemName(ItemStack itemstack)
     {
-        switch (itemstack.getItemDamage())
-        {
-            case 1:
-                return "tile.plantdust";
-
-            case 2:
-                return "tile.gundust";
-
-            case 3:
-                return "tile.lapisdust";
-
-            case 4:
-                return "tile.blazedust";
-        }
+    	String id = DustItemManager.ids[itemstack.getItemDamage()];
+    	if(id != null) return "tile." + DustItemManager.ids[itemstack.getItemDamage()];
 
         return "tile.dust";
     }
@@ -258,23 +234,6 @@ public class ItemDust extends ItemReed
     public int getIconFromDamage(int i)
     {
         return i-1;
-//        switch (i)
-//        {
-//            case 1:
-//                return plantTex;
-//
-//            case 2:
-//                return gunTex;
-//
-//            case 3:
-//                return lapisTex;
-//
-//            case 4:
-//                return blazeTex;
-//
-//            default:
-//                return Item.brick.getIconFromDamage(0);
-//        }
     }
     
 
@@ -285,9 +244,34 @@ public class ItemDust extends ItemReed
      */
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for (int var4 = 1; var4 < 5; ++var4)
+        for (int i = 5; i < 1000; ++i) //i > 4 for migration from old system
         {
-            par3List.add(new ItemStack(par1, 1, var4));
+        	if(DustItemManager.colors[i] != null){
+                par3List.add(new ItemStack(par1, 1, i));
+        	}
         }
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getColorFromDamage(int meta, int pass) {
+    	return pass == 0 ? DustItemManager.getPrimaryColor(meta) : DustItemManager.getSecondaryColor(meta);
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses()
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * Gets an icon index based on an item's damage value and the given render pass
+     */
+    public int getIconFromDamageForRenderPass(int meta, int rend)
+    {
+        return rend > 0 ? 5 : 4;
     }
 }

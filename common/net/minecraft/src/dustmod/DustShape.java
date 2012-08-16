@@ -46,6 +46,8 @@ public class DustShape
     public final int id;
 
     
+    public ArrayList<Integer> allowedVariable;
+    
     /**
      * 
      * The generic shape class that should be created to assign each rune its design.
@@ -76,7 +78,7 @@ public class DustShape
         length = l;
         height = 1;
         data = new int[height][width][length];
-        dustAmt = new int[5];
+        dustAmt = new int[1000];
         this.solid = solid;
         this.cy = cy;
         this.cx = cx;
@@ -100,6 +102,7 @@ public class DustShape
         }
 
         blocks = new ArrayList();
+        allowedVariable = new ArrayList();
         int[] test = getBlockCoord(ox + w, oy + l);
         int bwidth = test[0] + 2; //(int)Math.ceil((((double)w+Math.abs(oy))/4.0));
         int bheight = test[1] + 2; //(int)Math.ceil(((double)(l+Math.abs(ox))/4.0));
@@ -138,6 +141,12 @@ public class DustShape
     public DustShape setDesc(String d)
     {
         this.desc = d;
+        if(!allowedVariable.isEmpty()){
+        	desc += "\n----\nAllowed Variable Dusts:\n";
+        	for(int i: allowedVariable){
+        		desc += DustItemManager.names[i] + "\n";
+        	}
+        }
         return this;
     }
 
@@ -160,6 +169,30 @@ public class DustShape
         return this;
     }
 
+    
+    /**
+     * Add dust values to the allowed variable dust list. 
+     * If this function is never called (and the allowedVariable list is empty) then
+     * all dust's are allowed;
+     * 
+     * @param dustValue	Value to allow	
+     * @return			This DustShape for convenience
+     */
+    public DustShape addAllowedVariable(int... dustValue){
+    	for(int i:dustValue)
+    		allowedVariable.add(i);
+    	
+    	if(desc.contains("\n----\nAllowed Variable Dusts:\n")){
+    		setDesc(desc.substring(0,desc.indexOf("\n----\nAllowed Variable Dusts:\n")));
+    	}
+    	
+    	return this;
+    }
+    
+    public boolean isDustAllowedAsVariable(int dustValue){
+    	return allowedVariable.contains(dustValue) || allowedVariable.isEmpty();
+    }
+    
     private void updateData()
     {
         blocks = updateData(data, oy, ox);
@@ -191,7 +224,7 @@ public class DustShape
             }
         }
 
-        dustAmt = new int[5];
+        dustAmt = new int[1000];
 
         for (int y = 0; y < tdata.length; y++)
             for (int x = 0; x < tdata[0].length; x++)
@@ -380,7 +413,10 @@ public class DustShape
                 {
                     try
                     {
-                        if (x >= width || z >= length || (d[x][z] != data[oy][x + ox][z + oz] && !(d[x][z] != 0 && data[oy][x + ox][z + oz] == -1)))
+                        if (x >= width || 
+                        	z >= length ||
+                        	(d[x][z] != data[oy][x + ox][z + oz] && !(d[x][z] != 0 && data[oy][x + ox][z + oz] == -1)) ||
+                        	(data[oy][x + ox][z + oz] == -1 && !this.isDustAllowedAsVariable(d[x][z])))
                         {
                             //                        System.out.println("Derp0 [" + x + "," + z + "][" + (x+oy) + "," + (z+oy) + "] ");
                             equal = false;
@@ -435,7 +471,10 @@ public class DustShape
                 {
                     try
                     {
-                        if (x >= width || z >= length || (d[x][z] != data[oy][x + ox][z + oz] && !(d[x][z] != 0 && data[oy][x + ox][z + oz] == -1)))
+                        if (x >= width || 
+                        	z >= length ||
+                        	(d[x][z] != data[oy][x + ox][z + oz] && !(d[x][z] != 0 && data[oy][x + ox][z + oz] == -1)) ||
+                        	(data[oy][x + ox][z + oz] == -1 && !this.isDustAllowedAsVariable(d[x][z])))
                         {
                             //                        System.out.println("Derp0 [" + x + "," + z + "][" + (x+oy) + "," + (z+oy) + "] ");
                             equal = false;
@@ -635,7 +674,7 @@ public class DustShape
         si -= temp[0];
         sk -= temp[1];
 //        System.out.println("DICKS offest:" + temp[0] + " " + temp[1] + " do:" + tox + "," + toy + " dim:" + width + "," + length + " r:" + r) ;
-        int[] pDustAmount = new int[5];
+        int[] pDustAmount = new int[1000];
 
         for (ItemStack is: p.inventory.mainInventory)
         {
@@ -653,7 +692,7 @@ public class DustShape
             return false;
         }
 
-        pDustAmount = new int[5];
+        pDustAmount = new int[1000];
 
         for (int x = 0; x < tblocks.size(); x++)
         {
@@ -730,7 +769,7 @@ public class DustShape
 //        System.out.println("Dust Used " + Arrays.toString(pDustAmount));
         if (!p.capabilities.isCreativeMode)
         {
-            for (int id = 1; id < 5; id++)
+            for (int id = 1; id < 1000; id++)
             {
                 for (int sind = 0; sind < p.inventory.mainInventory.length; sind++)
                 {
@@ -779,7 +818,7 @@ public class DustShape
 
     public boolean hasEnough(int[] dust)
     {
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < 1000; i++)
         {
             if (dust[i] < dustAmt[i])
             {

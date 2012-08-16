@@ -352,6 +352,7 @@ public class BlockDust extends BlockContainer {
 		}
 
 		int dust = p.getCurrentEquippedItem().getItemDamage();// mod_DustMod.dustValue(p.getCurrentEquippedItem().itemID);
+		if(dust < 5) dust *= 100;
 		// System.out.println("ACTIVATED " + p.getCurrentEquippedItem().itemID +
 		// " " +dust+ " derp " + mod_DustMod.ITEM_DustID+256);
 		Vec3 look = p.getLookVec();

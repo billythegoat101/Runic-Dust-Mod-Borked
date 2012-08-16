@@ -107,7 +107,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                     }
                     else
                     {
-                        col = DustMod.getColor(midArray[x][z]);
+                        col = DustItemManager.getFloorColorRGB(midArray[x][z]);
                         r = (float)col[0];
                         g = (float)col[1];
                         b = (float)col[2];
@@ -144,7 +144,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                     }
                     else
                     {
-                        col = DustMod.getColor(horizArray[x][z]);
+                        col = DustItemManager.getFloorColorRGB(horizArray[x][z]);
                         r = (float)col[0];
                         g = (float)col[1];
                         b = (float)col[2];
@@ -181,7 +181,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                     }
                     else
                     {
-                        col = DustMod.getColor(vertArray[x][z]);
+                        col = DustItemManager.getFloorColorRGB(vertArray[x][z]);
                         r = (float)col[0];
                         g = (float)col[1];
                         b = (float)col[2];

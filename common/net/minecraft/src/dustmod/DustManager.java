@@ -401,10 +401,10 @@ public class DustManager
 
 //		System.out.println("Registering Shapes");
         int N = -1;
-        int P = 1;
-        int G = 2;
-        int L = 3;
-        int B = 4;
+        int P = 100;
+        int G = 200;
+        int L = 300;
+        int B = 400;
         DustShape s;
         int[][][] values;
         //test shape
@@ -451,6 +451,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of the Rabbit Hole");
         s.setNotes("Sacrifice:\n\n"
                 + "-2xHunger.\n\n"
@@ -479,6 +480,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Healing");
         s.setNotes("Sacrifice:\n\n"
                 + "-2xCoal + 2XP");
@@ -506,6 +508,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Lumber");
         s.setNotes("Sacrifice:\n\n"
                 + "-3xLog + 2xStick");
@@ -564,6 +567,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Depths");
         s.setAuthor("billythegoat101");
         s.setNotes("Sacrifice:\n\n"
@@ -622,6 +626,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of the Farm");
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, 0, -1, 0});
@@ -721,6 +726,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Fire Trap Rune");
         s.setNotes("Sacrifice:\n\n"
                 + "-3xFlint\n\n"
@@ -744,6 +750,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Lightning Trap Rune");
         s.setNotes("Sacrifice:\n\n"
                 + "-3xIronIngot\n\n"
@@ -771,6 +778,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Poison Trap Rune");
         s.setNotes("Sacrifice:\n\n"
                 + "-3xSpiderEye\n\n"
@@ -797,6 +805,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Detonation");
         s.setNotes("Sacrifice:\n\n"
                 + "-5xGunpowder\n"
@@ -962,6 +971,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Speed");
         s.setNotes("Sacrifice:\n\n"
                 + "-4xSugar + 2xBlazePowder");
@@ -1559,6 +1569,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Protection");
         s.setNotes("Sacrifice:\n\n"
                 + "-2xLiveIronGolem + 50XP\n\n"
@@ -1602,6 +1613,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of Level Earth");
         s.setNotes("Sacrifice:\n\n"
                 + "-Plant Dust: 10XP + 20xIronOre\n"
@@ -1632,6 +1644,7 @@ public class DustManager
             }
         };
         s.setData(values);
+        s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of the Mountain");
         s.setNotes("Sacrifice:\n\n"
                 + "-1xLiveIronGolem + 1xRose + 60XP\n\n"

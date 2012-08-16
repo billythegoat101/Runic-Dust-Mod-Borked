@@ -195,7 +195,7 @@ public class PageHelper
                         {
                             for (int j = 0; j < dW; j++)
                             {
-                                dust.setRGB(i, loc[1] + j, getColor(colors, colorCheck + 1));
+                                dust.setRGB(i, loc[1] + j,  getRandomDustColor(value, false));
                             }
                         }
                     }
@@ -206,7 +206,7 @@ public class PageHelper
                         {
                             for (int j = Math.min(loc[1], nextLoc[1]); j < Math.max(loc[1], nextLoc[1]); j++)
                             {
-                                dust.setRGB(loc[0] + i, j, getColor(colors, colorCheck + 1));
+                                dust.setRGB(loc[0] + i, j,  getRandomDustColor(value, false));
                             }
                         }
                     }
@@ -214,7 +214,7 @@ public class PageHelper
                     {
                         for (int j = 0; j < dW; j++)
                         {
-                            dust.setRGB(loc[0] + i, loc[1] + j, getColor(colors, colorCheck));
+                            dust.setRGB(loc[0] + i, loc[1] + j,  getRandomDustColor(value, true));
                         }
                     }
                 }
@@ -307,6 +307,74 @@ public class PageHelper
         int rand = new Random().nextInt(16);
         return colors.getRGB(rand, color);
     }
+    public static int getRandomDustColor(int dust, boolean primary)
+    {
+    	int color = DustItemManager.getPrimaryColor(dust);
+    	if(!primary){
+    		color = new Color(color).brighter().getRGB();
+    	}
+    	
+    	int r = (color&0xFF0000) >> 16;
+        int g = (color&0xFF00) >> 8;
+        int b = (color&0xFF);
+//        color = (color & 0xfefefe) >> 1;
+        Color temp = new Color(DustItemManager.getFloorColorRGB(dust)[0],DustItemManager.getFloorColorRGB(dust)[0],DustItemManager.getFloorColorRGB(dust)[2]);
+        Color c = primary? temp: temp;
+        
+        if(primary) {
+//        	for(int i = 0; i < 1; i++) c = c.darker();
+        	r+=10;
+        	g+=10;
+        	b+=10;
+        }else{
+//        	for(int i = 0; i < 1; i++) c = c.brighter();
+        	r-=10;
+        	g-=10;
+        	b-=10;
+        }
+        
+        int tol = 30;
+        Random rand = new Random();
+        int random = rand.nextInt(tol);
+        
+//        for(int i = 0; i < random; i++) c=c.darker(); 
+        c = stain(c,(float)rand.nextGaussian()*0.05f + (primary ? 0.02F:0));
+        if(primary) random *= -1;
+        
+        r = r + random;
+        g = g + random;
+        b = b + random;
+//        r = linearColorBurn(0x010101,r);
+//        g = linearColorBurn(0x010101,g);
+//        b = linearColorBurn(0,b);
+        
+        if(r < 0) r = 0; 
+        if(r > 255) r = 255;
+        if(g < 0) g = 0; 
+        if(g > 255) g = 255;
+        if(b < 0) b = 0; 
+        if(b > 255) b = 255;
+        
+        color = (r<<16) | (g<<8) | (b);
+    	return color;
+    }
+    public static Color stain(Color color, float amount)
+    {
+      int r = (int) ((color.getRed() * (1 - amount) / 255) * 255);
+      int g = (int) ((color.getGreen() * (1 - amount) / 255) * 255);
+      int b = (int) ((color.getBlue() * (1 - amount) / 255) * 255);
+      
+
+      if(r < 0) r = 0; 
+      if(r > 255) r = 255;
+      if(g < 0) g = 0; 
+      if(g > 255) g = 255;
+      if(b < 0) b = 0; 
+      if(b > 255) b = 255;
+      
+      return new Color(r, g, b);
+    }
+    
 //    private static HashMap<String, Boolean> textures;
     private static HashMap<String, BufferedImage> images;
 

@@ -34,6 +34,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     public static final String CHANNEL_TELexicon = "TElexicon";
     public static final String CHANNEL_TERut = "TERut";
     public static final String CHANNEL_DMRune = "DMRune";
+    public static final String CHANNEL_DustItem = "DutItem";
 
     public static Packet getTEDPacket(TileEntityDust ted)
     {
@@ -187,6 +188,45 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         pkt.data = bos.toByteArray();
         pkt.length = bos.size();
 //        pkt.isChunkDataPacket = true;
+        return pkt;
+    }
+    
+    public static Packet getDustDeclarationPacket(int value){
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try
+        {
+            dos.writeInt(value);
+            int primaryColor, secondaryColor, floorColor;
+            String idName, name;
+            
+            primaryColor = DustItemManager.getPrimaryColor(value);
+            secondaryColor = DustItemManager.getSecondaryColor(value);
+            floorColor = DustItemManager.getFloorColor(value);
+            
+            idName = DustItemManager.ids[value];
+            name = DustItemManager.names[value];
+            
+            dos.writeInt(primaryColor);
+            dos.writeInt(secondaryColor);
+            dos.writeInt(floorColor);
+            
+            dos.writeInt(idName.length());
+            dos.writeInt(name.length());
+            dos.writeChars(idName);
+            dos.writeChars(name);
+        }
+        catch (IOException e)
+        {
+            // UNPOSSIBLE? -cpw
+        }
+
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = CHANNEL_DustItem;
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
         return pkt;
     }
 
@@ -365,12 +405,46 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             {
                 return;
             }
+        }else if(channel.equals(CHANNEL_DustItem)){
+            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+            int value, primaryColor, secondaryColor, floorColor;
+            int idNameLen, nameLen;
+            String idName, name;
+            try
+            {
+            	value = dis.readInt();
+            	primaryColor= dis.readInt();
+            	secondaryColor = dis.readInt();
+            	floorColor = dis.readInt();
+            	
+            	idNameLen = dis.readInt();
+            	nameLen = dis.readInt();
+
+            	idName = "";
+                for(int i = 0; i < idNameLen; i++)
+                    idName += dis.readChar();
+                name = "";
+                for(int i = 0; i < nameLen; i++)
+                    name += dis.readChar();
+                
+                DustItemManager.registerDust(value, name, idName, primaryColor, secondaryColor, floorColor);
+            }
+            catch (IOException e)
+            {
+                return;
+            }
         }
     }
 
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler,
 			NetworkManager manager) {
+		for(int i = 0; i < DustItemManager.ids.length; i++){
+			if(DustItemManager.ids[i] != null){
+				netHandler.registerPacket(getDustDeclarationPacket(i));
+			}
+		}
         for(DustShape shape:DustManager.shapes){
             netHandler.registerPacket(getRuneDeclarationPacket(shape));
         }
@@ -408,7 +482,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 	public void clientLoggedIn(NetHandler clientHandler,
 			NetworkManager manager, Packet1Login login) {
 		DustManager.resetMultiplayerRunes();
-		
+		DustItemManager.reset();
 	}
     
 }

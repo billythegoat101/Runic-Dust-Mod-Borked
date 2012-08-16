@@ -37,7 +37,7 @@ public class ItemPlaceScroll extends Item
     public boolean tryPlaceIntoWorld(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int l, float x, float y, float z)
     {
     	if(world.isRemote) return false;
-    	
+    
         DustShape ds = DustManager.getShapeFromID(itemstack.getItemDamage());
         int r = (int)MathHelper.floor_double((double)((p.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         

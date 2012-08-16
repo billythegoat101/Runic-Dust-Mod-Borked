@@ -43,7 +43,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 	clientSideRequired = true, 
 	serverSideRequired = false, 
 	packetHandler = PacketHandler.class,
-	channels = {PacketHandler.CHANNEL_DMRune, PacketHandler.CHANNEL_TEDust, PacketHandler.CHANNEL_TELexicon, PacketHandler.CHANNEL_TERut})
+	channels = {PacketHandler.CHANNEL_DMRune, PacketHandler.CHANNEL_TEDust, PacketHandler.CHANNEL_TELexicon, PacketHandler.CHANNEL_TERut, PacketHandler.CHANNEL_DustItem})
 public class DustMod {
 
 	@Instance
@@ -161,10 +161,6 @@ public class DustMod {
 		proxy.registerTileEntityRenderers();
 		
 		LanguageRegistry lang = LanguageRegistry.instance();
-		lang.addStringLocalization("tile.plantdust.name", "en_US", "Plant Runic Dust");
-		lang.addStringLocalization("tile.gundust.name", "en_US", "Gunpowder Runic Dust");
-		lang.addStringLocalization("tile.lapisdust.name", "en_US", "Lapis Runic Dust");
-		lang.addStringLocalization("tile.blazedust.name", "en_US", "Blaze Runic Dust");
 		lang.addStringLocalization("tile.dust.name", "en_US", "[DustMod]:Do not use this");
 
         lang.addStringLocalization(dustTable.getBlockName() + ".name", "en_US", "Runic Lexicon");
@@ -174,15 +170,6 @@ public class DustMod {
         lang.addStringLocalization(spiritPickaxe.getItemName() + ".name", "en_US", "Spirit Pickaxe");
         lang.addStringLocalization(spiritSword.getItemName() + ".name", "en_US", "Spirit Sword");
         lang.addStringLocalization(chisel.getItemName() + ".name", "en_US", "Hammer&Chisel");
-        
-//        lang.addNameForObject(dustTable, "en_US", "Runic Lexicon");
-//        lang.addNameForObject(tome, "en_US", "Runic Tome");
-//        lang.addNameForObject(negateSacrifice, "en_US", "Negate Rune Sacrifice");
-//        lang.addNameForObject(runicPaper, "en_US", "Scroll Paper");
-//        lang.addNameForObject(spiritPickaxe, "en_US", "Spirit Pickaxe");
-//        lang.addNameForObject(spiritSword, "en_US", "Spirit Sword");
-//        lang.addNameForObject(chisel, "en_US", "Hammer&Chisel");
-        
 		
         GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"dwd", "wbw", "dwd", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, 1)});
         GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"wdw", "dbd", "wdw", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, 1)});
@@ -217,6 +204,8 @@ public class DustMod {
 //		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		
         proxy.registerRenderInformation();
+        
+        DustItemManager.registerDefaultDusts();
         DustManager.registerDefaultShapes();
         
         MinecraftForge.EVENT_BUS.register(this);
@@ -296,38 +285,6 @@ public class DustMod {
         }
 
         return -1;
-    }
-
-    /**
-     * Returns the color that a dust should have when placed in the world.
-     * 
-     * @param dustID    The dust
-     * @return  An int array containing the RGB values of the color
-     */
-    public static int[] getColor(int dustID)
-    {
-        //dustID = dustValue(dustID);
-//        System.out.println("DIIICKS " + dustID);
-        switch (dustID)
-        {
-            case -2:
-                return new int[] {206, 0, 224}; //00CE00E0
-            case 1:
-//                System.out.println("1");
-                return new int[] {194, 227, 0}; //0xB2C200/*89B000*/;
-            case 2:
-//                System.out.println("2");
-                return new int[] {102, 100, 100}; //0x2288FF;
-            case 3:
-//                System.out.println("3");
-                return new int[] {0, 135, 255}; //0x949278/*757240*/;
-            case 4:
-//                System.out.println("4");
-                return new int[] {255, 110, 30}; //0xFFAB1D;
-        }
-
-        System.out.println("COLOR GET WRONG " + dustID);
-        return new int[] {255, 0, 0};
     }
     
 

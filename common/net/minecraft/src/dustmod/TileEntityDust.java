@@ -68,7 +68,9 @@ public class TileEntityDust extends TileEntity implements IInventory
         {
             for (int j = 0; j < size; j++)
             {
-                pattern[i][j] = tag.getInteger(i + "dust" + j);
+            	int dust = tag.getInteger(i + "dust" + j);
+            	if(dust < 5 && dust > 0) dust *= 100; //Migration
+                pattern[i][j] = dust;
             }
         }
 
@@ -105,7 +107,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     {
 //        System.out.println("Update Dust");
         super.updateEntity();
-
+        
 //        if(worldObj.isRemote) return;
         if (ticksExisted > 2 && isEmpty() && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 10)
         {
@@ -314,7 +316,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     {
         if (dusts == null)
         {
-            dusts = new boolean[5];
+            dusts = new boolean[1000];
 
             for (int i = 0; i < size; i++)
             {
@@ -334,10 +336,10 @@ public class TileEntityDust extends TileEntity implements IInventory
     public int getRandomDustColor()
     {
         int s = 0;
-        int[] dusts = new int[4];
+        int[] dusts = new int[1000];
         boolean[] bdusts = getDusts();
 
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < 1000; i++)
         {
             if (bdusts[i])
             {
@@ -352,7 +354,7 @@ public class TileEntityDust extends TileEntity implements IInventory
         }
 
         Random rand = new Random();
-        int[] rgb = DustMod.getColor(dusts[rand.nextInt(s)]);
+        int[] rgb = DustItemManager.getFloorColorRGB(dusts[rand.nextInt(s)]);
         int hex = 0;
         return new Color(rgb[0], rgb[1], rgb[2]).getRGB();
     }
