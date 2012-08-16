@@ -34,21 +34,26 @@ public class DustItemManager {
 	
 	public static int getPrimaryColor(int value){
 		if(value <= 0) return 0x8F25A2;
+		if(colors[value] == null) return 0;
 		return colors[value].primaryColor;
 	}
 	
 	public static int getSecondaryColor(int value){
 		if(value <= 0) return 0xDB73ED1;
+		if(colors[value] == null) return 0;
 		return colors[value].secondaryColor;
 	}
 	
 	public static int getFloorColor(int value){
 		if(value <= 0) return 0xCE00E0;
+		if(colors[value] == null) return 0;
 		return colors[value].floorColor;
 	}
 	
 	public static int[] getFloorColorRGB(int value){
 		if(value <= 0) return new int[] {206, 0, 224}; //00CE00E0 variable
+
+		if(colors[value] == null) return new int[]{0,0,0};
 		
 		int[] rtn = new int[3];
 		
@@ -63,22 +68,22 @@ public class DustItemManager {
 	
 	public static void reset(){
 		colors = new DustColor[1000];
+		names = new String[1000];
+		ids = new String[1000];
 	}
 	
 	public static void registerDefaultDusts(){
-		registerDust(1,"Plant Runic Dust", "plantdust", 0x629B26, 0x8AD041, 0xC2E300);
+		registerDust(1,"PlantDust (old, place or craft to update)", "plantdustold", 0x629B26, 0x8AD041, 0xC2E300);
 		registerDust(100,"Plant Runic Dust", "plantdust", 0x629B26, 0x8AD041, 0xC2E300); //Migrating to space out
 		
-		registerDust(2,"Gunpowder Runic Dust", "gundust",0x696969, 0x979797, 0x666464);
+		registerDust(2,"GunDust (old, place or craft to update)", "gundustold",0x696969, 0x979797, 0x666464);
 		registerDust(200,"Gunpowder Runic Dust", "gundust",0x696969, 0x979797, 0x666464); //Migrating to space out
 		
-		registerDust(3,"Lapis Runic Dust", "lapisdust",0x345EC3, 0x5A82E2, 0x0087FF);
-		registerDust(300,"Lapis Runic Dust", "lapisdust",0x345EC3, 0x5A82E21, 0x0087FF); //Migrating to space out
+		registerDust(3,"LapisDust (old, place or craft to update)", "lapisdustold",0x345EC3, 0x5A82E2, 0x0087FF);
+		registerDust(300,"Lapis Runic Dust", "lapisdust",0x345EC3, 0x5A82E2, 0x0087FF); //Migrating to space out
 		
-		registerDust(4,"Blaze Runic Dust", "blazedust",0xEA8A00, 0xFFFE31, 0xFF6E1E);
+		registerDust(4,"BlazeDust (old, place or craft to update)", "blazedustold",0xEA8A00, 0xFFFE31, 0xFF6E1E);
 		registerDust(400,"Blaze Runic Dust", "blazedust",0xEA8A00, 0xFFFE31, 0xFF6E1E); //Migrating to space out
-		
-		registerDust(401,"Test Runic Dust", "testdust",0xFFFFFF, 0xFFFFFF, 0xFFFFFF);
 	}
 
 	@SideOnly(Side.SERVER)

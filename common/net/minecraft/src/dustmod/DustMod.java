@@ -196,6 +196,10 @@ public class DustMod {
         GameRegistry.addShapelessRecipe(new ItemStack(tome, 1, 1), new Object[] {new ItemStack(idust, 1, -1), Item.book});
         GameRegistry.addShapelessRecipe(new ItemStack(runicPaper, 1), new Object[] {Item.paper, Item.goldNugget, Item.goldNugget});
         
+        for(int i = 1; i < 5; i++){
+        	GameRegistry.addShapelessRecipe(new ItemStack(idust,1,i*100), new ItemStack(idust,1,i));
+        }
+        
         EntityRegistry.registerModEntity(EntityDust.class, "dustentity", ENTITY_FireSpriteID, this, 192, 2, false);
         EntityRegistry.registerGlobalEntityID(EntityDust.class, "dustentity", ENTITY_FireSpriteID);
         EntityRegistry.registerModEntity(EntityBlock.class, "dustblockentity", ENTITY_BlockEntityID, this, 64, 1, false);
