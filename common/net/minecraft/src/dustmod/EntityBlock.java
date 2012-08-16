@@ -54,17 +54,20 @@ public class EntityBlock extends EntityFallingSand
         super.entityInit();
         dataWatcher.addObject(10, new Integer(blockID));
         dataWatcher.addObject(11, new Integer(meta));
+        dataWatcher.addObject(12, new Integer((lingering ? 1:0)));
     }
 
     public void updateDataWatcher()
     {
         dataWatcher.updateObject(10, new Integer(blockID));
         dataWatcher.updateObject(11, new Integer(meta));
+        dataWatcher.updateObject(12, new Integer((lingering ? 1:0)));
     }
     public void updateEntityFromDataWatcher()
     {
         blockID = dataWatcher.getWatchableObjectInt(10);
         meta = dataWatcher.getWatchableObjectInt(11);
+        lingering = dataWatcher.getWatchableObjectInt(12) == 1;
     }
 
     @Override
@@ -90,22 +93,22 @@ public class EntityBlock extends EntityFallingSand
             this.extinguish();
         }
 
-        if (worldObj.isRemote)
-        {
-            super.onEntityUpdate();
+//        if (worldObj.isRemote)
+//        {
+//            super.onEntityUpdate();
 
             if ((this.ticksExisted % 10 == 0 && this.ticksExisted < 100) || this.ticksExisted % 60 == 0)
             {
                 updateEntityFromDataWatcher();
             }
 
-            return;
-        }
+//            return;
+//        }
 
-        if ((this.ticksExisted % 10 == 0 && this.ticksExisted < 100) || this.ticksExisted % 60 == 0)
-        {
-            updateDataWatcher();
-        }
+//        if ((this.ticksExisted % 10 == 0 && this.ticksExisted < 100) || this.ticksExisted % 60 == 0)
+//        {
+//            updateDataWatcher();
+//        }
 
         motionX = motionY = motionZ = 0;
 
@@ -139,10 +142,11 @@ public class EntityBlock extends EntityFallingSand
 
         if (going)
         {
-            if (lingering && getDistance(lx, ly, lz) > 0.5D)
+            if (lingering && getDistance(lx, ly, lz) > 1.5D)
             {
                 worldObj.setBlockWithNotify(lx, ly, lz, 0);
                 lingering = false;
+                this.updateDataWatcher();
             }
 
             double dist = goTo(gv, gx, gy, gz);
@@ -161,15 +165,17 @@ public class EntityBlock extends EntityFallingSand
 
             double velTol = 0.02D;
 
-            if (placeWhenArrived && (dist < 0.4D ||
+            if (placeWhenArrived && (dist < 1.4D ||
                     (Math.abs(motionX) < velTol && Math.abs(motionY) < velTol && Math.abs(motionY) < velTol)))
             {
                 if (lingering)
                 {
                     worldObj.setBlockWithNotify(lx, ly, lz, 0);
                     lingering = false;
+                    this.updateDataWatcher();
                 }
-
+                System.out.println("PLACE");
+                this.setPosition(gx,gy,gz);
                 place();
             }
         }
@@ -196,6 +202,8 @@ public class EntityBlock extends EntityFallingSand
             setDead();
             return;
         }
+        
+        this.updateDataWatcher();
     }
 
     /**
@@ -219,6 +227,7 @@ public class EntityBlock extends EntityFallingSand
         tag.setInteger("lx", lx);
         tag.setInteger("ly", ly);
         tag.setInteger("lz", lz);
+        this.updateDataWatcher();
     }
 
     /**
@@ -248,6 +257,7 @@ public class EntityBlock extends EntityFallingSand
         lz = tag.getInteger("lz");
     }
 
+    @Override
     public float getShadowSize()
     {
         return 0.0F;
@@ -287,6 +297,7 @@ public class EntityBlock extends EntityFallingSand
         lx = MathHelper.floor_double(posX);
         ly = MathHelper.floor_double(posY - 0.5D);
         lz = MathHelper.floor_double(posZ);
+        
         going = false;
         placeWhenArrived = false;
         gv = 0;

@@ -89,7 +89,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     {
         pattern[i][j] = dust;
         dusts = null;
-        System.out.println("Setting dust to " + dust + " [" + i + "," + j + "] " + this.getAmount());
+//        System.out.println("Setting dust to " + dust + " [" + i + "," + j + "] " + this.getAmount());
         this.onInventoryChanged();
     }
 

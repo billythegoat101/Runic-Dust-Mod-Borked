@@ -2,4 +2,5 @@
 -Spirit pickaxe doesn't break surrounding blocks as it should.
 -Dust entities don't always appear (Quick fix: Relog)
 -Wall lifting rune derps the player around when lifting them.
--Can't summon EntityBlocks (Earth sprite rune namely)
+-EntityBlock's become invisible permanantly after placing.
+-Earth sprite disappears after logout and login (visually)

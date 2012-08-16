@@ -44,18 +44,18 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.preloadTexture(DustMod.path + "/dustrItems.png");
         MinecraftForgeClient.preloadTexture(DustMod.path + "/dustBlocks.png");
         
-        DustBlockRenderers.dustModelID = RenderingRegistry.instance().getNextAvailableRenderId();
-        DustBlockRenderers.rutModelID = RenderingRegistry.instance().getNextAvailableRenderId();
-        DustBlockRenderers.dustModelID = RenderingRegistry.instance().getNextAvailableRenderId();
-        DustBlockRenderers.rutModelID = RenderingRegistry.instance().getNextAvailableRenderId();
+        DustBlockRenderers.dustModelID = RenderingRegistry.getNextAvailableRenderId();
+        DustBlockRenderers.rutModelID = RenderingRegistry.getNextAvailableRenderId();
+        DustBlockRenderers.dustModelID = RenderingRegistry.getNextAvailableRenderId();
+        DustBlockRenderers.rutModelID = RenderingRegistry.getNextAvailableRenderId();
         
         System.out.println("Dust model ID " + DustBlockRenderers.dustModelID + " Rut: " + DustBlockRenderers.rutModelID);
         
-        RenderingRegistry.instance().registerBlockHandler(new DustBlockRenderers(DustBlockRenderers.dustModelID));
-        RenderingRegistry.instance().registerBlockHandler(new DustBlockRenderers(DustBlockRenderers.rutModelID));
+        RenderingRegistry.registerBlockHandler(new DustBlockRenderers(DustBlockRenderers.dustModelID));
+        RenderingRegistry.registerBlockHandler(new DustBlockRenderers(DustBlockRenderers.rutModelID));
         
-        RenderingRegistry.instance().registerEntityRenderingHandler(EntityDust.class, new RenderEntityDust());
-        RenderingRegistry.instance().registerEntityRenderingHandler(EntityBlock.class, new RenderEntityBlock());
+        RenderingRegistry.registerEntityRenderingHandler(EntityDust.class, new RenderEntityDust());
+        RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new RenderEntityBlock());
         MinecraftForge.EVENT_BUS.register(new RenderLastHandler());
 	}
 	

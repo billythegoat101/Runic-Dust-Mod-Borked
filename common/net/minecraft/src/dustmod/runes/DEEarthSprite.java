@@ -47,6 +47,7 @@ public class DEEarthSprite  extends PoweredEvent
             eb.parentDust = e;
             registerFollower(e, eb);
             e.worldObj.spawnEntityInWorld(eb);
+            eb.updateDataWatcher();
 //            eb.save = false;
         }
     }
@@ -88,7 +89,7 @@ public class DEEarthSprite  extends PoweredEvent
 //                p.posX = px+0.5D;
 //                p.posY = py + p.yOffset+0.1D;
 //                p.posZ = pz+0.5D;
-                p.setPosition((double)px + 0.5D, (double)py + p.yOffset - 1.06, (double)pz + 0.5D);
+                p.setPositionAndUpdate((double)px + 0.5D, (double)py + p.yOffset, (double)pz + 0.5D);
                 p.setMoveForward(0);
 //                p.setVelocity(0,0,0);
             }
@@ -120,7 +121,7 @@ public class DEEarthSprite  extends PoweredEvent
                 if (protect /*&& worldObj.getBlockId(px+bx,py+by,pz+bz) == 0*/)
                 {
                     eb.setPosition(px + bx, py + by, pz + bz);
-                    eb.placeAndLinger(0.6D, px + bx, py + by, pz + bz);
+                    eb.placeAndLinger(0.6D, px + bx, py + by+1, pz + bz);
                 }
                 else
                 {
@@ -133,7 +134,7 @@ public class DEEarthSprite  extends PoweredEvent
                     double cos = Math.cos((ticks / period) * Math.PI * 2);
                     double dx = cos * dist;
                     double dz = sin * dist;
-                    double dy = sinY * 1D;
+                    double dy = sinY * 1D + 1.5D;
                     eb.goTo(2.8D, p.posX + dx, p.posY + dy, p.posZ + dz);
                 }
 
