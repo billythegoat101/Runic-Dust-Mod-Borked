@@ -46,7 +46,7 @@ public class DESilkTouchEnch extends DustEvent
 
         e.renderBeam = true;
         e.renderStar = true;
-        e.setColorOuter(0, 0, 255);
+        e.setColorStarOuter(0, 0, 255);
         e.setColorBeam(0, 0, 255);
 //        e.data = item;
         e.data[1] = item; //the sacrifice entity id will be set to data

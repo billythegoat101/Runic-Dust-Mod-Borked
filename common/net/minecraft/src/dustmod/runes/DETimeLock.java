@@ -31,8 +31,8 @@ public class DETimeLock extends PoweredEvent
         }
 
         e.renderStar = true;
-        e.setColorInner(0, 255, 255);
-        e.setColorOuter(0, 255, 255);
+        e.setColorStarInner(0, 255, 255);
+        e.setColorStarOuter(0, 255, 255);
         int[] center = new int[4];
         int[][] dusts = e.dusts;
         center[0] = dusts[3][2];
@@ -72,7 +72,7 @@ public class DETimeLock extends PoweredEvent
     public void onTick(EntityDust e)
     {
         super.onTick(e);
-        e.setColorOuter(0, 255, 255);
+        e.setColorStarOuter(0, 255, 255);
 
         if (e.ram == 0)
         {

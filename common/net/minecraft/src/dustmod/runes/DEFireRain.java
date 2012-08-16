@@ -22,7 +22,7 @@ public class DEFireRain extends PoweredEvent
     {
         super.onInit(e);
         e.renderStar = true;
-        e.setColorOuter(255, 0, 0);
+        e.setColorStarOuter(255, 0, 0);
         ItemStack[] req = new ItemStack[] {new ItemStack(Item.blazeRod, 4)};
         req = this.sacrifice(e, req);
 

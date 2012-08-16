@@ -38,13 +38,13 @@ public class DECage extends DETrap
 
         if (e.ticksExisted < 80)
         {
-            e.setColorInner(140, 140, 140);
-            e.setColorOuter(140, 140, 140);
+            e.setColorStarInner(140, 140, 140);
+            e.setColorStarOuter(140, 140, 140);
             return;
         }
 
-        e.setColorInner(0, 0, 255);
-        e.setColorOuter(0, 0, 255);
+        e.setColorStarInner(0, 0, 255);
+        e.setColorStarOuter(0, 0, 255);
         List<Entity> entities = getEntities(e, 2D);
 
         if (entities.size() > 0)

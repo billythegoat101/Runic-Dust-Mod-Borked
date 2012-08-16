@@ -49,7 +49,7 @@ public class DEFireBowEnch extends DustEvent
 
         e.renderBeam = true;
         e.renderStar = true;
-        e.setColorOuter(0, 0, 255);
+        e.setColorStarOuter(0, 0, 255);
         e.setColorBeam(0, 0, 255);
     }
 

@@ -133,7 +133,7 @@ public class DELillyBridge extends DustEvent
         }
 
         e.renderStar = true;
-        e.setColorOuter(0, 255, 0);
+        e.setColorStarOuter(0, 255, 0);
     }
 
     public void onTick(EntityDust e)

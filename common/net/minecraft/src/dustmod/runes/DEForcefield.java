@@ -34,7 +34,7 @@ public class DEForcefield extends PoweredEvent
             return;
         }
 
-        e.setColorOuter(0, 128, 62);
+        e.setColorStarOuter(0, 128, 62);
         e.renderStar = true;
         e.data[1] = dustStrength;
         e.sacrificeWaiting = 600;

@@ -183,11 +183,11 @@ public class EntityDust extends Entity
 
     public void setColorStar(int r, int g, int b)
     {
-        setColorInner(r, g, b);
-        setColorOuter(r, g, b);
+        setColorStarInner(r, g, b);
+        setColorStarOuter(r, g, b);
     }
 
-    public void setColorInner(int r, int g, int b)
+    public void setColorStarInner(int r, int g, int b)
     {
         ri = r;
         gi = g;
@@ -195,7 +195,7 @@ public class EntityDust extends Entity
         this.updateDataWatcher();
     }
 
-    public void setColorOuter(int r, int g, int b)
+    public void setColorStarOuter(int r, int g, int b)
     {
         ro = r;
         go = g;
@@ -219,6 +219,19 @@ public class EntityDust extends Entity
         this.updateDataWatcher();
     }
 
+    public void setRenderBeam(boolean b){
+    	this.renderBeam = b;
+    }
+    public void setRenderStar(boolean b){
+    	this.renderStar = b;
+    }
+    public void setRenderFireOnRune(boolean b){
+    	this.renderFlamesDust = b;
+    }
+    public void setRenderFireOnRuts(boolean b){
+    	this.renderFlamesRut = b;
+    }
+    
     public void setEvent(DustEvent evt, String name)
     {
         event = evt;
@@ -757,6 +770,10 @@ public class EntityDust extends Entity
     public int getZ()
     {
         return (int) Math.floor(this.posZ);
+    }
+    
+    public int getRotation(){
+    	return rot;
     }
 
     public void setFuel(int fuel)

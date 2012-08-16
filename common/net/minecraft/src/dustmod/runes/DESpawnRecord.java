@@ -26,7 +26,7 @@ public class DESpawnRecord extends DustEvent
     public void onInit(EntityDust e)
     {
         e.renderBeam = e.renderStar = true;
-        e.setColorOuter(0, 255, 0);
+        e.setColorStarOuter(0, 255, 0);
         e.setColorBeam(0, 255, 0);
         ItemStack[] sacrifice = new ItemStack[] {new ItemStack(Item.diamond, 1)};
         this.sacrifice(e, sacrifice);

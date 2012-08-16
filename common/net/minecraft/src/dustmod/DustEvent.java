@@ -7,12 +7,12 @@ package net.minecraft.src.dustmod;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 
 /**
@@ -242,49 +242,41 @@ public abstract class DustEvent
         return itemstacks;
     }
 
-    protected final boolean takeSacrifice(EntityDust e, ItemStack accum)
+    protected final boolean takeSacrifice(EntityDust e, ItemStack... items)
     {
         List<EntityItem> sacrifice = getSacrifice(e);
 
         for (EntityItem i: sacrifice)
         {
-            if (i.item.itemID == DustMod.negateSacrifice.shiftedIndex)
-            {
-                return true;
-            }
-
-            if (i.item.itemID == accum.itemID && (accum.getItemDamage() == -1 || i.item.getItemDamage() == accum.getItemDamage()))
-            {
-                if (i.item.stackSize <= accum.stackSize && accum.stackSize > 0)
-                {
-                    accum.stackSize -= i.item.stackSize;
-                    i.setDead();
-                }
-                else
-                {
-                    i.item.stackSize -= accum.stackSize;
-                    break;
-                }
-            }
+        	for (ItemStack item:items){
+	            if (i.item.itemID == DustMod.negateSacrifice.shiftedIndex)
+	            {
+	                return true;
+	            }
+	
+	            if (i.item.itemID == item.itemID && (item.getItemDamage() == -1 || i.item.getItemDamage() == item.getItemDamage()))
+	            {
+	                if (i.item.stackSize <= item.stackSize && item.stackSize > 0)
+	                {
+	                    item.stackSize -= i.item.stackSize;
+	                    i.setDead();
+	                }
+	                else
+	                {
+	                    i.item.stackSize -= item.stackSize;
+	                    break;
+	                }
+	            }
+        	}
         }
 
-        if (accum.stackSize <= 0)
-        {
-            return true;
-        }
+        for(ItemStack item:items)
+	        if (item.stackSize > 0)
+	        {
+	            return false;
+	        }
 
-        return false;
-    }
-
-    protected final void fizzle()
-    {
-    }
-
-    protected final void beam()
-    {
-    }
-    protected final void star()
-    {
+        return true;
     }
 
     public void registerFollower(EntityDust e, Object o)

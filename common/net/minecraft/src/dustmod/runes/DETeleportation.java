@@ -153,13 +153,13 @@ public class DETeleportation extends PoweredEvent
         else if (e.ram > 1)
         {
             e.ram--;
-            e.setColorOuter(255, 0, 0);
-            e.setColorInner(255, 0, 0);
+            e.setColorStarOuter(255, 0, 0);
+            e.setColorStarInner(255, 0, 0);
         }
         else
         {
-            e.setColorInner(255, 255, 255);
-            e.setColorOuter(255, 255, 255);
+            e.setColorStarInner(255, 255, 255);
+            e.setColorStarOuter(255, 255, 255);
         }
 
         List<Entity> ents = this.getEntities(e, 10D);

@@ -104,7 +104,7 @@ public class DEBait extends PoweredEvent
 
         e.data[0] = entClass;
         e.starScale = 1.005F;
-        e.setColorOuter(255, 1, 1);
+        e.setColorStarOuter(255, 1, 1);
     }
 
     public void onTick(EntityDust e)

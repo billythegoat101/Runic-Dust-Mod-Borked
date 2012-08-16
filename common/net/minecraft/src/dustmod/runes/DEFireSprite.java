@@ -31,7 +31,7 @@ public class DEFireSprite extends PoweredEvent
         super.onInit(e);
         e.renderStar = true;
         e.follow = true;
-        e.setColorInner(255, 0, 0);
+        e.setColorStarInner(255, 0, 0);
         ItemStack[] sacrifice = new ItemStack[] {new ItemStack(Item.ghastTear, 1), new ItemStack(Item.fireballCharge, 2)};
         this.sacrifice(e, sacrifice);
 
@@ -45,7 +45,7 @@ public class DEFireSprite extends PoweredEvent
     public void onTick(EntityDust e)
     {
         super.onTick(e);
-        e.setColorOuter(255, 0, 0);
+        e.setColorStarOuter(255, 0, 0);
         
         EntityPlayer player = e.worldObj.getPlayerEntityByName(e.summonerUN);
 

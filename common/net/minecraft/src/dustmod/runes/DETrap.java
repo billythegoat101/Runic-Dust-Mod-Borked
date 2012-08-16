@@ -42,13 +42,13 @@ public abstract class DETrap extends DustEvent
 
         if (e.ticksExisted < 80)
         {
-            e.setColorInner(140, 140, 140);
-            e.setColorOuter(140, 140, 140);
+            e.setColorStarInner(140, 140, 140);
+            e.setColorStarOuter(140, 140, 140);
             return;
         }
 
-        e.setColorInner(0, 0, 255);
-        e.setColorOuter(0, 0, 255);
+        e.setColorStarInner(0, 0, 255);
+        e.setColorStarOuter(0, 0, 255);
         List<Entity> entities = this.getEntitiesExcluding(e.worldObj, e, e.posX, e.posY, e.posZ, 2D);
 
         if (entities.size() > 0)

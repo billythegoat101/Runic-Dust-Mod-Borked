@@ -78,13 +78,13 @@ public class DEBomb extends DustEvent
 
         if (f != 1 && e.ticksExisted < f * 30)
         {
-            e.setColorInner(140, 140, 140);
-            e.setColorOuter(140, 140, 140);
+            e.setColorStarInner(140, 140, 140);
+            e.setColorStarOuter(140, 140, 140);
             return;
         }
 
-        e.setColorInner(0, 0, 255);
-        e.setColorOuter(0, 0, 255);
+        e.setColorStarInner(0, 0, 255);
+        e.setColorStarOuter(0, 0, 255);
         List<Entity> entities = getEntities(e);
 
         if (entities.size() > 0 || f > 1)

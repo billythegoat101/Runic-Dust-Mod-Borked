@@ -33,8 +33,8 @@ public class DEXPStore extends DustEvent
         }
 
         e.renderStar = true;
-        e.setColorInner(0, 255, 0);
-        e.setColorOuter(0, 255, 0);
+        e.setColorStarInner(0, 255, 0);
+        e.setColorStarOuter(0, 255, 0);
     }
 
     public void onTick(EntityDust e)
@@ -48,13 +48,13 @@ public class DEXPStore extends DustEvent
         
         if (e.ram > 0)
         {
-            e.setColorInner(255, 255, 0);
-            e.setColorOuter(255, 255, 0);
+            e.setColorStarInner(255, 255, 0);
+            e.setColorStarOuter(255, 255, 0);
         }
         else
         {
-            e.setColorInner(0, 255, 0);
-            e.setColorOuter(0, 255, 0);
+            e.setColorStarInner(0, 255, 0);
+            e.setColorStarOuter(0, 255, 0);
         }
 
         for (Entity i: ents)

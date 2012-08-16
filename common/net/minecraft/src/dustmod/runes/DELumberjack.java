@@ -38,8 +38,8 @@ public class DELumberjack extends DustEvent
 
         e.data[0] = e.dustID;
         e.renderStar = true;
-        e.setColorOuter(77, 65, 47);
-        e.setColorInner(77, 65, 47);
+        e.setColorStarOuter(77, 65, 47);
+        e.setColorStarInner(77, 65, 47);
         e.starScale = 1.08F;
         int x = e.getX();
         int y = e.getY();

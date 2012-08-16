@@ -268,8 +268,8 @@ public class DEMiniTele extends DustEvent
 
         if (e.ticksExisted > 100)
         {
-            e.setColorOuter(255, 0, 0);
-            e.setColorInner(255, 0, 0);
+            e.setColorStarOuter(255, 0, 0);
+            e.setColorStarInner(255, 0, 0);
             e.fade();
         }
 

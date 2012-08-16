@@ -84,8 +84,8 @@ public class DEHeal extends DustEvent
         }
 
         e.starScale = 1.12F;
-        e.setColorInner(255, 255, 255);
-        e.setColorOuter(255, -255, -255);
+        e.setColorStarInner(255, 255, 255);
+        e.setColorStarOuter(255, -255, -255);
         e.renderStar = true;
         //entityplayersp.addPotionEffect(new PotionEffect(Potion.regeneration.id, 3, 2));
     }

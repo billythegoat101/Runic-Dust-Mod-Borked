@@ -25,8 +25,8 @@ public class DEEarthSprite  extends PoweredEvent
 //        e.renderBeam = true;
         e.follow = true;
         e.renderStar = true;
-        e.setColorInner(255, 0, 0);
-        e.setColorOuter(255, 0, 0);
+        e.setColorStarInner(255, 0, 0);
+        e.setColorStarOuter(255, 0, 0);
         ItemStack[] req = new ItemStack[] {new ItemStack(Block.glass.blockID, 16, 0),
                       new ItemStack(Item.ghastTear.shiftedIndex, 1, 0),
                       new ItemStack(Block.oreIron.blockID, 20, 0)

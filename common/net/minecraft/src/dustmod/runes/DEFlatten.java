@@ -58,7 +58,7 @@ public class DEFlatten extends DustEvent
             return;
         }
 
-        e.setColorOuter(114, 53, 62);
+        e.setColorStarOuter(114, 53, 62);
         e.renderStar = true;
         e.data[0] = dustStrength;
     }

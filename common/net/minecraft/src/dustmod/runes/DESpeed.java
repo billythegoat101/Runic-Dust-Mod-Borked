@@ -78,7 +78,7 @@ public class DESpeed extends DustEvent
         }
 
         e.starScale = 1.12F;
-        e.setColorOuter(0, 255, 0);
+        e.setColorStarOuter(0, 255, 0);
         e.renderStar = true;
         e.fade();
     }
