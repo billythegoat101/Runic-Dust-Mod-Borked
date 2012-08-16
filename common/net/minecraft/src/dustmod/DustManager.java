@@ -217,16 +217,18 @@ public class DustManager
      * @param eventInstance An instance of the event to call when the rune shape is made.
      */
     public static void registerLocalDustShape(DustShape shape, DustEvent eventInstance){
-//    	System.out.println("Registering local rune");
+    	for(DustShape i:shapes){
+    		if(i.id == shape.id){
+    			throw new IllegalArgumentException("[DustMod] Rune ID [" + shape.id + "] already occupied. " + i + " and " + shape);
+    		}
+    	}
+    	
         add(shape.name, eventInstance);
         shapes.add(shape);
         DustMod.proxy.checkPage(shape);
-//        PageHelper.instance.checkImage(shape);
         if(eventInstance != null && eventInstance instanceof PoweredEvent){
             shape.isPower = true;
         }
-//        ModLoader.addLocalization("tile.scroll" + shape.name + ".name", shape.getRuneName() + " Placing Scroll");
-//        System.out.println("Registering new DustShape " + shape.name + " " + mod_DustMod.isSessionMultiplayer());
         
         
         if(config == null){
