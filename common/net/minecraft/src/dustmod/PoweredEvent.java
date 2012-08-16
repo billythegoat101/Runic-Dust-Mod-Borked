@@ -11,7 +11,7 @@ import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntityFurnace;
-import net.minecraft.src.dustmod.events.DEPowerRelay;
+import net.minecraft.src.dustmod.runes.DEPowerRelay;
 
 /**
  *
