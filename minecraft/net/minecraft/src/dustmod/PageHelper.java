@@ -390,6 +390,9 @@ public class PageHelper
         Minecraft mc = ModLoader.getMinecraftInstance();
         TexturePackBase tp = mc.renderEngine.texturePack.getSelectedTexturePack();
         InputStream stream = tp.getResourceAsStream(file);
+        if(stream == null){
+        	throw new IllegalArgumentException("[DustMod] Image file not found! " + file);
+        }
         rtn = ImageIO.read(stream);
         images.put(file, rtn);
         return rtn;
