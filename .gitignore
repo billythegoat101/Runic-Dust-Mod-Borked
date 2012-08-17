@@ -28,6 +28,8 @@ minecraft/Start.java
 *.java~
 *~
 
+build.properties
+
 #################
 ## Eclipse
 #################
