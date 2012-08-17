@@ -1,5 +1,6 @@
 package dustmod;
 
+import net.minecraft.src.StringTranslate;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -9,6 +10,9 @@ public class DustItemManager {
 	public static DustColor[] colors = new DustColor[1000];
 	public static String[] names = new String[1000];
 	public static String[] ids = new String[1000];
+	public static DustColor[] colorsRemote = new DustColor[1000];
+	public static String[] namesRemote = new String[1000];
+	public static String[] idsRemote = new String[1000];
 	
 	/**
 	 * Register a new dust type to the system.
@@ -25,39 +29,75 @@ public class DustItemManager {
 			throw new IllegalArgumentException("[DustMod] Dust value already taken! " + value);
 		}
 		
-		colors[value] = new DustColor(primaryColor, secondaryColor, floorColor);
-		names[value] = name;
-		ids[value] = idName;
+		colors[value] = colorsRemote[value] = new DustColor(primaryColor, secondaryColor, floorColor);
+		names[value] = namesRemote[value] = name;
+		ids[value] = idsRemote[value] = idName;
 
 		LanguageRegistry.instance().addStringLocalization("tile." + idName + ".name", "en_US", name);
+		reloadLanguage();
+	}
+	protected static void registerRemoteDust(int value, String name, String idName,  int primaryColor, int secondaryColor, int floorColor){
+		if(colorsRemote[value] != null){
+			throw new IllegalArgumentException("[DustMod] Remote error! Dust value already taken! " + value);
+		}
+		
+		System.out.println("Register new remote dust " + primaryColor + " " + secondaryColor + " " + floorColor);
+		
+		colorsRemote[value] = new DustColor(primaryColor, secondaryColor, floorColor);
+		namesRemote[value] = name;
+		idsRemote[value] = idName;
+		
+		LanguageRegistry.instance().addStringLocalization("tile." + idName + ".name", "en_US", name);
+		reloadLanguage();
+	}
+	
+	public static void reloadLanguage(){
+		StringTranslate st = StringTranslate.getInstance();
+		String curLan = st.currentLanguage;
+		String trick = "ar_SA"; //I pick this one because its the second one I see a hard-coded reference to in StringTranslate >_>
+		if(curLan.equals(trick)){
+			trick = "en_us"; //in case someone is using ar_SA. Not even 100% sure what that is.
+		}
+		st.setLanguage(trick);
+		st.setLanguage(curLan);
+	}
+	
+	public static String[] getNames(){
+		return (DustMod.proxy.isClient() ? namesRemote:names);
+	}
+	public static String[] getIDS(){
+		return (DustMod.proxy.isClient() ? idsRemote:ids);
+	}
+	public static DustColor[] getColors(){
+		return (DustMod.proxy.isClient() ? colorsRemote:colors);
 	}
 	
 	public static int getPrimaryColor(int value){
 		if(value <= 0) return 0x8F25A2;
-		if(colors[value] == null) return 0;
-		return colors[value].primaryColor;
+		if(colorsRemote[value] == null) return 0;
+		return colorsRemote[value].primaryColor;
 	}
 	
 	public static int getSecondaryColor(int value){
 		if(value <= 0) return 0xDB73ED1;
-		if(colors[value] == null) return 0;
-		return colors[value].secondaryColor;
+		if(colorsRemote[value] == null) return 0;
+		return colorsRemote[value].secondaryColor;
 	}
 	
 	public static int getFloorColor(int value){
 		if(value <= 0) return 0xCE00E0;
-		if(colors[value] == null) return 0;
-		return colors[value].floorColor;
+		if(colorsRemote[value] == null) return 0;
+		return colorsRemote[value].floorColor;
 	}
 	
 	public static int[] getFloorColorRGB(int value){
 		if(value <= 0) return new int[] {206, 0, 224}; //00CE00E0 variable
-
-		if(colors[value] == null) return new int[]{0,0,0};
+		
+		if(colorsRemote[value] == null) return new int[]{0,0,0};
 		
 		int[] rtn = new int[3];
 		
-		int col = colors[value].floorColor;
+		int col = colorsRemote[value].floorColor;
 		
 		rtn[0] = (col & 0xFF0000) >> 16;
 		rtn[1] = (col & 0xFF00) >> 8;
@@ -67,9 +107,10 @@ public class DustItemManager {
 	}
 	
 	public static void reset(){
-		colors = new DustColor[1000];
-		names = new String[1000];
-		ids = new String[1000];
+		System.out.println("Reset local dusts");
+		colorsRemote = new DustColor[1000];
+		namesRemote = new String[1000];
+		idsRemote = new String[1000];
 	}
 	
 	public static void registerDefaultDusts(){
@@ -87,7 +128,7 @@ public class DustItemManager {
 	}
 
 	@SideOnly(Side.SERVER)
-	private static class DustColor{
+	public static class DustColor{
 		public int primaryColor;
 		public int secondaryColor;
 		public int floorColor;

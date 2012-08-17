@@ -19,6 +19,12 @@ import dustmod.EntityDust;
 import dustmod.TileEntityDustTable;
 
 public class ClientProxy extends CommonProxy {
+	
+	@Override
+	public boolean isClient(){
+		return true;
+	}
+	
 	@Override
 	public int getBlockModel(Block b) {
 		if(b == DustMod.dust) return DustBlockRenderers.dustModelID;

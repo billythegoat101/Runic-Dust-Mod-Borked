@@ -73,8 +73,10 @@ public class DustManager
 	
     public static HashMap<String, DustEvent> events = new HashMap<String, DustEvent>();
     public static List<String> names = new ArrayList<String>();
+    public static List<String> namesRemote = new ArrayList<String>();
 
     public static ArrayList<DustShape> shapes = new ArrayList<DustShape>();
+    public static ArrayList<DustShape> shapesRemote = new ArrayList<DustShape>();
     public static Configuration config;
     public DustManager()
     {
@@ -83,10 +85,12 @@ public class DustManager
 
 
     public static List<String> getNames(){
+    	if(DustMod.proxy.isClient()) return namesRemote;
         return names;
     }
     
     public static ArrayList<DustShape> getShapes(){
+    	if(DustMod.proxy.isClient()) return shapesRemote;
         return shapes;
     }
     public static HashMap<String, DustEvent> getEvents(){
@@ -179,11 +183,14 @@ public class DustManager
 
     public static DustShape getShape(int ind)
     {
+    	if(DustMod.proxy.isClient()) return shapesRemote.get(ind);
         return shapes.get(ind);
     }
     public static DustShape getShapeFromID(int id)
     {
-        for (DustShape i: shapes)
+    	ArrayList<DustShape> s = (DustMod.proxy.isClient())? shapesRemote:shapes;
+    	
+        for (DustShape i: s)
         {
             if (i.id == id)
             {
@@ -202,9 +209,8 @@ public class DustManager
      */
     public static void resetMultiplayerRunes(){
     	System.out.println("Reset multiplayer runes");
-        events = new HashMap<String, DustEvent>();
-        names = new ArrayList<String>();
-        shapes = new ArrayList<DustShape>();
+        namesRemote = new ArrayList<String>();
+        shapesRemote = new ArrayList<DustShape>();
         DustMod.proxy.resetPlayerTomePage();
     }
     
@@ -246,6 +252,21 @@ public class DustManager
     }
     
 
+    
+    /**
+     * Registers a new DustShape into the local system reserved for SMP. This is 
+     * called by the packet from the server so that the available events are synced.
+     * 
+     * @param shape the DustShape to register.
+     */
+    public static void registerRemoteDustShape(DustShape shape){
+        String name = shape.name;
+        shapesRemote.add(shape);
+        namesRemote.add(shape.name);
+        DustMod.proxy.checkPage(shape);
+//        System.out.println("Registering temporary remote DustShape " + shape.name);
+        LanguageRegistry.instance().addStringLocalization("tile.scroll" + shape.name + ".name", "en_US", shape.getRuneName() + " Placing Scroll");
+    }
 
 	/**
 	 * Called when a rune is activated. This checks to see if the rune shape is
@@ -377,24 +398,6 @@ public class DustManager
 			System.out.println("nothing found.");
 		}
 	}
-    
-    
-    /**
-     * Registers a new DustShape into the local system reserved for SMP. This is 
-     * called by the packet from the server so that the available events are synced.
-     * 
-     * @param shape the DustShape to register.
-     */
-    public static void registerRemoteDustShape(DustShape shape){
-        String name = shape.name;
-        shapes.add(shape);
-        names.add(shape.name);
-        DustMod.proxy.checkPage(shape);
-//        System.out.println("Registering temporary remote DustShape " + shape.name);
-        LanguageRegistry.instance().addStringLocalization("tile.scroll" + shape.name + ".name", "en_US", shape.getRuneName() + " Placing Scroll");
-    }
-    
-    
     
 
 	public static void registerDefaultShapes() {

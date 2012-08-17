@@ -23,6 +23,7 @@ import net.minecraft.src.World;
 import cpw.mods.fml.common.network.IConnectionHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import dustmod.DustItemManager.DustColor;
 
 /**
  *
@@ -34,8 +35,12 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     public static final String CHANNEL_TELexicon = "TElexicon";
     public static final String CHANNEL_TERut = "TERut";
     public static final String CHANNEL_DMRune = "DMRune";
-    public static final String CHANNEL_DustItem = "DutItem";
+    public static final String CHANNEL_DustItem = "DustItem";
 
+    public PacketHandler(){
+    	System.out.println("yo wtfffff");
+    }
+    
     public static Packet getTEDPacket(TileEntityDust ted)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
@@ -202,9 +207,10 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             int primaryColor, secondaryColor, floorColor;
             String idName, name;
             
-            primaryColor = DustItemManager.getPrimaryColor(value);
-            secondaryColor = DustItemManager.getSecondaryColor(value);
-            floorColor = DustItemManager.getFloorColor(value);
+            DustColor color = DustItemManager.colors[value];
+            primaryColor = color.primaryColor;
+            secondaryColor = color.secondaryColor;
+            floorColor = color.floorColor;
             
             idName = DustItemManager.ids[value];
             name = DustItemManager.names[value];
@@ -235,6 +241,8 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     @Override
     public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
     {
+    	
+//    	System.out.println("Got packet " + packet.channel);
     	byte[] data = packet.data;
     	String channel = packet.channel;
     	
@@ -428,7 +436,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                 for(int i = 0; i < nameLen; i++)
                     name += dis.readChar();
                 
-                DustItemManager.registerDust(value, name, idName, primaryColor, secondaryColor, floorColor);
+                DustItemManager.registerRemoteDust(value, name, idName, primaryColor, secondaryColor, floorColor);
             }
             catch (IOException e)
             {
@@ -440,13 +448,18 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler,
 			NetworkManager manager) {
+		
+		System.out.println("Player logged in " + DustMod.proxy.isClient() );
+		
 		for(int i = 0; i < DustItemManager.ids.length; i++){
 			if(DustItemManager.ids[i] != null){
-				netHandler.registerPacket(getDustDeclarationPacket(i));
+				manager.addToSendQueue(getDustDeclarationPacket(i));
 			}
 		}
         for(DustShape shape:DustManager.shapes){
-            netHandler.registerPacket(getRuneDeclarationPacket(shape));
+        	DustEvent e = DustManager.getEvents().get(shape.name); 
+        	if(e.allowed && e.permaAllowed)
+        		manager.addToSendQueue(getRuneDeclarationPacket(shape));
         }
 		
 	}
@@ -454,35 +467,40 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 	@Override
 	public String connectionReceived(NetLoginHandler netHandler,
 			NetworkManager manager) {
-		// TODO Auto-generated method stub
+		System.out.println("Connection recieved");
 		return null;
 	}
 
+	//Remote server connection established
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server,
 			int port, NetworkManager manager) {
-		// TODO Auto-generated method stub
-		
+		DustManager.resetMultiplayerRunes();
+		DustItemManager.reset();
+		System.out.println("Connection opened");
 	}
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler,
 			MinecraftServer server, NetworkManager manager) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Fuckall");
+		DustManager.resetMultiplayerRunes();
+		DustItemManager.reset();
 	}
 
 	@Override
 	public void connectionClosed(NetworkManager manager) {
-		// TODO Auto-generated method stub
-		
+		DustManager.resetMultiplayerRunes();
+		DustItemManager.reset();
+//		DustManager.registerDefaultShapes();
+//		DustItemManager.registerDefaultDusts();
+		System.out.println("Connection closed");
 	}
 
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler,
 			NetworkManager manager, Packet1Login login) {
-		DustManager.resetMultiplayerRunes();
-		DustItemManager.reset();
+		System.out.println("Logged in");
 	}
     
 }

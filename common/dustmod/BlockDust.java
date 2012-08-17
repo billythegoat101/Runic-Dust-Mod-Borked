@@ -111,7 +111,6 @@ public class BlockDust extends BlockContainer {
 		this.onBlockActivated(world, i, j, k, (EntityPlayer) entityliving, 0,
 				0, 0, 0);
 
-		System.out.println("Placed");
 		if (((EntityPlayer) entityliving).getCurrentEquippedItem() != null) {
 			((EntityPlayer) entityliving).getCurrentEquippedItem().stackSize++;
 		}

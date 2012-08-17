@@ -112,4 +112,8 @@ public class CommonProxy implements IGuiHandler{
 //		Object rtn = new GuiTome(player.getCurrentEquippedItem());
 		return  null;
 	}
+
+	public boolean isClient() {
+		return false;
+	}
 }

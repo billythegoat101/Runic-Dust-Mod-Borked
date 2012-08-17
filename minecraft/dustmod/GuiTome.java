@@ -109,6 +109,7 @@ public class GuiTome extends GuiScreen
         String notes = "";
         boolean recolor = false;
 
+    	System.out.println("WTF Tome, " + DustMod.proxy.isClient());
         if (getPage() == 0)
         {
             name = "Legend";

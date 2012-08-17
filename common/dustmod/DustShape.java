@@ -144,7 +144,7 @@ public class DustShape
         if(!allowedVariable.isEmpty()){
         	desc += "\n----\nAllowed Variable Dusts:\n";
         	for(int i: allowedVariable){
-        		desc += DustItemManager.names[i] + "\n";
+        		desc += DustItemManager.getNames()[i] + "\n";
         	}
         }
         return this;

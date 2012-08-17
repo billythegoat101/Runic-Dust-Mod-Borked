@@ -34,6 +34,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -150,6 +151,9 @@ public class DustMod {
 	
 	@Init
 	public void load(FMLInitializationEvent evt){
+		
+		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
+		
 		GameRegistry.registerBlock(dust);
 		GameRegistry.registerBlock(dustTable);
 		GameRegistry.registerBlock(rutBlock);

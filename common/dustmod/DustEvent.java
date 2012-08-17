@@ -593,7 +593,7 @@ public abstract class DustEvent
                 int hy = h[1];
                 int hz = h[2];
 
-                if (hx == hx && hy == hy && hz == hz)
+                if (vx == hx && vy == hy && vz == hz)
                 {
                     farea.add(new Integer[] {hx, hy, hz});
                     get = true;
@@ -648,7 +648,7 @@ public abstract class DustEvent
                     int hy = h[1];
                     int hz = h[2];
 
-                    if (hx == hx && hy == hy && hz == hz)
+                    if (lx == hx && ly == hy && lz == hz)
                     {
                         farea.add(new Integer[] {hx, hy, hz});
                         get = true;
@@ -931,7 +931,7 @@ public abstract class DustEvent
                     int hy = h[1];
                     int hz = h[2];
 
-                    if (hx == hx && hy == hy && hz == hz)
+                    if (lx == hx && ly == hy && lz == hz)
                     {
                         farea.add(h);
                         get = true;
