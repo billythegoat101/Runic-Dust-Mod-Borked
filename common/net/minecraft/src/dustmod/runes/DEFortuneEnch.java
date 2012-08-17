@@ -21,7 +21,7 @@ public class DEFortuneEnch extends DustEvent
 
     public void onInit(EntityDust e)
     {
-        List<EntityItem> sacrifice = getSacrifice(e);
+        List<EntityItem> sacrifice = getItems(e);
         int item = Item.pickaxeDiamond.shiftedIndex;
 
         for (EntityItem i: sacrifice)

@@ -25,7 +25,7 @@ public class DECompression extends DustEvent
 
     public void onInit(EntityDust e)
     {
-        if (!this.takeSacrifice(e, new ItemStack(Block.blockSteel.blockID, 1, -1)))
+        if (!this.takeItems(e, new ItemStack(Block.blockSteel.blockID, 1, -1)))
         {
             e.fizzle();
             return;

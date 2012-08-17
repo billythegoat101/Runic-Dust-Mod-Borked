@@ -221,11 +221,11 @@ public abstract class DustEvent
         return l;
     }
 
-    protected final List<EntityItem> getSacrifice(EntityDust e)
+    protected final List<EntityItem> getItems(EntityDust e)
     {
-        return getSacrifice(e, 1D);
+        return getItems(e, 1D);
     }
-    protected final List<EntityItem> getSacrifice(EntityDust e, double radius)
+    protected final List<EntityItem> getItems(EntityDust e, double radius)
     {
         ArrayList<EntityItem> itemstacks = new ArrayList<EntityItem>();
         List l = getEntities(e.worldObj, e.posX, e.posY - e.yOffset, e.posZ, radius);
@@ -242,9 +242,9 @@ public abstract class DustEvent
         return itemstacks;
     }
 
-    protected final boolean takeSacrifice(EntityDust e, ItemStack... items)
+    protected final boolean takeItems(EntityDust e, ItemStack... items)
     {
-        List<EntityItem> sacrifice = getSacrifice(e);
+        List<EntityItem> sacrifice = getItems(e);
 
         for (EntityItem i: sacrifice)
         {
@@ -285,7 +285,7 @@ public abstract class DustEvent
 
     protected ItemStack[] sacrifice(EntityDust e, ItemStack[] req)
     {
-        List<EntityItem> sacrifice = getSacrifice(e);
+        List<EntityItem> sacrifice = getItems(e);
         boolean negate = false;
 
         for (EntityItem i: sacrifice)

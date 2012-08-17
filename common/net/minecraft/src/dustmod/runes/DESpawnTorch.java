@@ -56,7 +56,7 @@ public class DESpawnTorch extends DustEvent
         super.onTick(e);
 
         if(e.data[0] == 1 && e.ticksExisted%10 == 0){
-            List<EntityItem> items = this.getSacrifice(e);
+            List<EntityItem> items = this.getItems(e);
             for(EntityItem i:items){
                 ItemStack item = i.item;
                 if(item.itemID == Item.dyePowder.shiftedIndex && e.data[1] != item.getItemDamage()){

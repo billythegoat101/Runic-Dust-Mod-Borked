@@ -21,7 +21,7 @@ public class DESilkTouchEnch extends DustEvent
 
     public void onInit(EntityDust e)
     {
-        List<EntityItem> sacrifice = getSacrifice(e);
+        List<EntityItem> sacrifice = getItems(e);
         int item = -1;
 
         for (EntityItem i: sacrifice)

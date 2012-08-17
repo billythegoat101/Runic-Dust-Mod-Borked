@@ -36,7 +36,7 @@ public class DEVoid extends DustEvent
         e.renderStar = true;
         e.setColorStarInner(255, 0, 255);
         e.setColorStarOuter(255, 0, 255);
-        List<EntityItem> sacrifice = this.getSacrifice(e);
+        List<EntityItem> sacrifice = this.getItems(e);
 
         if (sacrifice == null || sacrifice.isEmpty())
         {

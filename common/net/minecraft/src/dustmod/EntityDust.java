@@ -181,6 +181,12 @@ public class EntityDust extends Entity
         }
     }
 
+    public void setStarScale(float scale){
+    	this.starScale = scale;
+    }
+    public void setStartScaleY(float scale){
+    	this.starScaleY = scale;
+    }
     public void setColorStar(int r, int g, int b)
     {
         setColorStarInner(r, g, b);
