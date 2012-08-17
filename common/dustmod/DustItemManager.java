@@ -41,7 +41,7 @@ public class DustItemManager {
 			throw new IllegalArgumentException("[DustMod] Remote error! Dust value already taken! " + value);
 		}
 		
-		System.out.println("Register new remote dust " + primaryColor + " " + secondaryColor + " " + floorColor);
+//		System.out.println("Register new remote dust " + primaryColor + " " + secondaryColor + " " + floorColor);
 		
 		colorsRemote[value] = new DustColor(primaryColor, secondaryColor, floorColor);
 		namesRemote[value] = name;
@@ -107,7 +107,7 @@ public class DustItemManager {
 	}
 	
 	public static void reset(){
-		System.out.println("Reset local dusts");
+//		System.out.println("Reset local dusts");
 		colorsRemote = new DustColor[1000];
 		namesRemote = new String[1000];
 		idsRemote = new String[1000];

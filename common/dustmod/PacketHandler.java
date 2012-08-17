@@ -36,10 +36,6 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     public static final String CHANNEL_TERut = "TERut";
     public static final String CHANNEL_DMRune = "DMRune";
     public static final String CHANNEL_DustItem = "DustItem";
-
-    public PacketHandler(){
-    	System.out.println("yo wtfffff");
-    }
     
     public static Packet getTEDPacket(TileEntityDust ted)
     {
@@ -449,7 +445,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 	public void playerLoggedIn(Player player, NetHandler netHandler,
 			NetworkManager manager) {
 		
-		System.out.println("Player logged in " + DustMod.proxy.isClient() );
+//		System.out.println("Player logged in " + DustMod.proxy.isClient() );
 		
 		for(int i = 0; i < DustItemManager.ids.length; i++){
 			if(DustItemManager.ids[i] != null){
@@ -477,13 +473,11 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 			int port, NetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
-		System.out.println("Connection opened");
 	}
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler,
 			MinecraftServer server, NetworkManager manager) {
-		System.out.println("Fuckall");
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
 	}
@@ -494,13 +488,13 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 		DustItemManager.reset();
 //		DustManager.registerDefaultShapes();
 //		DustItemManager.registerDefaultDusts();
-		System.out.println("Connection closed");
+//		System.out.println("Connection closed");
 	}
 
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler,
 			NetworkManager manager, Packet1Login login) {
-		System.out.println("Logged in");
+//		System.out.println("Logged in");
 	}
     
 }

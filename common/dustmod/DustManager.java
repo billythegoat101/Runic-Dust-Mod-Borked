@@ -208,7 +208,7 @@ public class DustManager
      * 
      */
     public static void resetMultiplayerRunes(){
-    	System.out.println("Reset multiplayer runes");
+//    	System.out.println("Reset multiplayer runes");
         namesRemote = new ArrayList<String>();
         shapesRemote = new ArrayList<DustShape>();
         DustMod.proxy.resetPlayerTomePage();
