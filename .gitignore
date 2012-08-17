@@ -2,28 +2,14 @@
 ## Not-me
 #################
 
-common/cpw/
-common/org/
-common/net/minecraftforge/
-common/net/minecraft/server/
-common/net/minecraft/src/*.java
+common/
 !common/net/minecraft/src/DustModBouncer.java
-
-common/fml_at.cfg
-common/fml_marker.cfg
-common/fmlversion.properties
-common/forge_at.cfg
+!common/dustmod/
 
 minecraft_server/
 
-minecraft/cpw/
-minecraft/ibxm/
-minecraft/paulscode/
-minecraft/net/minecraftforge/
-minecraft/net/minecraft/client/
-minecraft/net/minecraft/src/*.java
-minecraft/forge_logo.png
-minecraft/Start.java
+minecraft/
+!minecraft/dustmod/
 
 *.java~
 *~

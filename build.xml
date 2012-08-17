@@ -1,0 +1,72 @@
+<?xml version="1.0" ?> 
+
+<!-- Most things edited or copied from pahimar's EE3 build.xml as I am still learning ant. -->
+<project name="Runic Dust Mod">
+
+    <property file="build.properties" />
+
+    <target name="recompile">
+        <exec dir="${dir.development.mcp}" executable="cmd" os="Windows 7">
+            <arg line="/c recompile.bat" />
+        </exec>
+    </target>
+
+    <target name="reobfuscate">
+        <exec dir="${dir.development.mcp}" executable="cmd" os="Windows 7">
+            <arg line="/c reobfuscate.bat" />
+        </exec>
+    </target>
+
+    <target name="release-beta">
+            <!-- Prep for the release -->
+    	    <!-- andcall target="clean" /-->
+            <!-- antcall target="build" /-->
+            <antcall target="recompile" />      
+            <antcall target="reobfuscate" />
+			
+            <!-- Build the jar -->
+            <jar destfile="${dir.development}\releases\test-dustmod-v${release.mod.version}.jar">
+                <fileset dir="${dir.development.cmp}\src\" includes="mcmod.info" />
+                <fileset dir="${dir.development.mcp}\reobf\minecraft\" />
+                <fileset dir="${dir.development.mcp}\src\resource\" />
+            </jar>
+
+            <!-- Put a copy in my Beta DB share -->
+            <mkdir dir="${dir.beta}\${release.minecraft.version}\${release.mod.version}" />
+            <move file="${dir.development}\releases\test-dustmod-v${release.mod.version}.jar" todir="${dir.beta}\${release.minecraft.version}\${release.mod.version}" />
+
+            <!-- copy file="${dir.beta}\${release.minecraft.version}\${release.mod.version}" toDir="${dir.development.test}" /-->
+    	
+            <!-- Clean up the MCP source now that we are done -->
+            <!-- antcall target="clean" /-->
+        </target>
+
+    <target name="release-final">
+            <!-- Prep for the release -->
+    	    <!-- andcall target="clean" /-->
+            <!-- antcall target="build" /-->
+            <antcall target="recompile" />      
+            <antcall target="reobfuscate" />
+			
+            <!-- Build the jar -->
+            <jar destfile="${dir.development}\releases\dustmod-v${release.mod.version}.jar">
+                <fileset dir="${dir.development.cmp}\src\" includes="mcmod.info" />
+                <fileset dir="${dir.development.mcp}\reobf\minecraft\" />
+                <fileset dir="${dir.development.mcp}\src\resource\" />
+            </jar>
+
+            <!-- Put a copy in my Beta DB share -->
+            <mkdir dir="${dir.beta}\${release.minecraft.version}\${release.mod.version}" />
+            <move file="${dir.development}\releases\dustmod-v${release.mod.version}.jar" todir="${dir.beta}\${release.minecraft.version}\${release.mod.version}" />
+
+            <!-- Put a copy in my Release DB share -->
+            <mkdir dir="${dir.release}\${release.minecraft.version}\${release.mod.version}" />
+            <move file="${dir.development}\releases\dustmod-v${release.mod.version}.jar" todir="${dir.release}\${release.minecraft.version}\${release.mod.version}" />
+
+            <!-- copy file="${dir.beta}\${release.minecraft.version}\${release.mod.version}" toDir="${dir.development.test}" /-->
+    	
+            <!-- Clean up the MCP source now that we are done -->
+            <!-- antcall target="clean" /-->
+    </target>
+
+</project>
