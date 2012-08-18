@@ -4,3 +4,4 @@
 -Wall lifting rune derps the player around when lifting them.
 -EntityBlock's become invisible permanantly after placing.
 -Earth sprite disappears after logout and login (visually)
+-No particle effect indicators show up. This will have to be done through custom packets later.
