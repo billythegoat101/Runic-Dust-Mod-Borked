@@ -494,7 +494,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DEHeal());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="lumberjack">
-        s = new DustShape(8, 8, "lumberjack", true, 2, 2, 0, 0, 4);
+        s = new DustShape(8, 8, "lumberjack", true, 2, 2, 2, 2, 4);
         values = new int[][][]
         {
             {
@@ -520,7 +520,7 @@ public class DustManager
                 + "The area of effect and the chances of doubling increase with dust value. "
                 + "Also destroys leaves with a small chance of dropping plant runic dust.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] { -2, -1, -1, 0, 0, -1, -1, -2});
+        s.setManualRotationDerp(new int[] { 0,1, -1,0, 0,-1, 1,0});
         DustManager.registerLocalDustShape(s, new DELumberjack());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="campfire">
@@ -542,7 +542,7 @@ public class DustManager
         };
         s.setData(values);
         s.setRuneName("Rune of Fire");
-        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, 0});
+        s.setManualRotationDerp(new int[] {-1, -1, -1, -1, -1, -1, -1, -1});
         s.setAuthor("billythegoat101");
         s.setNotes("Sacrifice:\n\n"
                 + "-8xLog + 1xZombieFlesh\n\n"
@@ -632,7 +632,7 @@ public class DustManager
         s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of the Farm");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, 0, -1, 0});
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, -1, 0, 0, 0});
         s.setNotes("Sacrifice:\n\n"
                 + "-8xIronIngot + 4XP");
         s.setDesc("Description:\n\n"
@@ -664,7 +664,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Spawns a bridge of lily pads over a body of water in front of it.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, -1});
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, -1, 0, 0});
         DustManager.registerLocalDustShape(s, new DELillyBridge());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="dawn">
@@ -877,7 +877,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Locks day/night time, sand falling, and water flowing for as long as it is fueled. BEWARE: Very high chance of bugs especially with other mods.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, -1});
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, -1, 0, 0});
         DustManager.registerLocalDustShape(s, new DETimeLock());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="void">
@@ -907,7 +907,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Stores sacrificed items in a void. When activated without a sacrifice, the items are returned.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, 0, -1, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
         DustManager.registerLocalDustShape(s, new DEVoid());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="wall">
@@ -930,7 +930,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Lifts a wall out of the earth.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 1, 0, 0, -1, 1 , 18});
+        s.setManualRotationDerp(new int[] {-1, 1, 0, 0, -1, 1, 0, 0});
         DustManager.registerLocalDustShape(s, new DEWall());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="xpstore">
@@ -981,7 +981,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Gives you a variable speed boost.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, -1, -1, 0});
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, -1, 0, 0, -1});
         DustManager.registerLocalDustShape(s, new DESpeed());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="compression">
@@ -1033,8 +1033,8 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Creates a fog that blinds and confuses anyone inside.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, 0, -1, 0});
-        DustManager.registerLocalDustShape(s, new DEFog());
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
+        DustManager.registerLocalDustShape(s, new DEFog().setPermaAllowed(false));
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="firerain">
         s = new DustShape(6, 7, "firerain6", false, 3, 3, 1, 1, 25);
@@ -1060,11 +1060,11 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Summons a storm of ignited arrows for a duration of time. WARNING:Large chance of lag if left running. Break rune to stop.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, 0, -1, -1, 0, 0, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, 0, 0, 0, -1});
         DustManager.registerLocalDustShape(s, new DEFireRain());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="egg">
-        s = new DustShape(6, 7, "egg", false, 3, 2, 5, 5,  45);
+        s = new DustShape(6, 7, "egg", false, 3, 2, 1, 2,  45);
         values = new int[][][]
         {
             {
@@ -1082,7 +1082,7 @@ public class DustManager
         s.setData(values);
         s.setRuneName("Rune Rebirth");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 1, 1, 1, 1, 1, 1, 0});
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, -1, 0, 0});
         s.setNotes("Sacrifice:\n\n"
                 + "-1xLiveEntity + 1xEgg + 1xDiamond + 10XP\n\n");
         s.setDesc("Description:\n\n"
@@ -1143,7 +1143,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DEResurrection());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="powerRelay">
-        s = new DustShape(10, 10, "powerRelay", false, 1, 1, 5, 5,  42);
+        s = new DustShape(10, 10, "powerRelay", false, 1, 1, 3, 3,  42);
         values = new int[][][]
         {
             {
@@ -1176,7 +1176,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DEPowerRelay());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="scollect">
-        s = new DustShape(9, 6, "scollect", false, 2, 3, 0, 0, 35);
+        s = new DustShape(9, 6, "scollect", false, 2, 3, 2, 3, 35);
         values = new int[][][]
         {
             {
@@ -1196,7 +1196,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Collects a spawner that it is placed around.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] { -2, -1, -1, 0, 0, -1, -1, -2});
+        s.setManualRotationDerp(new int[] {0, 1, -1, 0, 0, -1, 1, 0});
         DustManager.registerLocalDustShape(s, new DESpawnerCollector());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="reprog">
@@ -1225,7 +1225,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Reassigns a placed spawner to spawn mobs of the specified type.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] { -1, 0, 0, 0, 0, 0, 0, -1});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, 0, -1, 0, 0});
         DustManager.registerLocalDustShape(s, new DESpawnerReprog());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="tele">
@@ -1258,7 +1258,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Creates a teleporation network location for other teleportation runes to teleport to. Will cost 4 hearts every teleportation. The teleportation network frequency on which to send you depends on the block beneath the blaze square in the rune design.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, 1, 0, 2, 0, 1, -2});
+        s.setManualRotationDerp(new int[] {1, 0, 0, 0, 1, -2, 3, 0});
         DustManager.registerLocalDustShape(s, new DETeleportation());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="minitele">
@@ -1279,7 +1279,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Teleports you to a teleporation network rune location. The teleportation network frequency on which to send you depends on the block beneath the blaze square in the rune design.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, 0, -1, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
         DustManager.registerLocalDustShape(s, new DEMiniTele());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Fire Sprite">
@@ -1320,16 +1320,16 @@ public class DustManager
         values = new int[][][]
         {
             {
-                {0, 0, 0, 0, G, G, 0, 0, 0, 0},
-                {0, 0, G, P, B, G, P, G, 0, 0},
-
-                {0, B, B, P, B, B, P, B, B, 0},
-                {G, G, G, P, G, B, P, G, G, G},
-                {G, G, G, P, B, G, P, G, G, G},
-                {0, B, B, P, B, B, P, B, B, 0},
-
-                {0, 0, G, P, G, B, P, G, 0, 0},
-                {0, 0, 0, 0, G, G, 0, 0, 0, 0}
+                {0,0,0, 0,G,G,0, 0,0,0},
+                {0,0,G, P,B,G,P, G,0,0},
+                
+                {0,B,B, P,B,B,P, B,B,0},
+                {G,G,G, P,G,B,P, G,G,G},
+                {G,G,G, P,B,G,P, G,G,G},
+                {0,B,B, P,B,B,P, B,B,0},
+                
+                {0,0,G, P,G,B,P, G,0,0},
+                {0,0,0, 0,G,G,0, 0,0,0}
             }
         };
         s.setData(values);
@@ -1342,7 +1342,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Summons a sprite that will encircle you with earth. Pressing [crouch] while standing still will call the sprite to protect you.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, 0, -1, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
         DustManager.registerLocalDustShape(s, new DEEarthSprite());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="loyaltysprite">
@@ -1374,20 +1374,20 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DELoyaltySprite().setAllowed(false));
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="hunter">
-        s = new DustShape(12, 8, "hunter6", false, 0, 2, 0, 0,  43);
+        s = new DustShape(12, 8, "hunter6", false, 0, 2, 0, 2,  43);
         values = new int[][][]
         {
             {
-                {0, 0, G, G, G, 0, 0, G, G, G, 0, 0},
-                {G, G, G, B, G, G, G, G, B, G, G, G},
+                {0,0,G,G, G,0,0,G, G,G,0,0},
+                {G,G,G,B, G,G,G,G, B,G,G,G},
 
-                {0, 0, B, G, G, G, G, G, G, B, 0, 0},
-                {0, 0, G, G, B, B, B, B, G, G, 0, 0},
-                {0, 0, G, G, B, B, B, B, G, G, 0, 0},
-                {0, 0, B, G, G, G, G, G, G, B, 0, 0},
+                {0,0,B,G, G,G,G,G, G,B,0,0},
+                {0,0,G,G, B,B,B,B, G,G,0,0},
+                {0,0,G,G, B,B,B,B, G,G,0,0},
+                {0,0,B,G, G,G,G,G, G,B,0,0},
 
-                {G, G, G, B, G, G, G, G, B, G, G, G},
-                {0, 0, G, G, G, 0, 0, G, G, G, 0, 0},
+                {G,G,G,B, G,G,G,G, B,G,G,G},
+                {0,0,G,G, G,0,0,G, G,G,0,0},
             }
         };
         s.setData(values);
@@ -1522,7 +1522,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DESilkTouchEnch());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="ench.fortune">
-        s = new DustShape(10, 10, "ench.fortune", false, 1, 1, 5, 5, 27);
+        s = new DustShape(10, 10, "ench.fortune", false, 1, 1, 3, 3, 27);
         values = new int[][][]
         {
             {
@@ -1585,7 +1585,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DEForcefield());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="flatten">
-        s = new DustShape(20, 20, "flatten", false, 0, 0, 9, 9, 32);
+        s = new DustShape(20, 20, "flatten", false, 0, 0, 8, 8, 32);
         values = new int[][][]
         {
             {
@@ -1656,43 +1656,43 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Lifts the earth specified by the clay-filled etchings up high into the sky.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 1, 0, 0, -1, 1});
+        s.setManualRotationDerp(new int[] {-1, 1, 0, 0, -1, 1, 0, 0});
         
         DustManager.registerLocalDustShape(s, new DELiftTerrain());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="sarlacc">
-        s = new DustShape(22, 32, "xp6", false, 2, 3, 15, 10, 31);
+        s = new DustShape(22, 32, "xp6", false, 2, 3, 14, 9, 31);
         values = new int[][][]
         {
             {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, G, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  G, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ 
+                {0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  G, 0, 0, 0,  G, G, G, G, 0, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0,  0, 0, 0, 0,  0, G, G, G,  G, 0, 0, 0,  0, G, G, 0, 0, 0, 0, G, G, G, G, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0,  0, 0, L, L,  0, 0, 0, 0,  0, 0, L, 0,  L, 0, 0, L, 0, L, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0},
+                {0, 0,  0, 0, L, L,  L, L, L, L,  L, L, L, L,  L, L, L, L, L, L, L, L, L, L, L, L, L, L, 0, 0, 0, 0},
 
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, G, 0, 0, 0, G, G, G, G, 0, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, G, G, G, G, 0, 0, 0, 0, G, G, 0, 0, 0, 0, G, G, G, G, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, L, 0, L, 0, 0, L, 0, L, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0},
-                {0, 0, 0, 0, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, 0, 0, 0, 0},
+                {0, 0,  G, G, 0, L,  0, 0, 0, 0,  0, 0, 0, 0,  0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, G, G, 0, 0},
+                {0, 0,  G, 0, 0, L,  0, 0, 0, 0,  0, 0, 0, 0,  0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, G, 0, 0},
+                {0, 0,  0, 0, 0, L,  0, 0, 0, 0,  0, 0, 0, 0,  0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, 0, 0, 0},
+                {0, 0,  0, L, L, L,  0, 0, 0, 0,  0, 0, 0, 0,  L, L, L, L, 0, 0, 0, 0, 0, 0, 0, 0, L, L, L, 0, 0, 0},
 
-                {0, 0, G, G, 0, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, G, G, 0, 0},
-                {0, 0, G, 0, 0, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, G, 0, 0},
-                {0, 0, 0, 0, 0, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, 0, 0, 0},
-                {0, 0, 0, L, L, L, 0, 0, 0, 0, 0, 0, 0, 0, L, L, L, L, 0, 0, 0, 0, 0, 0, 0, 0, L, L, L, 0, 0, 0},
+                {0, L,  L, L, 0, L,  0, 0, 0, 0,  G, G, G, G,  L, G, G, L, G, G, G, G, 0, 0, 0, 0, L, 0, L, L, L, 0},
+                {L, L,  L, 0, L, L,  0, 0, 0, 0,  0, L, L, G,  G, L, L, G, G, L, L, 0, 0, 0, 0, 0, L, L, 0, L, L, L},
+                {L, L,  L, 0, L, L,  0, 0, 0, 0,  0, L, L, G,  G, L, L, G, G, L, L, 0, 0, 0, 0, 0, L, L, 0, L, L, L},
+                {0, L,  L, L, 0, L,  0, 0, 0, 0,  G, G, G, G,  L, G, G, L, G, G, G, G, 0, 0, 0, 0, L, 0, L, L, L, 0},
 
-                {0, L, L, L, 0, L, 0, 0, 0, 0, G, G, G, G, L, G, G, L, G, G, G, G, 0, 0, 0, 0, L, 0, L, L, L, 0},
-                {L, L, L, 0, L, L, 0, 0, 0, 0, 0, L, L, G, G, L, L, G, G, L, L, 0, 0, 0, 0, 0, L, L, 0, L, L, L},
-                {L, L, L, 0, L, L, 0, 0, 0, 0, 0, L, L, G, G, L, L, G, G, L, L, 0, 0, 0, 0, 0, L, L, 0, L, L, L},
-                {0, L, L, L, 0, L, 0, 0, 0, 0, G, G, G, G, L, G, G, L, G, G, G, G, 0, 0, 0, 0, L, 0, L, L, L, 0},
+                {0, 0,  0, L, L, L,  0, 0, 0, 0,  0, 0, 0, 0,  L, L, L, L, 0, 0, 0, 0, 0, 0, 0, 0, L, L, L, 0, 0, 0},
+                {0, 0,  0, 0, 0, L,  0, 0, 0, 0,  0, 0, 0, 0,  0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, 0, 0, 0},
+                {0, 0,  G, 0, 0, L,  0, 0, 0, 0,  0, 0, 0, 0,  0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, G, 0, 0},
+                {0, 0,  G, G, 0, L,  0, 0, 0, 0,  0, 0, 0, 0,  0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, G, G, 0, 0},
 
-                {0, 0, 0, L, L, L, 0, 0, 0, 0, 0, 0, 0, 0, L, L, L, L, 0, 0, 0, 0, 0, 0, 0, 0, L, L, L, 0, 0, 0},
-                {0, 0, 0, 0, 0, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, 0, 0, 0},
-                {0, 0, G, 0, 0, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, 0, G, 0, 0},
-                {0, 0, G, G, 0, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, 0, 0, 0, L, 0, G, G, 0, 0},
+                {0, 0,  0, 0, L, L,  L, L, L, L,  L, L, L, L,  L, L, L, L, L, L, L, L, L, L, L, L, L, L, 0, 0, 0, 0},
+                {0, 0,  0, 0, L, L,  0, 0, 0, 0,  0, 0, L, 0,  L, 0, 0, L, 0, L, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0},
+                {0, 0,  0, 0, 0, 0,  0, G, G, G,  G, 0, 0, 0,  0, G, G, 0, 0, 0, 0, G, G, G, G, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  G, 0, 0, 0,  G, G, G, G, 0, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 
-                {0, 0, 0, 0, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, 0, 0, 0, 0},
-                {0, 0, 0, 0, L, L, 0, 0, 0, 0, 0, 0, L, 0, L, 0, 0, L, 0, L, 0, 0, 0, 0, 0, 0, L, L, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, G, G, G, G, 0, 0, 0, 0, G, G, 0, 0, 0, 0, G, G, G, G, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, G, 0, 0, 0, G, G, G, G, 0, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, G, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  G, 0, 0, G, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             }
         };
         s.setData(values);
@@ -1706,7 +1706,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Kills any mobs dropped onto it and destroys their drops. However, will drop 2 times as much XP into the holes around it. Will not damage anyone underneath.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, -1, 1, 0, 0, -1, 1});
+        s.setManualRotationDerp(new int[] {-2, 1, 0, 0, -2, 1, 0, 0});
         DustManager.registerLocalDustShape(s, new DEXP());
         //</editor-fold>
 //        System.out.println("Loaded " + DustManager.shapes.size() + " runes.");

@@ -69,7 +69,7 @@ public class ItemRunicTome  extends Item
         }
 
         DustShape ds = DustManager.getShape(page - 1);
-        int r = (int)MathHelper.floor_double((double)((p.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+        int r = (MathHelper.floor_double((double)(p.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
 
 //        if (world.canBlockBePlacedAt(blockID, i, j, k, false, l))
 //        {

@@ -5,6 +5,7 @@
 package dustmod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
@@ -69,7 +70,7 @@ public class DustShape
     {
         
         if(w > 22 || l > 32){
-            throw new IllegalArgumentException("Rune dimensions too big! Max:22x32");
+            throw new IllegalArgumentException("Rune dimensions too big! " + name + " Max:22x32");
         }
         
         this.id = id;
@@ -165,7 +166,8 @@ public class DustShape
      */
     public DustShape setManualRotationDerp(int[] derp)
     {
-        this.manRot = derp;
+//        this.manRot = derp;
+//    	System.out.println("Setting derp " + name + " " + Arrays.toString(manRot));
         return this;
     }
 
@@ -576,31 +578,27 @@ public class DustShape
                 rtn[w - x - 1][y] = mat[x][y];
             }
         }
-
         return rtn;
     }
+    
 
     public boolean drawOnWorld(World w, int i, int j, int k, EntityPlayer p, int r)
     {
-        j++;
-        //yes, I know this rotation code is bull, but i'm getting fed up with it
-        r = (r + 3) % 4;
-
-//        System.out.println("r " + r);
-
-        if (r == 3)
-        {
-            r = 1;
-        }
-        else if (r == 1)
-        {
-            r = 3;
-        }
-
-//        System.out.println("Drawing " + r);
         int si = i, sk = k;
         int tcx = cy, tcy = cx, tox = oy, toy = ox;
         int[][][] tdata = new int[height][width][length];
+        
+        si += manRot[r*2];
+        sk += manRot[r*2+1];
+        
+        j++;
+        r = (5-r)%4;
+        //yes, I know this rotation code is bull, but i'm getting fed up with it
+//        r = (r + 3) % 4;
+
+        System.out.println("r " + r + " " + Arrays.toString(manRot));
+
+//        System.out.println("Drawing " + r);
         ArrayList<ArrayList<int[][]>> tblocks;
 
         for (int y = 0; y < height; y++)
@@ -627,45 +625,21 @@ public class DustShape
         switch (r)
         {
             case 0:
-//                si--;
-                si += manRot[0];
-                sk += manRot[1];
                 break;
 
             case 1:
                 tox = ox;
                 toy = tw - ((data[0].length + oy) % 4);
-//                tcx = cx;
-//                tcy = tw-((data[0].length+cy)%4);
-//                toy+=ox;
-//                tcx = cx+th;
-//                tcy = cy+tw;
-                si += manRot[2];
-                sk += manRot[3];
                 break;
 
             case 2:
                 tox = tw - ((data[0].length + oy) % 4);
                 toy = th - ((data[0][0].length + ox) % 4);
-//                tcx = tw-((data[0].length+cy)%4)-tox;
-//                tcy = th-((data[0][0].length+cx)%4)-toy;
-//                tox+=oy;
-//                tcx = width-cy;
-//                tcy = length-cx;
-                si += manRot[4];
-                sk += manRot[5];
                 break;
 
             case 3:
                 tox = th - ((data[0][0].length + ox) % 4);
                 toy = oy;
-//                tcx = th-((data[0][0].length+cx)%4)-tox;
-//                tcy = cy;
-//                sk--;
-//                tcx = cx+th;
-//                tcy = cy+tw;
-                si += manRot[6];
-                sk += manRot[7];
                 break;
         }
 
@@ -673,7 +647,7 @@ public class DustShape
         int[] temp = this.getBlockCoord(tcx, tcy, tox, toy);
         si -= temp[0];
         sk -= temp[1];
-//        System.out.println("DICKS offest:" + temp[0] + " " + temp[1] + " do:" + tox + "," + toy + " dim:" + width + "," + length + " r:" + r) ;
+        System.out.println("DICKS offest:" + temp[0] + " " + temp[1] + " do:" + tox + "," + toy + " dim:" + width + "," + length + " r:" + r) ;
         int[] pDustAmount = new int[1000];
 
         for (ItemStack is: p.inventory.mainInventory)

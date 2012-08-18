@@ -4,11 +4,16 @@
  */
 package dustmod;
 
+import java.util.logging.Level;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.World;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 /**
  *
@@ -36,7 +41,7 @@ public class ItemPlaceScroll extends Item
     @Override
     public boolean tryPlaceIntoWorld(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int l, float x, float y, float z)
     {
-    	if(world.isRemote) return false;
+//    	if(world.isRemote) return false;
     
         DustShape ds = DustManager.getShapeFromID(itemstack.getItemDamage());
         int r = (int)MathHelper.floor_double((double)((p.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -48,10 +53,15 @@ public class ItemPlaceScroll extends Item
             j--;
         }
 
+        try{
         if (ds.drawOnWorld(world, i, j, k, p, r))
         {
             itemstack.stackSize--;
 //                System.out.println("Drawing success!");
+        }
+        } catch(Exception e){
+        	FMLLog.log(Level.SEVERE, "THE FUUUUCK " + e.getMessage(), e.getStackTrace());
+        	e.printStackTrace();
         }
 
         return true;
