@@ -233,12 +233,12 @@ public class DELumberjack extends DustEvent
                 break;
 
             case 300:
-                dustchance = 0.3D;
+                dustchance = 0.2D;
                 maxDust = 2;
                 break;
 
             case 400:
-                dustchance = 0.35D;
+                dustchance = 0.25D;
                 maxDust = 2;
                 break;
         }
@@ -247,7 +247,7 @@ public class DELumberjack extends DustEvent
 
         if (Math.random() < dustchance)
         {
-            for (int a = rand.nextInt(maxDust); a > 0; a--)
+            for (int a = rand.nextInt(maxDust); a >= 0; a--)
             {
                 EntityItem ei = new EntityItem(world, x, y, z, new ItemStack(DustMod.idust.shiftedIndex, 1, 100));
                 world.spawnEntityInWorld(ei);
