@@ -82,7 +82,6 @@ public class DustShape
         data = new int[height][width][length];
         dustAmt = new int[1000];
         this.solid = solid;
-        System.out.println("NEW FUCKING RUNE " + name + " " + solid);
         this.cy = cy;
         this.cx = cx;
         this.oy = oy;

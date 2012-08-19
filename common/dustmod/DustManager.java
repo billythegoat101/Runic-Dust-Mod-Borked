@@ -551,7 +551,9 @@ public class DustManager
                 + "Notes:\n\n"
                 + "-Lasts a fourth of a day unless fueled.\n");
         s.setDesc("Description:\n\n"
-                + "Creates a flame that allows you to smelt items instantly. There is a small chance of getting double of what you throw in. Items must be thrown in 1 at a time or else they will burn.");
+                + "Creates a flame that allows you to smelt items instantly. " +
+                "There is a small chance of getting double of what you throw in. " +
+                "\n-\nItems must be thrown in 1 at a time or else they will burn.");
         DustManager.registerLocalDustShape(s, new DECampFire());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="pit">
@@ -1465,7 +1467,9 @@ public class DustManager
                 + "-Spirit Pickaxe: 1xGoldPickaxe + 4xTNT + 18XP\n"
                 + "-Spirit Sword: 1xGoldSword + 1xGlowstoneBlock + 18XP");
         s.setDesc("Description:\n\n"
-                + "Spawns either a spirit sword or spirit pickaxe. Each with special abilities.");
+                + "Spawns either a spirit sword or spirit pickaxe.\n-\n" +
+                "The spirit pick on right-click breaks a bigger area and has a chance to drop Lapis dust depending on your XP level. \n-\n" +
+                "The spirit sword comes with high-enchantments and may drop Gunpowder dust in the same way.");
         s.setData(values);
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, 0});
