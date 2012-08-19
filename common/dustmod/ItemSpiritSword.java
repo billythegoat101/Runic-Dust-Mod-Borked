@@ -4,8 +4,12 @@
  */
 package dustmod;
 
+import java.util.Random;
+
 import net.minecraft.src.Enchantment;
 import net.minecraft.src.Entity;
+import net.minecraft.src.EntityItem;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EnumRarity;
 import net.minecraft.src.EnumToolMaterial;
 import net.minecraft.src.ItemStack;
@@ -62,5 +66,26 @@ public class ItemSpiritSword extends ItemSword
     public int getDamageVsEntity(Entity entity)
     {
         return 12;
+    }
+    
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player,
+    		Entity entity) {
+
+    	Random rand = new Random();
+    	double r = rand.nextDouble();
+    	
+    	int level = player.experienceLevel+5;
+    	double tol = (double)level/25D;
+    	
+    	if(r < tol){
+    		int amt = 1;
+    		if(rand.nextDouble() < 0.5D) amt = 2;
+    		EntityItem ei = player.dropPlayerItem(new ItemStack(DustMod.idust,amt,200));
+    		ei.setPosition(entity.posX, entity.posY, entity.posZ);
+    		ei.delayBeforeCanPickup = 0;
+    	}
+    	
+    	return false;
     }
 }
