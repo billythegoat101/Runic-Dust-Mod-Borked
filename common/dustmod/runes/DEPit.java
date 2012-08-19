@@ -27,19 +27,19 @@ public class DEPit extends DustEvent
 
         switch (dustID)
         {
-            case 1:
+            case 100:
                 dist = 8;
                 break;
 
-            case 2:
+            case 200:
                 dist = 16;
                 break;
 
-            case 3:
+            case 300:
                 dist = 20;
                 break;
 
-            case 4:
+            case 400:
                 dist = 48;
                 break;
         }

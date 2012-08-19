@@ -33,6 +33,7 @@ public class DustShape
     private String author = "";
     protected String desc = "";
     protected int[][][] data;
+    protected boolean isRemote = false;
 
     public int[] manRot = new int[8];
     private int[] setPos = new int[] {0, 0, 0};
@@ -81,6 +82,7 @@ public class DustShape
         data = new int[height][width][length];
         dustAmt = new int[1000];
         this.solid = solid;
+        System.out.println("NEW FUCKING RUNE " + name + " " + solid);
         this.cy = cy;
         this.cx = cx;
         this.oy = oy;
@@ -166,7 +168,7 @@ public class DustShape
      */
     public DustShape setManualRotationDerp(int[] derp)
     {
-//        this.manRot = derp;
+        this.manRot = derp;
 //    	System.out.println("Setting derp " + name + " " + Arrays.toString(manRot));
         return this;
     }
@@ -584,6 +586,7 @@ public class DustShape
 
     public boolean drawOnWorld(World w, int i, int j, int k, EntityPlayer p, int r)
     {
+
         int si = i, sk = k;
         int tcx = cy, tcy = cx, tox = oy, toy = ox;
         int[][][] tdata = new int[height][width][length];
@@ -594,11 +597,7 @@ public class DustShape
         j++;
         r = (5-r)%4;
         //yes, I know this rotation code is bull, but i'm getting fed up with it
-//        r = (r + 3) % 4;
 
-        System.out.println("r " + r + " " + Arrays.toString(manRot));
-
-//        System.out.println("Drawing " + r);
         ArrayList<ArrayList<int[][]>> tblocks;
 
         for (int y = 0; y < height; y++)
@@ -647,7 +646,7 @@ public class DustShape
         int[] temp = this.getBlockCoord(tcx, tcy, tox, toy);
         si -= temp[0];
         sk -= temp[1];
-        System.out.println("DICKS offest:" + temp[0] + " " + temp[1] + " do:" + tox + "," + toy + " dim:" + width + "," + length + " r:" + r) ;
+//        System.out.println("DICKS offest:" + temp[0] + " " + temp[1] + " do:" + tox + "," + toy + " dim:" + width + "," + length + " r:" + r) ;
         int[] pDustAmount = new int[1000];
 
         for (ItemStack is: p.inventory.mainInventory)

@@ -37,22 +37,22 @@ public class DEHeal extends DustEvent
 
         switch (dustID)
         {
-            case 1:
+            case 100:
                 healMul = 1;
                 healDurBase = 4; //3 hearts
                 break;
 
-            case 2:
+            case 200:
                 healMul = 2;
                 healDurBase = 5; //n-2 hearts
                 break;
 
-            case 3:
+            case 300:
                 healMul = 2;
                 healDurBase = 10;
                 break;
 
-            case 4:
+            case 400:
                 healMul = 5;
                 healDurBase = 32;
                 break;

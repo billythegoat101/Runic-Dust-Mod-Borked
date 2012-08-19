@@ -49,25 +49,25 @@ public class DEFarm extends DustEvent
 
         switch (dustID)
         {
-            case 1:
+            case 100:
                 r = 1;
                 cBase = 0;
                 cRand = 2;
                 break;
 
-            case 2:
+            case 200:
                 r = 2;
                 cBase = 1;
                 cRand = 3;
                 break;
 
-            case 3:
+            case 300:
                 r = 3;
                 cBase = 3;
                 cRand = 3;
                 break;
 
-            case 4:
+            case 400:
                 r = 4;
                 cBase = 4;
                 cRand = 5;

@@ -62,19 +62,19 @@ public class DELiftTerrain extends DustEvent
 
         switch (dustStrength)
         {
-            case 1:
+            case 100:
                 e.data[1] = 12;
                 break;
 
-            case 2:
+            case 200:
                 e.data[1] = 16;
                 break;
 
-            case 3:
+            case 300:
                 e.data[1] = 22;
                 break;
 
-            case 4:
+            case 400:
                 e.data[1] = 32;
                 break;
         }

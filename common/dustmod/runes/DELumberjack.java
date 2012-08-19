@@ -41,7 +41,7 @@ public class DELumberjack extends DustEvent
         e.renderStar = true;
         e.setColorStarOuter(77, 65, 47);
         e.setColorStarInner(77, 65, 47);
-        e.starScale = 1.08F;
+        e.starScale = 1.2F;
         int x = e.getX();
         int y = e.getY();
         int z = e.getZ();
@@ -58,19 +58,19 @@ public class DELumberjack extends DustEvent
         int y = e.getY();
         int z = e.getZ();
         World world = e.worldObj;
-        int rad = 0;
-        switch (e.dustID)
+        int rad = 50;
+        switch (e.data[0])
         {
-            case 1:
+            case 100:
                 rad = 6;
                 break;
-            case 2:
+            case 200:
                 rad = 9;
                 break;
-            case 3:
+            case 300:
                 rad = 12;
                 break;
-            case 4:
+            case 400:
                 rad = 16;
                 break;
         }
@@ -112,7 +112,6 @@ public class DELumberjack extends DustEvent
                 }
             }
 
-//            world.setBlockWithNotify(x,y,z,Block.brick.blockID);
             e.fade();
         }
     }
@@ -136,28 +135,28 @@ public class DELumberjack extends DustEvent
 
         switch (dustID)
         {
-            case 1:
+            case 100:
                 doublechance = 0.12D;
                 stickchance = 0.2D;
                 maxdouble = 2;
                 maxstick = 2;
                 break;
 
-            case 2:
+            case 200:
                 doublechance = 0.2D;
                 stickchance = 0.35D;
                 maxdouble = 2;
                 maxstick = 3;
                 break;
 
-            case 3:
+            case 300:
                 doublechance = 0.35D;
                 stickchance = 0.5D;
                 maxdouble = 3;
                 maxstick = 3;
                 break;
 
-            case 4:
+            case 400:
                 doublechance = 0.5D;
                 stickchance = 0.65D;
                 maxdouble = 3;
@@ -223,22 +222,22 @@ public class DELumberjack extends DustEvent
 
         switch (dustID)
         {
-            case 1:
+            case 100:
                 dustchance = 0.2D;
                 maxDust = 1;
                 break;
 
-            case 2:
+            case 200:
                 dustchance = 0.25D;
                 maxDust = 1;
                 break;
 
-            case 3:
+            case 300:
                 dustchance = 0.3D;
                 maxDust = 2;
                 break;
 
-            case 4:
+            case 400:
                 dustchance = 0.35D;
                 maxDust = 2;
                 break;
@@ -250,7 +249,7 @@ public class DELumberjack extends DustEvent
         {
             for (int a = rand.nextInt(maxDust); a > 0; a--)
             {
-                EntityItem ei = new EntityItem(world, x, y, z, new ItemStack(DustMod.idust.shiftedIndex, 1, 1));
+                EntityItem ei = new EntityItem(world, x, y, z, new ItemStack(DustMod.idust.shiftedIndex, 1, 100));
                 world.spawnEntityInWorld(ei);
             }
         }
@@ -285,9 +284,9 @@ public class DELumberjack extends DustEvent
             return false;
         }
         
-        int meta = world.getBlockMetadata(i,j,k);
-        if(meta >= 4)
-            return false;
+//        int meta = world.getBlockMetadata(i,j,k);
+//        if(meta >= 4)
+//            return false;
         
         return true;
     }

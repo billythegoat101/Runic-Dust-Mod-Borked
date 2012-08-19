@@ -124,10 +124,10 @@ public class DustManager
             ted.setEntityDust(result);
         }
 
+        result.dustID = -1;
         if (shape.solid)
         {
             boolean found = false;
-            result.dustID = -1;
 
             for (int i = 0; i < map.length && !found; i++)
             {
@@ -249,6 +249,7 @@ public class DustManager
         config.save();
         
         LanguageRegistry.instance().addStringLocalization("tile.scroll" + shape.name + ".name", "en_US", shape.getRuneName() + " Placing Scroll");
+        DustItemManager.reloadLanguage();
     }
     
 
@@ -266,6 +267,7 @@ public class DustManager
         DustMod.proxy.checkPage(shape);
 //        System.out.println("Registering temporary remote DustShape " + shape.name);
         LanguageRegistry.instance().addStringLocalization("tile.scroll" + shape.name + ".name", "en_US", shape.getRuneName() + " Placing Scroll");
+        DustItemManager.reloadLanguage();
     }
 
 	/**
@@ -542,7 +544,7 @@ public class DustManager
         };
         s.setData(values);
         s.setRuneName("Rune of Fire");
-        s.setManualRotationDerp(new int[] {-1, -1, -1, -1, -1, -1, -1, -1});
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, 0});
         s.setAuthor("billythegoat101");
         s.setNotes("Sacrifice:\n\n"
                 + "-8xLog + 1xZombieFlesh\n\n"
@@ -632,7 +634,7 @@ public class DustManager
         s.addAllowedVariable(100,200,300,400);
         s.setRuneName("Rune of the Farm");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {0, 0, 0, 0, -1, 0, 0, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
         s.setNotes("Sacrifice:\n\n"
                 + "-8xIronIngot + 4XP");
         s.setDesc("Description:\n\n"
@@ -1060,7 +1062,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Summons a storm of ignited arrows for a duration of time. WARNING:Large chance of lag if left running. Break rune to stop.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, 0, 0, 0, -1});
+        s.setManualRotationDerp(new int[] {0, -1, 0, 0, 0, 0, -1, 0});
         DustManager.registerLocalDustShape(s, new DEFireRain());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="egg">
@@ -1225,7 +1227,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Reassigns a placed spawner to spawn mobs of the specified type.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, 0, -1, 0, 0});
+        s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, -1, 0, 0});
         DustManager.registerLocalDustShape(s, new DESpawnerReprog());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="tele">
@@ -1258,7 +1260,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Creates a teleporation network location for other teleportation runes to teleport to. Will cost 4 hearts every teleportation. The teleportation network frequency on which to send you depends on the block beneath the blaze square in the rune design.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {1, 0, 0, 0, 1, -2, 3, 0});
+        s.setManualRotationDerp(new int[] {1, 0, 0, 0, 1, -2, 2, 0});
         DustManager.registerLocalDustShape(s, new DETeleportation());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="minitele">
@@ -1279,7 +1281,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Teleports you to a teleporation network rune location. The teleportation network frequency on which to send you depends on the block beneath the blaze square in the rune design.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, -1, 0});
         DustManager.registerLocalDustShape(s, new DEMiniTele());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Fire Sprite">
@@ -1374,7 +1376,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DELoyaltySprite().setAllowed(false));
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="hunter">
-        s = new DustShape(12, 8, "hunter6", false, 0, 2, 0, 2,  43);
+        s = new DustShape(12, 8, "hunter6", false, 0, 2, 4, 2,  43);
         values = new int[][][]
         {
             {

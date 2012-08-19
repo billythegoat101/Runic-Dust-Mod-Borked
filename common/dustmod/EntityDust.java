@@ -473,7 +473,7 @@ public class EntityDust extends Entity
             updateEntityFromDataWatcher();
         }
 
-        if (worldObj.isRemote && event == null)
+        if (event == null)
         {
         	updateDataWatcher();
             super.onEntityUpdate();
@@ -485,7 +485,7 @@ public class EntityDust extends Entity
             updateDataWatcher();
         }
 
-        if (!worldObj.isRemote)
+        if (!worldObj.isRemote || true)
         {
 //            if (!event.allowed)
 //            {

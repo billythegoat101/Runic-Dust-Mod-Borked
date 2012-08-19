@@ -97,6 +97,6 @@ public class DEBomb extends DustEvent
 
     public void trigger(EntityDust e, int level)
     {
-        e.worldObj.createExplosion(e, e.posX, e.posY - EntityDust.yOffset, e.posZ, (float)(level * level) + 2F);
+        e.worldObj.createExplosion(e, e.posX, e.posY - EntityDust.yOffset, e.posZ, (float)(level * level)/10000 + 2F);
     }
 }

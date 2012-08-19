@@ -35,19 +35,19 @@ public class DEFlatten extends DustEvent
 
         switch (dustStrength)
         {
-            case 1:
+            case 100:
                 xp = 10;
                 break;
 
-            case 2:
+            case 200:
                 xp = 12;
                 break;
 
-            case 3:
+            case 300:
                 xp = 15;
                 break;
 
-            case 4:
+            case 400:
                 xp = 20;
                 break;
         }

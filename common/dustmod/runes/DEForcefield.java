@@ -37,7 +37,7 @@ public class DEForcefield extends PoweredEvent
 
         e.setColorStarOuter(0, 128, 62);
         e.renderStar = true;
-        e.data[1] = dustStrength;
+        e.data[1] = dustStrength/100;
         e.sacrificeWaiting = 600;
         this.addSacrificeList(new Sacrifice(99), new Sacrifice(99));
     }

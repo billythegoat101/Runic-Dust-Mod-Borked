@@ -157,6 +157,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             dos.writeInt(shape.cx);
             dos.writeInt(shape.cy);
             dos.writeBoolean(shape.isPower);
+            dos.writeBoolean(shape.solid);
             dos.writeInt(shape.name.length());
             dos.writeInt(shape.getRuneName().length());
             dos.writeInt(shape.getAuthor().length());
@@ -177,6 +178,10 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                         dos.writeInt(shape.getDataAt(x, y, z));
                     }
                 }
+            }
+            
+            for(int i = 0; i < 8; i++){
+            	dos.writeInt(shape.manRot[i]);
             }
         }
         catch (IOException e)
@@ -350,7 +355,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 
             int w,h,l,id,ox,oy,cx,cy,nameLen, pNameLen,authorLen, notesLen, descLen;
             String name,pName,author,notes,desc;
-            boolean powered;
+            boolean powered,solid;
             try
             {
                 w = dis.readInt();//dos.writeInt(shape.width);
@@ -362,6 +367,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                 cx = dis.readInt();//dos.writeInt(shape.cx);
                 cy = dis.readInt();//dos.writeInt(shape.cy);
                 powered = dis.readBoolean();
+                solid = dis.readBoolean();
                 nameLen = dis.readInt();
                 pNameLen = dis.readInt();
                 authorLen = dis.readInt();
@@ -396,13 +402,22 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                     }
                 }
                 
-                DustShape shape = new DustShape(w,l,name,false,ox,oy,cx,cy,id);
+                int[] manRot = new int[8];
+                for(int i = 0; i < 8; i++){
+                	manRot[i] = dis.readInt();
+                }
+                
+                DustShape shape = new DustShape(w,l,name,solid,ox,oy,cx,cy,id);
                 shape.setData(design);
                 shape.setRuneName(pName);
                 shape.setNotes(notes);
                 shape.setDesc(desc);
                 shape.setAuthor(author);
                 shape.isPower = powered;
+                shape.manRot = manRot;
+                
+                shape.isRemote = true;
+                
                 DustManager.registerRemoteDustShape(shape);
             }
             catch (IOException e)

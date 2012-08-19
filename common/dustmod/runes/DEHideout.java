@@ -48,19 +48,19 @@ public class DEHideout extends DustEvent
         int h = 3;
         
         switch(e.dustID){
-            case 1:
+            case 100:
                 r = 1;
                 h = 3;
                 break;
-            case 2:
+            case 200:
                 r = 2;
                 h = 3;
                 break;
-            case 3:
+            case 300:
                 r = 2;
                 h = 5;
                 break;
-            case 4:
+            case 400:
                 r = 4;
                 h = 6;
                 break;

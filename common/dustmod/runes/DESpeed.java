@@ -47,22 +47,22 @@ public class DESpeed extends DustEvent
 
         switch (dustId)
         {
-            case 1:
+            case 100:
                 p = 1;
                 d = 25 * 30;
                 break;
 
-            case 2:
+            case 200:
                 p = 1;
                 d = 25 * 60;
                 break;
 
-            case 3:
+            case 300:
                 p = 2;
                 d = 25 * 120;
                 break;
 
-            case 4:
+            case 400:
                 p = 4;
                 d = 25 * 180;
                 break;

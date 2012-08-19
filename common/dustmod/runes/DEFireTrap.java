@@ -39,21 +39,21 @@ public class DEFireTrap extends DETrap
 
         switch (dustLevel)
         {
-            case 2:
+            case 200:
                 firerand = 0.05;
                 rad = 3;
                 firedambase = 5;
                 firedamrand = 2;
                 break;
 
-            case 3:
+            case 300:
                 firerand = 0.12;
                 rad = 4;
                 firedambase = 7;
                 firedamrand = 4;
                 break;
 
-            case 4:
+            case 400:
                 firerand = 0.4;
                 rad = 6;
                 firedambase = 10;
