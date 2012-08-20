@@ -100,6 +100,12 @@ public class EntityDust extends Entity
     }
     
 
+    /**
+     * The datawatcher is 100% dedicated to the visual aspects of the dust entity.
+     * This is because only the server needs to know anything involving the logic 
+     * (the data array is not synced) and the client just needs to know what the 
+     * player needs to see.
+     */
     @Override
     protected void entityInit()
     {
@@ -745,11 +751,20 @@ public class EntityDust extends Entity
         super.kill();
     }
 
+    /**
+     * Used to slowly kill the rune. During fading, the animations still go but
+     * no ticks are called to the event. Typically used when a rune is finished and ends
+     */
     public void fade()
     {
         fade = true;
     }
 
+
+    /**
+     * Immediately kills the rune and spawns smoke particles. Typically used to 
+     * indicate a failed sacrifice or something similar.
+     */
     public void fizzle()
     {
         int x = (int) Math.floor(posX);

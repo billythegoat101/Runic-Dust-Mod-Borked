@@ -10,6 +10,7 @@ minecraft_server/
 
 minecraft/
 !minecraft/dustmod/
+!minecraft/dustexample/
 
 *.java~
 *~

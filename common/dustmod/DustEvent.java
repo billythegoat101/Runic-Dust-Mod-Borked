@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.src.AxisAlignedBB;
+import net.minecraft.src.DamageSource;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
@@ -136,6 +137,14 @@ public abstract class DustEvent
         }
     }
 
+
+    /**
+     * Take experience levels from the closest nearby player.
+     * 
+     * @param e EntityDust instance
+     * @param levels    number of levels to take
+     * @return  True if levels can be (and have been) taken, false if player doesn't have enough
+     */
     protected boolean takeXP(EntityDust e, int levels)
     {
         EntityPlayer player = e.worldObj.getClosestPlayerToEntity(e, 12D);
@@ -156,6 +165,13 @@ public abstract class DustEvent
 
         return false;
     }
+    
+    /**
+     * Take hunger bars from the closest nearby player
+     * @param e EntityDust instance
+     * @param halves    Number of bars to take (in halves)
+     * @return True if bars can be (and have been) taken, false if player doesn't have enough
+     */
     protected boolean takeHunger(EntityDust e, int halves)
     {
         EntityPlayer player = e.worldObj.getClosestPlayerToEntity(e, 12D);
@@ -176,7 +192,43 @@ public abstract class DustEvent
 
         return false;
     }
+    
+    /**
+     * Takes hearts away from the nearest player (in terms of half-hearts)
+     * @param e EntityDust instance
+     * @param halves    Number of halves of hearts to take.
+     * @param kill  Whether to kill the player if they don't have enough hearts
+     * @return True if the closest player has enough hearts and they have been taken.
+     */
+    public boolean takeLife(EntityDust e, int halves, boolean kill){
+        EntityPlayer player = e.worldObj.getClosestPlayerToEntity(e, 12D);
 
+        if (player.capabilities.isCreativeMode)
+        {
+            return true;
+        }
+
+        if (player != null)
+        {
+            if (player.getHealth() >= halves)
+            {
+                player.attackEntityFrom(DamageSource.magic, halves);
+                return true;
+            } else if(kill){
+                player.attackEntityFrom(DamageSource.magic, halves);
+            }
+        }
+        
+        return false;
+    }
+
+
+    /**
+     * Loop through a list of ItemStacks and see if they are all empty. Useful 
+     * to see if the sacrifice has been fulfilled.
+     * @param req   The array of ItemStacks
+     * @return True if all items in the array have stackSizes <= 0, false if any are >0
+     */
     protected boolean checkSacrifice(ItemStack[] req)
     {
         for (ItemStack i: req)
@@ -194,15 +246,35 @@ public abstract class DustEvent
     {
         return getEntities(world, x, y, z, 1D);
     }
+    /**
+     * Get all entities within 1 block of the given Entity's position
+     * @param e The entity to look around
+     * @return A list of all entities within 1 block of the given entity's position (including the entity itself)
+     */
     protected List getEntities(Entity e)
     {
         return getEntities(e.worldObj, e.posX, e.posY - e.yOffset, e.posZ, 1D);
     }
+    /**
+     * Get all entities within a radius of the given Entity's position
+     * @param e The entity to look around
+     * @param r The radius to look around
+     * @return A list containing all entities within the radius of the given Entity's position (including the entity itself)
+     */
     protected List getEntities(Entity e, double r)
     {
         return getEntities(e.worldObj, e.posX, e.posY - e.yOffset, e.posZ, r);
     }
 
+    /**
+     *  Get all entities within a given radius of the coordinates
+     * @param world The current world to check in
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @param radius The radius around the location to check
+     * @return  A list containing all entities within the radius of the coordinates
+     */
     protected List getEntities(World world, double x, double y, double z, double radius)
     {
         List l = world.getEntitiesWithinAABBExcludingEntity(null,  AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(radius, radius, radius));
@@ -221,10 +293,21 @@ public abstract class DustEvent
         return l;
     }
 
+    /**
+     * Get a list of all dropped items within a 1 block radius of the EntityDust
+     * @param e The EntityDust instance
+     * @return a List<EntityItem> of all nearby dropped items
+     */
     protected final List<EntityItem> getItems(EntityDust e)
     {
         return getItems(e, 1D);
     }
+    /**
+     * Get a list of all dropped items within a given radius of the EntityDust
+     * @param e The EntityDust instance
+     * @param radius    The radius in which to check for dropped items
+     * @return A List<EntityItem> of all nearby dropped items.
+     */
     protected final List<EntityItem> getItems(EntityDust e, double radius)
     {
         ArrayList<EntityItem> itemstacks = new ArrayList<EntityItem>();
@@ -242,6 +325,12 @@ public abstract class DustEvent
         return itemstacks;
     }
 
+    /**
+     * Checks around the rune for the listed items and destroys them. Returns true if all listed items are found  
+     * @param e EntityDust instance
+     * @param items Itemst to look for
+     * @return True if all items found and consumed
+     */
     protected final boolean takeItems(EntityDust e, ItemStack... items)
     {
         List<EntityItem> sacrifice = getItems(e);
