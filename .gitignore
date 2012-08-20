@@ -5,12 +5,12 @@
 common/
 !common/net/minecraft/src/DustModBouncer.java
 !common/dustmod/
+!common/dustexample/
 
 minecraft_server/
 
 minecraft/
 !minecraft/dustmod/
-!minecraft/dustexample/
 
 *.java~
 *~
