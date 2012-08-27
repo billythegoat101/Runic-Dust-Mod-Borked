@@ -39,12 +39,12 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.0", useMetadata=true)
+@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.0")
 @NetworkMod(
 	clientSideRequired = true, 
 	serverSideRequired = false, 
 	packetHandler = PacketHandler.class,
-	channels = {PacketHandler.CHANNEL_DMRune, PacketHandler.CHANNEL_TEDust, PacketHandler.CHANNEL_TELexicon, PacketHandler.CHANNEL_TERut, PacketHandler.CHANNEL_DustItem})
+	channels = {PacketHandler.CHANNEL_DMRune, PacketHandler.CHANNEL_TEDust, PacketHandler.CHANNEL_TELexicon, PacketHandler.CHANNEL_TERut, PacketHandler.CHANNEL_DustItem, PacketHandler.CHANNEL_Key})
 public class DustMod {
 
 	@Instance
@@ -78,6 +78,7 @@ public class DustMod {
     public static int ITEM_ChiselID = 1232;
     public static int ITEM_SacrificeNegationID = 1233;
     public static int ITEM_RunicPaperID = 1234;
+    public static int ITEM_InscriptionID = 1235;
     public static int ENTITY_FireSpriteID = 149;
     public static int ENTITY_BlockEntityID = 150;
     public static boolean Enable_Render_Flames_On_Dust = true;
@@ -94,7 +95,7 @@ public class DustMod {
     public static Item chisel;
     public static Item negateSacrifice;
     public static Item runicPaper;
-    
+//    public static ItemInscription inscription;
 
     public static int prevVoidSize;
     public static HashMap<String, ArrayList<ItemStack>> voidInventory;
@@ -105,6 +106,7 @@ public class DustMod {
     
     @SidedProxy(clientSide = "dustmod.ClientProxy", serverSide = "dustmod.CommonProxy")
     public static CommonProxy proxy;
+    public static CommonKeyHandler keyHandler = new CommonKeyHandler();
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent evt){
@@ -124,6 +126,7 @@ public class DustMod {
 			ITEM_ChiselID = config.getOrCreateIntProperty("ChiselItem", Configuration.CATEGORY_ITEM, ITEM_ChiselID).getInt(ITEM_ChiselID);
 			ITEM_SacrificeNegationID = config.getOrCreateIntProperty("SacrificeNegatorItem", Configuration.CATEGORY_ITEM, ITEM_SacrificeNegationID).getInt(ITEM_SacrificeNegationID);
 			ITEM_RunicPaperID = config.getOrCreateIntProperty("RunicPaperItem", Configuration.CATEGORY_ITEM, ITEM_RunicPaperID).getInt(ITEM_RunicPaperID);
+			ITEM_InscriptionID = config.getOrCreateIntProperty("RunicInscriptionTag", Configuration.CATEGORY_ITEM, ITEM_InscriptionID).getInt(ITEM_InscriptionID);
 			
 			ENTITY_FireSpriteID = config.getOrCreateIntProperty("FireSpriteEntityID", Configuration.CATEGORY_GENERAL, ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
 			ENTITY_BlockEntityID = config.getOrCreateIntProperty("BlockEntityID", Configuration.CATEGORY_GENERAL, ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
@@ -141,7 +144,9 @@ public class DustMod {
 	        chisel = new ItemChisel(ITEM_ChiselID).setItemName("itemdustchisel").setTabToDisplayOn(CreativeTabs.tabTools);
 	        spiritPickaxe = (Item)(new ItemSpiritPickaxe(ITEM_SpiritPickID, EnumToolMaterial.EMERALD)).setItemName("dustpickaxeSpirit").setTabToDisplayOn(CreativeTabs.tabTools);
 	        spiritSword = (Item)(new ItemSpiritSword(ITEM_SpiritSwordID)).setItemName("dustswordSpirit").setTabToDisplayOn(CreativeTabs.tabCombat);
-			
+//			inscription = (ItemInscription)(new ItemInscription(ITEM_InscriptionID)).setItemName("runicinscription").setTabToDisplayOn(CreativeTabs.tabDeco).setIconIndex(0);
+//			inscription.setTextureFile(path + "/dustItems.png");
+	        
 		} catch (Exception e){
 			FMLLog.log(Level.SEVERE, e, "[DustMod]: Error loading config.");
 		} finally {
@@ -153,6 +158,9 @@ public class DustMod {
 	public void load(FMLInitializationEvent evt){
 		
 		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
+//		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		
+//		proxy.registerEventHandlers();
 		
 		GameRegistry.registerBlock(dust);
 		GameRegistry.registerBlock(dustTable);
@@ -174,6 +182,7 @@ public class DustMod {
         lang.addStringLocalization(spiritPickaxe.getItemName() + ".name", "en_US", "Spirit Pickaxe");
         lang.addStringLocalization(spiritSword.getItemName() + ".name", "en_US", "Spirit Sword");
         lang.addStringLocalization(chisel.getItemName() + ".name", "en_US", "Hammer&Chisel");
+//        lang.addStringLocalization(inscription.getItemName() + ".name", "en_US", "Runic Inscription");
 		
         GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"dwd", "wbw", "dwd", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, 1)});
         GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"wdw", "dbd", "wdw", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, 1)});

@@ -11,7 +11,9 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.TickRegistry;
 import dustmod.runes.DEBait;
 import dustmod.runes.DEBomb;
 import dustmod.runes.DEBounce;
@@ -96,6 +98,10 @@ public class CommonProxy implements IGuiHandler{
 	}
 
 	public void registerEventHandlers() {
+		System.out.println("Register");
+		TickHandler tick = new TickHandler();
+		TickRegistry.registerTickHandler(tick, Side.CLIENT);
+		TickRegistry.registerTickHandler(tick, Side.SERVER);
 	}
 
 

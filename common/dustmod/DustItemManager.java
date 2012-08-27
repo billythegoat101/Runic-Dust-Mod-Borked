@@ -127,7 +127,6 @@ public class DustItemManager {
 		registerDust(400,"Blaze Runic Dust", "blazedust",0xEA8A00, 0xFFFE31, 0xFF6E1E); //Migrating to space out
 	}
 
-	@SideOnly(Side.SERVER)
 	public static class DustColor{
 		public int primaryColor;
 		public int secondaryColor;

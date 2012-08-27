@@ -5,6 +5,7 @@
 package dustexample;
 
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
@@ -34,12 +35,14 @@ import dustmod.DustShape;
  * @author billythegoat101
  */
 
-@Mod(modid = "DustModExample1", name = "Dust Mod Example 1", version = "1.0", dependencies="required-after:mod_DustMod")
-@NetworkMod(clientSideRequired=false, serverSideRequired=false)
+//@Mod(modid = "DustModExample1", name = "Dust Mod Example 1", version = "1.0"/*, dependencies="after:DustMod"*/)
+//@NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class DustExample
 {
-    
-	@PostInit
+//    @Instance
+    public static DustExample instance;
+	
+//	@PostInit
 	public void postInit(FMLPostInitializationEvent evt){
 		registerDusts();
 		registerRunes();
@@ -288,9 +291,9 @@ public class DustExample
      * 
      * @return
      */
-    public String getPriorities()
-    {
-        return "required-after:mod_DustMod";
-    }
+//    public String getPriorities()
+//    {
+//        return "required-after:mod_DustMod";
+//    }
     
 }
