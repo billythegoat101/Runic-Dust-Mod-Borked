@@ -66,7 +66,7 @@ public class DEEggifier extends DustEvent
         if (e.ticksExisted > 120)
         {
             EntityItem en = null;
-            en = new EntityItem(e.worldObj, e.posX, e.posY, e.posZ, new ItemStack(Item.monsterPlacer, 1, e.data[0]));
+            en = new EntityItem(e.worldObj, e.posX, e.posY, e.posZ, new ItemStack(Item.monsterPlacer, 1, e.data[15]));
 
             if (en != null)
             {

@@ -357,7 +357,7 @@ public class TileEntityRut extends TileEntity
     }
 
     @Override
-    public Packet getAuxillaryInfoPacket()
+    public Packet getDescriptionPacket()
     {
         return PacketHandler.getTERPacket(this);
     }

@@ -86,7 +86,7 @@ public class RenderDustTable extends TileEntitySpecialRenderer
         int page = (int)Math.round(tedt.pageFlipping * 2);
         if(page == 0)
             bindTextureByName(DustMod.path + "/pages/info.png");
-        else PageHelper.bindExternalTexture(PageHelper.folder + getPageName(page) + ".png");
+        else PageHelper.bindExternalTexture(PageHelper.runeFolder + getRunePageName(page) + ".png");
         
 //        bindTextureByName(PageHelper.g//getPagePath((int)Math.round(tedt.pageFlipping * 2)));
         book.renderPages(null, f1, f4, f5, f6, 0.0F, 0.0625F);
@@ -107,7 +107,7 @@ public class RenderDustTable extends TileEntitySpecialRenderer
         func_40449_a((TileEntityDustTable)tileentity, d, d1, d2, f);
     }
 
-    public static String getPageName(int page)
+    public static String getRunePageName(int page)
     {
         List<String> names = DustManager.getNames();
         if(page == 0){

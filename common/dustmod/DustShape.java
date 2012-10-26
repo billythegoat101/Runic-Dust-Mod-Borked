@@ -46,7 +46,7 @@ public class DustShape
     public int[] dustAmt;
 
     public final int id;
-
+    public int pageNumber;
     
     public ArrayList<Integer> allowedVariable;
     
@@ -68,6 +68,30 @@ public class DustShape
      * @param id    unique rune id
      */
     public DustShape(int w, int l, String name, boolean solid, int ox, int oy, int cx, int cy, int id)
+    {
+        this(w,l,name,solid,ox,oy,cx,cy,DustManager.getNextPageNumber(),id);
+    }
+    
+    
+    /**
+     * 
+     * The generic shape class that should be created to assign each rune its design.
+     * Note: The 'name' parameter is used to identify the rune in save files and once set should not be changed. If you want to set the name that is displayed, use DustShape.setRuneName()
+     * See picture: 
+     * 
+     * 
+     * @param w     Rune size width (x)
+     * @param l     Rune size length (z)
+     * @param name  Code name for the rune.
+     * @param solid     Is this rune a solid color. Mostly useful for runes who are entirely made out of variable and should only be one dust (like fire trap) 
+     * @param ox    X offset for the edge of the rune
+     * @param oy    Y offset for the edge of the rune
+     * @param cx    X offset for the center of the rune
+     * @param cy    Y offset for the center of the rune
+     * @param page	The page number used in the tome
+     * @param id    unique rune id
+     */
+    public DustShape(int w, int l, String name, boolean solid, int ox, int oy, int cx, int cy, int page, int id)
     {
         
         if(w > 22 || l > 32){
@@ -119,6 +143,7 @@ public class DustShape
                 blocks.get(i).add(new int[4][4]);
             }
         }
+        this.pageNumber = page;
 
 //        System.out.println("Derpsize " + bwidth + " " + bheight + " " + blocks.size() + " " + blocks.get(0).size() + " " + name);
         updateData();
@@ -416,9 +441,10 @@ public class DustShape
                 {
                     try
                     {
+                    	
                         if (x >= width || 
                         	z >= length ||
-                        	(d[x][z] != data[oy][x + ox][z + oz] && !(d[x][z] != 0 && data[oy][x + ox][z + oz] == -1)) ||
+                        	(d[x][z] != data[oy][x + ox][z + oz] && (d[x][z] == 0 || data[oy][x + ox][z + oz] != -1)) ||
                         	(data[oy][x + ox][z + oz] == -1 && !this.isDustAllowedAsVariable(d[x][z])))
                         {
                             //                        System.out.println("Derp0 [" + x + "," + z + "][" + (x+oy) + "," + (z+oy) + "] ");
@@ -650,9 +676,15 @@ public class DustShape
 
         for (ItemStack is: p.inventory.mainInventory)
         {
-            if (is != null && is.itemID == DustMod.idust.shiftedIndex)
+            if (is != null)
             {
-                pDustAmount[is.getItemDamage()] += is.stackSize;
+            	if(is.itemID == DustMod.idust.shiftedIndex){
+            		pDustAmount[is.getItemDamage()] += is.stackSize;
+            	}else if(is.itemID == DustMod.pouch.shiftedIndex){
+            		int dustID = ItemPouch.getValue(is);
+            		int amt = ItemPouch.getDustAmount(is);
+            		pDustAmount[dustID] += amt;
+            	}
             }
         }
 
@@ -747,19 +779,32 @@ public class DustShape
                 {
                     ItemStack is = p.inventory.mainInventory[sind];
 
-                    if (is != null && is.itemID == DustMod.idust.shiftedIndex && is.getItemDamage() == id && pDustAmount[id] > 0)
+                    if (is != null && pDustAmount[id] > 0)
                     {
-                        while (pDustAmount[id] > 0 && is.stackSize > 0)
-                        {
-                            is.stackSize--;
-
-                            if (is.stackSize == 0)
-                            {
-                                p.inventory.mainInventory[sind] = null;
-                            }
-
-                            pDustAmount[id] --;
-                        }
+                    	if(is.itemID == DustMod.idust.shiftedIndex && is.getItemDamage() == id){
+	                        while (pDustAmount[id] > 0 && is.stackSize > 0)
+	                        {
+	                            is.stackSize--;
+	
+	                            if (is.stackSize == 0)
+	                            {
+	                                p.inventory.mainInventory[sind] = null;
+	                            }
+	
+	                            pDustAmount[id] --;
+	                        }
+                    	}else if(is.itemID == DustMod.pouch.shiftedIndex){
+                    		int did = ItemPouch.getValue(is);
+                    		if(did == id){
+                    			while (pDustAmount[id] > 0 && ItemPouch.getDustAmount(is) > 0)
+    	                        {
+                    				ItemPouch.subtractDust(is, 1);
+    	
+    	                            pDustAmount[id] --;
+    	                        }
+                    		}
+                    	}
+                    
                     }
                 }
             }

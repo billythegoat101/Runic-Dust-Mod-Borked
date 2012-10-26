@@ -24,11 +24,6 @@ public class ItemDust extends ItemReed
 {
     private int blockID;
 
-    private int plantTex;
-    private int gunTex;
-    private int lapisTex;
-    private int blazeTex;
-
     public ItemDust(int i, Block block)
     {
         super(i, block);
@@ -122,7 +117,7 @@ public class ItemDust extends ItemReed
     public String getItemNameIS(ItemStack itemstack)
     {
     	String id = DustItemManager.getIDS()[itemstack.getItemDamage()];
-    	if(id != null) return "tile." + DustItemManager.idsRemote[itemstack.getItemDamage()];
+    	if(id != null) return "tile.dust." + DustItemManager.idsRemote[itemstack.getItemDamage()];
 
         return "tile.dust";
     }
@@ -130,10 +125,7 @@ public class ItemDust extends ItemReed
     @Override
     public String getLocalItemName(ItemStack itemstack)
     {
-    	String id = DustItemManager.getIDS()[itemstack.getItemDamage()];
-    	if(id != null) return "tile." + DustItemManager.idsRemote[itemstack.getItemDamage()];
-
-        return "tile.dust";
+    	return getItemNameIS(itemstack);
     }
 
     @Override

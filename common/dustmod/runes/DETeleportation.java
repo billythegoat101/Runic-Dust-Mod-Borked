@@ -134,6 +134,31 @@ public class DETeleportation extends PoweredEvent
             }
         }
 
+        e.rotationYaw = ((e.rot+1)%4)*90;
+        
+        int cx,cy,cz;
+        cx = (int)(e.posX)-1;
+        cy = (int)e.posY-1;
+        cz = (int)(e.posZ);
+        
+        switch(e.rot){
+        case 0:
+        	cx++;
+        	break;
+        case 1:
+        	cz++;
+        	break;
+        case 2:
+        	cx--;
+        	break;
+        case 3:
+        	cz--;
+        	break;
+        }
+//        e.worldObj.setBlockWithNotify(cx,cy,cz,Block.brick.blockID);
+        e.data[0] = e.worldObj.getBlockId(cx,cy,cz);
+
+        e.posY += 1.5D;
         e.renderStar = true;
         e.starScaleY = 2F;
     }
@@ -229,7 +254,7 @@ public class DETeleportation extends PoweredEvent
                         int[] iwarp = VoidTeleManager.voidNetwork.get(temp);
 
 //                        System.out.println("Found warp: " + warp[3] + ":" + warp[4] + " " + iwarp[3] + ":" + iwarp[4] + " dim:" + iwarp[6] + " ver:" + iwarp[7]);
-                        if ((Math.abs(warp[0] - iwarp[0]) < 0.5D && Math.abs(warp[1] - iwarp[1]) < 0.5D && Math.abs(warp[2] - iwarp[2]) < 0.5D) || iwarp[6] != i.worldObj.provider.worldType || iwarp[7] != warp[7])
+                        if ((Math.abs(warp[0] - iwarp[0]) < 0.5D && Math.abs(warp[1] - iwarp[1]) < 0.5D && Math.abs(warp[2] - iwarp[2]) < 0.5D) || iwarp[6] != i.worldObj.provider.dimensionId || iwarp[7] != warp[7])
                         {
 //                            System.out.println("Skipping dead:" + ed.isDead);
                             continue;

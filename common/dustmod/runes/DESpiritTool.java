@@ -89,19 +89,19 @@ public class DESpiritTool extends DustEvent
 
         if (!checkSacrifice(req))
         {
-            System.out.println("check1");
+//            System.out.println("check1");
             req = new ItemStack[] {new ItemStack(Item.swordGold, 1), new ItemStack(Block.glowStone, 1)};
             req = this.sacrifice(e, req);
 
             if (!checkSacrifice(req))
             {
-                System.out.println("check2");
+//                System.out.println("check2");
                 e.fizzle();
                 return;
             }
             else
             {
-                System.out.println("check3");
+//                System.out.println("check3");
                 e.data[0] = 2;
             }
         }
@@ -112,12 +112,12 @@ public class DESpiritTool extends DustEvent
 
             if (!checkSacrifice(req))
             {
-                System.out.println("check4");
+//                System.out.println("check4");
                 e.fizzle();
                 return;
             }
 
-            System.out.println("check5");
+//            System.out.println("check5");
             e.data[0] = 1;
         }
 
@@ -150,7 +150,7 @@ public class DESpiritTool extends DustEvent
 
             ItemStack create =  new ItemStack(itemID, 1, 0);
 
-            if (e.data[0] == 1)
+            if (e.data[0] == 2)
             {
                 create.addEnchantment(Enchantment.knockback, 10);
                 create.addEnchantment(Enchantment.smite, 5);

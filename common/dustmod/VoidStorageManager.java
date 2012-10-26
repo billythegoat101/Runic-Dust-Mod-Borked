@@ -63,10 +63,13 @@ public class VoidStorageManager {
         }
     }
     public static void addItemToVoidInventory(EntityDust e, ItemStack is){
-        if(voidInventory.get(e.summonerUN) == null){
-            voidInventory.put(e.summonerUN, new ArrayList<ItemStack>());
+        addItemToVoidInventory(e.summonerUN,is);
+    }
+    public static void addItemToVoidInventory(String player, ItemStack is){
+        if(voidInventory.get(player) == null){
+            voidInventory.put(player, new ArrayList<ItemStack>());
         }
-        voidInventory.get(e.summonerUN).add(is);
+        voidInventory.get(player).add(is);
                 
     }
     public static ArrayList<ItemStack> getVoidInventory(EntityDust e){

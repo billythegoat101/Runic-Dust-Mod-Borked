@@ -6,17 +6,15 @@ package dustmod.runes;
 
 import java.util.List;
 
-import dustmod.DustEvent;
-import dustmod.DustMod;
-import dustmod.EntityDust;
-import dustmod.TileEntityDust;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.Entity;
+import net.minecraft.src.EntityFallingSand;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import dustmod.DustEvent;
+import dustmod.DustMod;
+import dustmod.EntityDust;
 
 /**
  *
@@ -36,71 +34,8 @@ public class DEWall extends DustEvent
             e.fizzle();
             return;
         }
-
-        World world = e.worldObj;
-        Integer[][] fPoints = new Integer[2][3];
-        int fPiter = 0;
-
-        for (Integer[] i : e.dustPoints)
-        {
-            TileEntity te = world.getBlockTileEntity(i[0], i[1], i[2]);
-
-            if (te != null && te instanceof TileEntityDust)
-            {
-                TileEntityDust ted = (TileEntityDust) te;
-                int pamt = 5;
-                int gamt = 5;
-
-//                System.out.println("CHECKING");
-                for (int x = 0; x < 4; x++)
-                {
-                    for (int y = 0; y < 4; y++)
-                    {
-//                        System.out.print(ted.getDust(x, y) + ",");
-                        if (ted.getDust(x, y) == 1)
-                        {
-                            pamt--;
-                        }
-
-                        if (ted.getDust(x, y) == 2)
-                        {
-                            gamt--;
-                        }
-                    }
-
-//                    System.out.println();
-                }
-
-                if (pamt == 0 && gamt == 0)
-                {
-                    fPoints[fPiter] = i;
-                    fPiter++;
-
-                    if (fPiter >= 2)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
-        int dx = fPoints[0][0] - fPoints[1][0];
-        int dz = fPoints[0][2] - fPoints[1][2];
-
-//        System.out.println("Deltas " + dx + " " + dz);
-        if (dx == 0 && dz != 0)
-        {
-            e.data[0] = 1;
-        }
-        else if (dz == 0 && dx != 0)
-        {
-            e.data[0] = 0;
-        }
-        else
-        {
-            e.fizzle();
-            return;
-        }
+        e.data[0] = (e.rot+1)%2;
+        System.out.println("AWRASDF " + e.data[0]);
     }
 
     public void onTick(EntityDust e)
@@ -117,15 +52,19 @@ public class DEWall extends DustEvent
             int width = 2;
             int height = 8;
 
-            for (int w = -width; w <= width; w++)
-            {
-                List<Entity> ents = getEntities(e.worldObj, x + (dir ? w : 0), y + currentHeight, z + (dir ? 0 : w), 1.0D); //world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBoxFromPool((float)x-0.5, y+e.data[0]-1, (float)z-0.5, (float)(x + 1.5), (double)y+e.data[0]+1, (float)(z + 0.5)));
-
-                for (Entity i : ents)
-                {
-                    i.setPosition(i.posX, y + currentHeight + 1.8, i.posZ);
-                }
-            }
+            int entC = 0;
+//            for (int w = -width; w <= width; w++)
+//            {
+//                List<Entity> ents = getEntities(e.worldObj, x + (dir ? w : 0), y + currentHeight-0.5, z + (dir ? 0 : w),1.2D); //world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBoxFromPool((float)x-0.5, y+e.data[0]-1, (float)z-0.5, (float)(x + 1.5), (double)y+e.data[0]+1, (float)(z + 0.5)));
+//
+//                for (Entity i : ents)
+//                {
+//                	entC++;
+//                	if(!(i instanceof EntityFallingSand))
+//                		i.setPosition(Math.floor(i.posX) + 0.5, y + currentHeight+11.5, Math.floor(i.posZ) + 0.5);
+//                }
+//            }
+            System.out.println("TICK " + (y + currentHeight) + " " + entC);
 
             for (int t = -height; t <= height + 1; t++)
             {

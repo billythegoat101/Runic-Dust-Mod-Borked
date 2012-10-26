@@ -76,7 +76,7 @@ public class VoidTeleManager {
 
     public static int[] toWarp(EntityDust e)
     {
-        return new int[] {e.getX(), e.dustPoints.get(0)[1], e.getZ(), e.data[0], e.worldObj.getBlockMetadata(e.getX(), e.dustPoints.get(0)[1] - 1, e.getZ()), (int)e.rotationYaw, e.worldObj.provider.worldType, DustMod.warpVer};
+        return new int[] {e.getX(), e.dustPoints.get(0)[1], e.getZ(), e.data[0], e.worldObj.getBlockMetadata(e.getX(), e.dustPoints.get(0)[1] - 1, e.getZ()), (int)e.rotationYaw, e.worldObj.provider.dimensionId, DustMod.warpVer};
     }
     
     public static EntityDust getWarpEntity(int[] warp, World world)

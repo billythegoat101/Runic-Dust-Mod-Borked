@@ -49,24 +49,24 @@ public class DETimeLock extends PoweredEvent
             }
         }
 
-        switch (center[0])
-        {
-            case 1:
-                e.data[0] = 9000;
-                break;
-
-            case 2:
-                e.data[0] = 18000;
-                break;
-
-            case 3:
+//        switch (center[0])
+//        {
+//            case 100:
+//                e.data[0] = 9000;
+//                break;
+//
+//            case 200:
+//                e.data[0] = 18000;
+//                break;
+//
+//            case 300:
                 e.data[0] = 24000;
-                break;
-
-            case 4:
-                e.data[0] = 24000 * 2;
-                break;
-        }
+//                break;
+//
+//            case 400:
+//                e.data[0] = 24000 * 2;
+//                break;
+//        }
     }
 
     public void onTick(EntityDust e)

@@ -4,12 +4,15 @@
  */
 package dustmod;
 
+import java.util.List;
 import java.util.logging.Level;
 
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Side;
@@ -39,7 +42,7 @@ public class ItemPlaceScroll extends Item
     }
 
     @Override
-    public boolean tryPlaceIntoWorld(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int l, float x, float y, float z)
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int l, float x, float y, float z)
     {
 
     
@@ -73,5 +76,15 @@ public class ItemPlaceScroll extends Item
     public String getLocalItemName(ItemStack itemstack)
     {
         return getItemNameIS(itemstack);
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs,
+    		List list) {
+    	for(DustShape i:DustManager.getShapes()){
+    		list.add(new ItemStack(shiftedIndex, 1, i.id));
+    	}
+//    	super.getSubItems(par1, par2CreativeTabs, list);
     }
 }

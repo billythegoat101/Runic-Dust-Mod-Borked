@@ -50,6 +50,13 @@ public class DEBomb extends DustEvent
         fuse[2] = dusts[1][3];
         fuse[3] = dusts[2][3];
 
+        String rawr = "";
+        for(int i = 0; i < dusts.length; i++){
+        	for(int j = 0; j < dusts[0].length; j++){
+        		rawr += dusts[i][j] + ",";
+        	}
+        	rawr += "\n";
+        }
         for (int i = 0; i < 4; i++)
         {
             if (center[0] != center[i])
@@ -67,17 +74,18 @@ public class DEBomb extends DustEvent
 
         int c = center[0];
         int f = fuse[0];
-        c = c << 3;
-        e.data[0] = c | f;
+        e.data[0] = c;
+        e.data[1] = f;
         e.renderStar = true;
     }
     public void onTick(EntityDust e)
     {
-        int f = e.data[0] & 7;
-        int c = (e.data[0] >> 3) & 7;
+        int f = getTime(e.data[1]);
+        int c = e.data[0];
         e.renderStar = true;
 
-        if (f != 1 && e.ticksExisted < f * 30)
+        
+        if (e.ticksExisted < f * 30)
         {
             e.setColorStarInner(140, 140, 140);
             e.setColorStarOuter(140, 140, 140);
@@ -93,6 +101,20 @@ public class DEBomb extends DustEvent
             trigger(e, c);
             e.fade();
         }
+    }
+    
+    public int getTime(int f){
+    	switch(f){
+    	case 100:
+    		return 1;
+    	case 200:
+    		return 2;
+    	case 300:
+    		return 3;
+    	case 400:
+    		return 4;
+    	}
+    	return 1;
     }
 
     public void trigger(EntityDust e, int level)

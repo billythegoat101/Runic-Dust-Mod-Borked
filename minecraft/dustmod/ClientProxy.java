@@ -3,20 +3,13 @@ package dustmod;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import dustmod.CommonProxy;
-import dustmod.DustMod;
-import dustmod.DustShape;
-import dustmod.EntityBlock;
-import dustmod.EntityDust;
-import dustmod.TileEntityDustTable;
 
 public class ClientProxy extends CommonProxy {
 	
@@ -34,7 +27,8 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void resetPlayerTomePage() {
-		GuiTome.page = 0;
+		GuiTome.runePage = 0;
+		GuiTome.insPage = 0;
 	}
 	
 	@Override
@@ -43,12 +37,18 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	@Override
-	public void checkPage(DustShape shape) {
-		PageHelper.instance.checkImage(shape);
+	public void checkRunePage(DustShape shape) {
+		PageHelper.instance.checkRuneImage(shape);
+	}
+	
+	@Override
+	public void checkInscriptionPage(InscriptionEvent shape) {
+		PageHelper.instance.checkInscriptionImage(shape);
 	}
 	
 	@Override
 	public void registerEventHandlers() {
+		super.registerEventHandlers();
 	}
 	
 	@Override
@@ -86,5 +86,11 @@ public class ClientProxy extends CommonProxy {
 	public boolean placeDustWithTome(ItemStack itemstack, EntityPlayer p,
 			World world, int i, int j, int k, int l) {
         return true;
+	}
+	
+	@Override
+	public void tickMouseManager() {
+		super.tickMouseManager();
+		MouseManager.instance.onTick();
 	}
 }

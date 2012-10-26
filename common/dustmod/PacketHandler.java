@@ -12,7 +12,12 @@ import java.io.IOException;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.ModLoader;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagInt;
+import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetHandler;
 import net.minecraft.src.NetLoginHandler;
 import net.minecraft.src.NetworkManager;
@@ -35,7 +40,11 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     public static final String CHANNEL_TELexicon = "TElexicon";
     public static final String CHANNEL_TERut = "TERut";
     public static final String CHANNEL_DMRune = "DMRune";
-    public static final String CHANNEL_DustItem = "DustItem";
+    public static final String CHANNEL_DeclareInscription = "DecInsc";
+    public static final String CHANNEL_DustItem = "DustItem";    
+    public static final String CHANNEL_Mouse = "DustMouse";
+    public static final String CHANNEL_UseInk = "DustUseInk";
+    public static final String CHANNEL_SetInscription = "DustSetInsc";
     
     public static Packet getTEDPacket(TileEntityDust ted)
     {
@@ -156,6 +165,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             dos.writeInt(shape.oy);
             dos.writeInt(shape.cx);
             dos.writeInt(shape.cy);
+            dos.writeInt(shape.pageNumber);
             dos.writeBoolean(shape.isPower);
             dos.writeBoolean(shape.solid);
             dos.writeInt(shape.name.length());
@@ -191,6 +201,49 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 
         Packet250CustomPayload pkt = new Packet250CustomPayload();
         pkt.channel = CHANNEL_DMRune;
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+//        pkt.isChunkDataPacket = true;
+        return pkt;
+    }
+    
+    public static Packet getInscriptionDeclarationPacket(InscriptionEvent evt){
+    	ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try
+        {
+        	dos.writeInt(evt.referenceDesign.length);
+        	dos.writeInt(evt.referenceDesign[0].length);
+            dos.writeInt(evt.id);
+            dos.writeInt(evt.getIDName().length());
+            dos.writeInt(evt.getInscriptionName().length());
+            dos.writeInt(evt.getDescription().length());
+            dos.writeInt(evt.getNotes().length());
+            dos.writeInt(evt.getAuthor().length());
+            dos.writeChars(evt.getIDName());
+            dos.writeChars(evt.getInscriptionName());
+            dos.writeChars(evt.getDescription());
+            dos.writeChars(evt.getNotes());
+            dos.writeChars(evt.getAuthor());
+
+            int w = evt.referenceDesign.length;
+            int h = evt.referenceDesign[0].length;
+            for (int x = 0; x < w; x++)
+            {
+                for (int y = 0; y < h; y++)
+                { 
+                        dos.writeInt(evt.referenceDesign[x][y]); 
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            // UNPOSSIBLE? -cpw
+        }
+
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = CHANNEL_DeclareInscription;
         pkt.data = bos.toByteArray();
         pkt.length = bos.size();
 //        pkt.isChunkDataPacket = true;
@@ -237,7 +290,72 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         return pkt;
     }
 
+    public static Packet getMousePacket(int keyID, boolean pressed){
+    	 ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+         DataOutputStream dos = new DataOutputStream(bos);
 
+         try
+         {
+             dos.writeInt(keyID);
+             dos.writeBoolean(pressed);
+         }
+         catch (IOException e)
+         {
+             // UNPOSSIBLE? -cpw
+         }
+
+         Packet250CustomPayload pkt = new Packet250CustomPayload();
+         pkt.channel = CHANNEL_Mouse;
+         pkt.data = bos.toByteArray();
+         pkt.length = bos.size();
+         pkt.isChunkDataPacket = false;
+         return pkt;
+    }
+    
+    public static Packet getUseInkPacket(int slot, int amt){
+    	ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try
+        {
+            dos.writeInt(slot);
+            dos.writeInt(amt);
+        }
+        catch (IOException e)
+        {
+            // UNPOSSIBLE? -cpw
+        }
+
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = CHANNEL_UseInk;
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = false;
+        return pkt;
+    }
+    
+    public static Packet getSetInscriptionPacket(int[] design){
+    	ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try
+        {
+        	for(int i = 0; i < design.length; i++){
+    			dos.writeInt(design[i]);
+        	}
+        }
+        catch (IOException e)
+        {
+            // UNPOSSIBLE? -cpw
+        }
+
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = CHANNEL_SetInscription;
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = false;
+        return pkt;
+    }
     
     @Override
     public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
@@ -353,7 +471,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         }else if(channel.equals(CHANNEL_DMRune)){
             DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
 
-            int w,h,l,id,ox,oy,cx,cy,nameLen, pNameLen,authorLen, notesLen, descLen;
+            int w,h,l,id,ox,oy,cx,cy,pageNumber,nameLen, pNameLen,authorLen, notesLen, descLen;
             String name,pName,author,notes,desc;
             boolean powered,solid;
             try
@@ -366,6 +484,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                 oy = dis.readInt();//dos.writeInt(shape.oy);
                 cx = dis.readInt();//dos.writeInt(shape.cx);
                 cy = dis.readInt();//dos.writeInt(shape.cy);
+                pageNumber = dis.readInt();
                 powered = dis.readBoolean();
                 solid = dis.readBoolean();
                 nameLen = dis.readInt();
@@ -407,7 +526,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                 	manRot[i] = dis.readInt();
                 }
                 
-                DustShape shape = new DustShape(w,l,name,solid,ox,oy,cx,cy,id);
+                DustShape shape = new DustShape(w,l,name,solid,ox,oy,cx,cy,pageNumber,id);
                 shape.setData(design);
                 shape.setRuneName(pName);
                 shape.setNotes(notes);
@@ -453,6 +572,126 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             {
                 return;
             }
+        }else if(channel.equals(CHANNEL_Mouse)){
+            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        	int keyID;
+        	boolean pressed;
+            try
+            {
+            	keyID = dis.readInt();
+            	pressed = dis.readBoolean();
+
+            	DustMod.keyHandler.setKey(player, keyID, pressed);
+            	
+            }
+            catch (IOException e)
+            {
+                return;
+            }
+        }else if(channel.equals(CHANNEL_UseInk)){
+            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        	int slot, amt;
+            try
+            {
+            	slot = dis.readInt();
+            	amt = dis.readInt();
+            	
+            	EntityPlayer ep = (EntityPlayer)player;
+            	ItemStack stack = ep.inventory.getStackInSlot(slot);
+            	ItemInk.reduce(stack, amt);
+            	ep.inventory.setInventorySlotContents(slot, stack);
+            }
+            catch (IOException e)
+            {
+                return;
+            }
+        }else if(channel.equals(CHANNEL_SetInscription)){
+        	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        	int[] design = new int[16*16];
+            try
+            {
+            	for(int i = 0; i < design.length;i++){
+            		design[i] = dis.readInt();
+            	}
+            	
+            	EntityPlayer ep = (EntityPlayer)player;
+            	ItemStack stack = ep.getCurrentEquippedItem();
+            	if(stack != null){
+            		if(stack.getItemDamage() == 0)
+            			stack.setItemDamage(1);
+            		NBTTagCompound tag = stack.getTagCompound();
+            		if(tag == null){
+            			tag = new NBTTagCompound();
+            			stack.setTagCompound(tag);
+            		}
+                	for(int i = 0; i < 16; i++){
+                		for(int j = 0; j < 16; j++){
+                			tag.setInteger(i + "," + j, design[i*16 + j]);
+                		}
+                	}
+                	EntityPlayerMP mp = (EntityPlayerMP)player;
+                	mp.sendInventoryToPlayer();
+            	}
+            }
+            catch (IOException e)
+            {
+                return;
+            }
+        }else if(channel.equals(CHANNEL_DeclareInscription)){
+        	System.out.println("Insc recieved");
+            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+            int w,h,id,idNameLen, nameLen,authorLen, notesLen, descLen;
+            String idname,name,author,notes,desc;
+            try
+            {
+            	w = dis.readInt();
+            	h = dis.readInt();
+                id = dis.readInt();//dos.writeInt(shape.id);
+                idNameLen = dis.readInt();
+                nameLen = dis.readInt();
+                descLen = dis.readInt();
+                notesLen = dis.readInt();
+                authorLen = dis.readInt();
+                idname = "";
+                for(int i = 0; i < idNameLen; i++)
+                    idname += dis.readChar();
+                name = "";
+                for(int i = 0; i < nameLen; i++)
+                    name += dis.readChar();
+                desc = "";
+                for(int i = 0; i < descLen; i++)
+                    desc += dis.readChar();
+                notes = "";
+                for(int i = 0; i < notesLen; i++)
+                    notes += dis.readChar();
+                author = "";
+                for(int i = 0; i < authorLen; i++)
+                    author += dis.readChar();
+
+                int[][] design = new int[w][h];
+                
+                for (int x = 0; x < w; x++)
+                {
+                    for (int y = 0; y < h; y++)
+                    {
+                        design[x][y] = dis.readInt();//dos.writeInt(shape.getDataAt(x, y, z));
+                    }
+                }
+                
+                InscriptionEvent event = new InscriptionEvent(design, idname, name, id);
+                event.setAuthor(author);
+                event.setDescription(desc);
+                event.setNotes(notes);
+                InscriptionManager.registerRemoteInscriptionEvent(event);
+            }
+            catch (IOException e)
+            {
+                return;
+            }
         }
     }
 
@@ -461,7 +700,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 			NetworkManager manager) {
 		
 //		System.out.println("Player logged in " + DustMod.proxy.isClient() );
-		
+		DustMod.keyHandler.checkPlayer(player);
 		for(int i = 0; i < DustItemManager.ids.length; i++){
 			if(DustItemManager.ids[i] != null){
 				manager.addToSendQueue(getDustDeclarationPacket(i));
@@ -472,13 +711,19 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         	if(e.allowed && e.permaAllowed)
         		manager.addToSendQueue(getRuneDeclarationPacket(shape));
         }
+
+        for(InscriptionEvent evt:InscriptionManager.events){
+        	System.out.println("Sending event");
+        		manager.addToSendQueue(getInscriptionDeclarationPacket(evt));
+        }
+        
+        // TODO Send inscription registration packets 
 		
 	}
 
 	@Override
 	public String connectionReceived(NetLoginHandler netHandler,
 			NetworkManager manager) {
-		System.out.println("Connection recieved");
 		return null;
 	}
 
@@ -488,6 +733,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 			int port, NetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
+		InscriptionManager.resetRemoteInscriptions();
 	}
 
 	@Override
@@ -495,12 +741,14 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 			MinecraftServer server, NetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
+		InscriptionManager.resetRemoteInscriptions();
 	}
 
 	@Override
 	public void connectionClosed(NetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
+		InscriptionManager.resetRemoteInscriptions();
 //		DustManager.registerDefaultShapes();
 //		DustItemManager.registerDefaultDusts();
 //		System.out.println("Connection closed");

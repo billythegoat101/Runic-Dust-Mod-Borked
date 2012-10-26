@@ -145,7 +145,7 @@ public abstract class DustEvent
      * @param levels    number of levels to take
      * @return  True if levels can be (and have been) taken, false if player doesn't have enough
      */
-    protected boolean takeXP(EntityDust e, int levels)
+    public boolean takeXP(EntityDust e, int levels)
     {
         EntityPlayer player = e.worldObj.getClosestPlayerToEntity(e, 12D);
 
@@ -172,7 +172,7 @@ public abstract class DustEvent
      * @param halves    Number of bars to take (in halves)
      * @return True if bars can be (and have been) taken, false if player doesn't have enough
      */
-    protected boolean takeHunger(EntityDust e, int halves)
+    public boolean takeHunger(EntityDust e, int halves)
     {
         EntityPlayer player = e.worldObj.getClosestPlayerToEntity(e, 12D);
 
@@ -229,7 +229,7 @@ public abstract class DustEvent
      * @param req   The array of ItemStacks
      * @return True if all items in the array have stackSizes <= 0, false if any are >0
      */
-    protected boolean checkSacrifice(ItemStack[] req)
+    public boolean checkSacrifice(ItemStack[] req)
     {
         for (ItemStack i: req)
         {
@@ -242,7 +242,7 @@ public abstract class DustEvent
         return true;
     }
 
-    protected List getEntities(World world, double x, double y, double z)
+    public List getEntities(World world, double x, double y, double z)
     {
         return getEntities(world, x, y, z, 1D);
     }
@@ -251,7 +251,7 @@ public abstract class DustEvent
      * @param e The entity to look around
      * @return A list of all entities within 1 block of the given entity's position (including the entity itself)
      */
-    protected List getEntities(Entity e)
+    public List getEntities(Entity e)
     {
         return getEntities(e.worldObj, e.posX, e.posY - e.yOffset, e.posZ, 1D);
     }
@@ -261,7 +261,7 @@ public abstract class DustEvent
      * @param r The radius to look around
      * @return A list containing all entities within the radius of the given Entity's position (including the entity itself)
      */
-    protected List getEntities(Entity e, double r)
+    public List getEntities(Entity e, double r)
     {
         return getEntities(e.worldObj, e.posX, e.posY - e.yOffset, e.posZ, r);
     }
@@ -275,18 +275,18 @@ public abstract class DustEvent
      * @param radius The radius around the location to check
      * @return  A list containing all entities within the radius of the coordinates
      */
-    protected List getEntities(World world, double x, double y, double z, double radius)
+    public List getEntities(World world, double x, double y, double z, double radius)
     {
         List l = world.getEntitiesWithinAABBExcludingEntity(null,  AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(radius, radius, radius));
         return l;
     }
-    protected List getEntities(World world, Class entType, double x, double y, double z, double radius)
+    public List getEntities(World world, Class entType, double x, double y, double z, double radius)
     {
         List l = world.getEntitiesWithinAABB(entType,  AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(radius, radius, radius));
 //        System.out.println("Retrieving entities " + world.worldProvider.worldType + " [" + x + "," + y + "," + z + "] " + l.size());
         return l;
     }
-    protected List getEntitiesExcluding(World world, Entity e, double x, double y, double z, double radius)
+    public List getEntitiesExcluding(World world, Entity e, double x, double y, double z, double radius)
     {
         List l = world.getEntitiesWithinAABBExcludingEntity(e,  AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(radius, radius, radius));
 //        System.out.println("Retrieving entities " + world.worldProvider.worldType + " [" + x + "," + y + "," + z + "] " + l.size());
@@ -298,7 +298,7 @@ public abstract class DustEvent
      * @param e The EntityDust instance
      * @return a List<EntityItem> of all nearby dropped items
      */
-    protected final List<EntityItem> getItems(EntityDust e)
+    public final List<EntityItem> getItems(EntityDust e)
     {
         return getItems(e, 1D);
     }
@@ -308,7 +308,7 @@ public abstract class DustEvent
      * @param radius    The radius in which to check for dropped items
      * @return A List<EntityItem> of all nearby dropped items.
      */
-    protected final List<EntityItem> getItems(EntityDust e, double radius)
+    public final List<EntityItem> getItems(EntityDust e, double radius)
     {
         ArrayList<EntityItem> itemstacks = new ArrayList<EntityItem>();
         List l = getEntities(e.worldObj, e.posX, e.posY - e.yOffset, e.posZ, radius);
@@ -331,7 +331,7 @@ public abstract class DustEvent
      * @param items Itemst to look for
      * @return True if all items found and consumed
      */
-    protected final boolean takeItems(EntityDust e, ItemStack... items)
+    public final boolean takeItems(EntityDust e, ItemStack... items)
     {
         List<EntityItem> sacrifice = getItems(e);
 
@@ -372,7 +372,7 @@ public abstract class DustEvent
     {
     }
 
-    protected ItemStack[] sacrifice(EntityDust e, ItemStack[] req)
+    public ItemStack[] sacrifice(EntityDust e, ItemStack[] req)
     {
         List<EntityItem> sacrifice = getItems(e);
         boolean negate = false;
@@ -415,7 +415,7 @@ public abstract class DustEvent
 
         return req;
     }
-    protected Sacrifice[] sacrifice(EntityDust e, ArrayList<Sacrifice> reqA)
+    public Sacrifice[] sacrifice(EntityDust e, ArrayList<Sacrifice> reqA)
     {
         List<Entity> sacrifice = this.getEntities(e, 3D);
         Sacrifice[] req = new Sacrifice[reqA.size()];

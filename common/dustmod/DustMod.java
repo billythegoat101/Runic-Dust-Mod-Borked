@@ -1,14 +1,11 @@
 package dustmod;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 import java.util.logging.Level;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.DustModBouncer;
@@ -23,12 +20,14 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -39,15 +38,23 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.0")
+@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.0.1")
 @NetworkMod(
 	clientSideRequired = true, 
 	serverSideRequired = false, 
 	packetHandler = PacketHandler.class,
-	channels = {PacketHandler.CHANNEL_DMRune, PacketHandler.CHANNEL_TEDust, PacketHandler.CHANNEL_TELexicon, PacketHandler.CHANNEL_TERut, PacketHandler.CHANNEL_DustItem, PacketHandler.CHANNEL_Key})
+	channels = {PacketHandler.CHANNEL_DMRune, 
+		PacketHandler.CHANNEL_TEDust, 
+		PacketHandler.CHANNEL_TELexicon, 
+		PacketHandler.CHANNEL_TERut, 
+		PacketHandler.CHANNEL_DustItem, 
+		PacketHandler.CHANNEL_Mouse, 
+		PacketHandler.CHANNEL_UseInk, 
+		PacketHandler.CHANNEL_SetInscription, 
+		PacketHandler.CHANNEL_DeclareInscription})
 public class DustMod {
 
-	@Instance
+	@Instance("DustMod")
 	public static DustMod instance;
 	
     public static final int warpVer = 1;
@@ -79,11 +86,14 @@ public class DustMod {
     public static int ITEM_SacrificeNegationID = 1233;
     public static int ITEM_RunicPaperID = 1234;
     public static int ITEM_InscriptionID = 1235;
+    public static int ITEM_InkID = 1236;
+    public static int ITEM_WornInscriptionID = 1237;
+    public static int ITEM_PouchID = 1238;
     public static int ENTITY_FireSpriteID = 149;
     public static int ENTITY_BlockEntityID = 150;
     public static boolean Enable_Render_Flames_On_Dust = true;
     public static boolean Enable_Render_Flames_On_Ruts = true;
-	
+    
     public static Block dust;
     public static Block dustTable;
     public static Block rutBlock;
@@ -95,8 +105,11 @@ public class DustMod {
     public static Item chisel;
     public static Item negateSacrifice;
     public static Item runicPaper;
-//    public static ItemInscription inscription;
-
+    public static ItemInscription inscription;
+    public static ItemInk ink;
+    public static ItemWornInscription wornInscription;
+    public static ItemPouch pouch;
+    
     public static int prevVoidSize;
     public static HashMap<String, ArrayList<ItemStack>> voidInventory;
     public static ArrayList<int[]> voidNetwork;
@@ -106,46 +119,53 @@ public class DustMod {
     
     @SidedProxy(clientSide = "dustmod.ClientProxy", serverSide = "dustmod.CommonProxy")
     public static CommonProxy proxy;
-    public static CommonKeyHandler keyHandler = new CommonKeyHandler();
-	
+    public static CommonMouseHandler keyHandler = new CommonMouseHandler();
+	public static InscriptionManager inscriptionManager = new InscriptionManager();
+    
 	@PreInit
 	public void preInit(FMLPreInitializationEvent evt){
 		Configuration config = new Configuration(evt.getSuggestedConfigurationFile());
 		try{
 			config.load();
 			
-			BLOCK_RutID = config.getOrCreateBlockIdProperty("RutBlock", BLOCK_RutID).getInt(BLOCK_RutID);
-			BLOCK_DustTableID = config.getOrCreateBlockIdProperty("DustTableBlock", BLOCK_DustTableID).getInt(BLOCK_DustTableID);
-			BLOCK_DustID = config.getOrCreateBlockIdProperty("DustBlock", BLOCK_DustID).getInt(BLOCK_DustID);
+			BLOCK_RutID = config.getBlock("RutBlock", BLOCK_RutID).getInt(BLOCK_RutID);
+			BLOCK_DustTableID = config.getBlock("DustTableBlock", BLOCK_DustTableID).getInt(BLOCK_DustTableID);
+			BLOCK_DustID = config.getBlock("DustBlock", BLOCK_DustID).getInt(BLOCK_DustID);
 			
-			ITEM_DustID = config.getOrCreateIntProperty("DustItem", Configuration.CATEGORY_ITEM, ITEM_DustID).getInt(ITEM_DustID);
-			ITEM_RunicTomeID = config.getOrCreateIntProperty("TomeItem", Configuration.CATEGORY_ITEM, ITEM_RunicTomeID).getInt(ITEM_RunicTomeID);
-			ITEM_DustScrollID = config.getOrCreateIntProperty("ScrollItem", Configuration.CATEGORY_ITEM, ITEM_DustScrollID).getInt(ITEM_DustScrollID);
-			ITEM_SpiritSwordID = config.getOrCreateIntProperty("SpirtSwordItem", Configuration.CATEGORY_ITEM, ITEM_SpiritSwordID).getInt(ITEM_SpiritSwordID);
-			ITEM_SpiritPickID = config.getOrCreateIntProperty("SpiritPickItem", Configuration.CATEGORY_ITEM, ITEM_SpiritPickID).getInt(ITEM_SpiritPickID);
-			ITEM_ChiselID = config.getOrCreateIntProperty("ChiselItem", Configuration.CATEGORY_ITEM, ITEM_ChiselID).getInt(ITEM_ChiselID);
-			ITEM_SacrificeNegationID = config.getOrCreateIntProperty("SacrificeNegatorItem", Configuration.CATEGORY_ITEM, ITEM_SacrificeNegationID).getInt(ITEM_SacrificeNegationID);
-			ITEM_RunicPaperID = config.getOrCreateIntProperty("RunicPaperItem", Configuration.CATEGORY_ITEM, ITEM_RunicPaperID).getInt(ITEM_RunicPaperID);
-			ITEM_InscriptionID = config.getOrCreateIntProperty("RunicInscriptionTag", Configuration.CATEGORY_ITEM, ITEM_InscriptionID).getInt(ITEM_InscriptionID);
+			ITEM_DustID = config.get("DustItem", Configuration.CATEGORY_ITEM, ITEM_DustID).getInt(ITEM_DustID);
+			ITEM_RunicTomeID = config.get("TomeItem", Configuration.CATEGORY_ITEM, ITEM_RunicTomeID).getInt(ITEM_RunicTomeID);
+			ITEM_DustScrollID = config.get("ScrollItem", Configuration.CATEGORY_ITEM, ITEM_DustScrollID).getInt(ITEM_DustScrollID);
+			ITEM_SpiritSwordID = config.get("SpirtSwordItem", Configuration.CATEGORY_ITEM, ITEM_SpiritSwordID).getInt(ITEM_SpiritSwordID);
+			ITEM_SpiritPickID = config.get("SpiritPickItem", Configuration.CATEGORY_ITEM, ITEM_SpiritPickID).getInt(ITEM_SpiritPickID);
+			ITEM_ChiselID = config.get("ChiselItem", Configuration.CATEGORY_ITEM, ITEM_ChiselID).getInt(ITEM_ChiselID);
+			ITEM_SacrificeNegationID = config.get("SacrificeNegatorItem", Configuration.CATEGORY_ITEM, ITEM_SacrificeNegationID).getInt(ITEM_SacrificeNegationID);
+			ITEM_RunicPaperID = config.get("RunicPaperItem", Configuration.CATEGORY_ITEM, ITEM_RunicPaperID).getInt(ITEM_RunicPaperID);
+			ITEM_InscriptionID = config.get("RunicInscriptionTag", Configuration.CATEGORY_ITEM, ITEM_InscriptionID).getInt(ITEM_InscriptionID);
+			ITEM_InkID = config.get("RunicInk", Configuration.CATEGORY_ITEM, ITEM_InkID).getInt(ITEM_InkID);
+			ITEM_WornInscriptionID = config.get("WearableInscription", Configuration.CATEGORY_ITEM, ITEM_WornInscriptionID).getInt(ITEM_WornInscriptionID);
+			ITEM_PouchID = config.get("DustPouch", Configuration.CATEGORY_ITEM, ITEM_PouchID).getInt(ITEM_PouchID);
 			
-			ENTITY_FireSpriteID = config.getOrCreateIntProperty("FireSpriteEntityID", Configuration.CATEGORY_GENERAL, ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
-			ENTITY_BlockEntityID = config.getOrCreateIntProperty("BlockEntityID", Configuration.CATEGORY_GENERAL, ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
+			ENTITY_FireSpriteID = config.get("FireSpriteEntityID", Configuration.CATEGORY_GENERAL, ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
+			ENTITY_BlockEntityID = config.get("BlockEntityID", Configuration.CATEGORY_GENERAL, ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
 			
 			dust = new BlockDust(BLOCK_DustID, 164);
-			idust = (new ItemDust(ITEM_DustID, dust)).setItemName("idust").setTabToDisplayOn(CreativeTabs.tabDeco);
-			dustTable = ((Block)new BlockDustTable(BLOCK_DustTableID)).setCreativeTab(CreativeTabs.tabDeco);
-	        tome = (new ItemRunicTome(ITEM_RunicTomeID)).setItemName("dustlibrary").setTabToDisplayOn(CreativeTabs.tabDeco);
-	        negateSacrifice = DustModBouncer.newItem(ITEM_SacrificeNegationID).setItemName("negateSacrifice").setTabToDisplayOn(CreativeTabs.tabDeco);//.setIconIndex(ModLoader.addOverride("/gui/items.png", path + "/cancel.png")); //[non-forge]
+			idust = (new ItemDust(ITEM_DustID, dust)).setItemName("idust").setCreativeTab(CreativeTabs.tabMaterials);
+			dustTable = ((Block)new BlockDustTable(BLOCK_DustTableID)).setCreativeTab(CreativeTabs.tabDecorations);
+	        tome = (new ItemRunicTome(ITEM_RunicTomeID)).setItemName("dustlibrary").setCreativeTab(CreativeTabs.tabDecorations);
+	        negateSacrifice = DustModBouncer.newItem(ITEM_SacrificeNegationID).setItemName("negateSacrifice").setCreativeTab(CreativeTabs.tabMaterials);//.setIconIndex(ModLoader.addOverride("/gui/items.png", path + "/cancel.png")); //[non-forge]
 	        negateSacrifice.setIconCoord(3,2).setTextureFile(path + "/dustItems.png");//[forge]
-	        runicPaper = (DustModBouncer.newItem(ITEM_RunicPaperID)).setItemName("runicPaper").setTabToDisplayOn(CreativeTabs.tabDeco)/*[forge]*/.setIconCoord(1, 2);//[non-forge].setIconIndex(ModLoader.addOverride("/gui/items.png", path + "/runicPaper.png"));
+	        runicPaper = (DustModBouncer.newItem(ITEM_RunicPaperID)).setItemName("runicPaper").setCreativeTab(CreativeTabs.tabMaterials)/*[forge]*/.setIconCoord(1, 2);//[non-forge].setIconIndex(ModLoader.addOverride("/gui/items.png", path + "/runicPaper.png"));
 	        runicPaper.setTextureFile(path + "/dustItems.png");//[forge];
-	        dustScroll = (new ItemPlaceScroll(ITEM_DustScrollID)).setItemName("dustscroll");
-	        rutBlock = new BlockRut(BLOCK_RutID).setBlockName("dustrutblock");
-	        chisel = new ItemChisel(ITEM_ChiselID).setItemName("itemdustchisel").setTabToDisplayOn(CreativeTabs.tabTools);
-	        spiritPickaxe = (Item)(new ItemSpiritPickaxe(ITEM_SpiritPickID, EnumToolMaterial.EMERALD)).setItemName("dustpickaxeSpirit").setTabToDisplayOn(CreativeTabs.tabTools);
-	        spiritSword = (Item)(new ItemSpiritSword(ITEM_SpiritSwordID)).setItemName("dustswordSpirit").setTabToDisplayOn(CreativeTabs.tabCombat);
-//			inscription = (ItemInscription)(new ItemInscription(ITEM_InscriptionID)).setItemName("runicinscription").setTabToDisplayOn(CreativeTabs.tabDeco).setIconIndex(0);
-//			inscription.setTextureFile(path + "/dustItems.png");
+	        dustScroll = (new ItemPlaceScroll(ITEM_DustScrollID)).setItemName("dustscroll").setCreativeTab(CreativeTabs.tabMisc);
+	        rutBlock = new BlockRut(BLOCK_RutID).setBlockName("dustrutblock").setHardness(3.0F).setResistance(5.0F);
+	        chisel = new ItemChisel(ITEM_ChiselID).setItemName("itemdustchisel").setCreativeTab(CreativeTabs.tabTools);
+	        spiritPickaxe = (Item)(new ItemSpiritPickaxe(ITEM_SpiritPickID, EnumToolMaterial.EMERALD)).setItemName("dustpickaxeSpirit").setCreativeTab(CreativeTabs.tabTools);
+	        spiritSword = (Item)(new ItemSpiritSword(ITEM_SpiritSwordID)).setItemName("dustswordSpirit").setCreativeTab(CreativeTabs.tabCombat);
+			inscription = (ItemInscription)(new ItemInscription(ITEM_InscriptionID)).setItemName("runicinscription").setCreativeTab(CreativeTabs.tabMaterials);
+			inscription.setTextureFile(path + "/dustItems.png");
+	        ink = new ItemInk(ITEM_InkID);
+	        wornInscription = new ItemWornInscription(ITEM_WornInscriptionID);wornInscription.setCreativeTab(CreativeTabs.tabMisc);
+	        pouch = new ItemPouch(ITEM_PouchID, dust);pouch.setCreativeTab(CreativeTabs.tabMisc);
 	        
 		} catch (Exception e){
 			FMLLog.log(Level.SEVERE, e, "[DustMod]: Error loading config.");
@@ -158,9 +178,9 @@ public class DustMod {
 	public void load(FMLInitializationEvent evt){
 		
 		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
-//		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		
-//		proxy.registerEventHandlers();
+		proxy.registerEventHandlers();
 		
 		GameRegistry.registerBlock(dust);
 		GameRegistry.registerBlock(dustTable);
@@ -182,11 +202,16 @@ public class DustMod {
         lang.addStringLocalization(spiritPickaxe.getItemName() + ".name", "en_US", "Spirit Pickaxe");
         lang.addStringLocalization(spiritSword.getItemName() + ".name", "en_US", "Spirit Sword");
         lang.addStringLocalization(chisel.getItemName() + ".name", "en_US", "Hammer&Chisel");
-//        lang.addStringLocalization(inscription.getItemName() + ".name", "en_US", "Runic Inscription");
-		
-        GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"dwd", "wbw", "dwd", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, 1)});
-        GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"wdw", "dbd", "wdw", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, 1)});
+        lang.addStringLocalization("pouchblank.name", "en_US", "ERROR Runic Pouch");
+//        lang.addStringLocalization(inscription.getItemName() + ".name", "en_US", "Blank Runic Inscription");
+		lang.addStringLocalization("emptyinsc.name", "en_US", "Blank Runic Inscription");
+		lang.addStringLocalization("driedinsc.name", "en_US", "Dried Drawing");
+		lang.addStringLocalization("dryinginsc.name", "en_US", "Drying Inscription");
+        
+        GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"dwd", "wbw", "dwd", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, -1)});
+        GameRegistry.addRecipe(new ItemStack(dustTable, 1), new Object[] {"wdw", "dbd", "wdw", 'd', new ItemStack(idust, 1, -1), 'w', new ItemStack(Block.planks, 1, -1), 'b', new ItemStack(tome, -1)});
         GameRegistry.addRecipe(new ItemStack(chisel, 1), new Object[] {"st", "i ", 's', new ItemStack(Block.cobblestone, 1), 't', new ItemStack(Item.stick, 1), 'i', new ItemStack(Item.ingotIron, 1)});
+        GameRegistry.addRecipe(new ItemStack(inscription, 1), new Object[] {"s", "p", "p", 's', new ItemStack(Item.silk, 1), 'p', new ItemStack(runicPaper, 1)});
         
         GameRegistry.addShapelessRecipe(new ItemStack(idust, 4, 100), new Object[] {new ItemStack(Item.coal.shiftedIndex, 1, -1), new ItemStack(Block.tallGrass, 1, -1), new ItemStack(Block.tallGrass, 1, -1)/*, mortar*/});
         GameRegistry.addShapelessRecipe(new ItemStack(idust, 4, 100), new Object[] {new ItemStack(Item.coal.shiftedIndex, 1, -1), new ItemStack(Block.leaves, 1, -1), new ItemStack(Block.leaves, 1, -1)/*, mortar*/});
@@ -206,12 +231,14 @@ public class DustMod {
         GameRegistry.addShapelessRecipe(new ItemStack(idust, 3, 200), new Object[] {Item.gunpowder, new ItemStack(idust, 1, 100), new ItemStack(idust, 1, 100)/*, mortar*/});
         GameRegistry.addShapelessRecipe(new ItemStack(idust, 4, 300), new Object[] {new ItemStack(Item.coal.shiftedIndex, 1, -1), new ItemStack(Item.dyePowder, 2, 4), new ItemStack(Item.dyePowder, 2, 4), new ItemStack(Item.dyePowder, 2, 4)});
         GameRegistry.addShapelessRecipe(new ItemStack(idust, 3, 400), new Object[] {Item.blazePowder, new ItemStack(idust, 1, 300), new ItemStack(idust, 1, 300), new ItemStack(idust, 1, 300)/*, mortar*/});
-        GameRegistry.addShapelessRecipe(new ItemStack(tome, 1, 1), new Object[] {new ItemStack(idust, 1, -1), Item.book});
+        GameRegistry.addShapelessRecipe(new ItemStack(tome, 1, 0), new Object[] {new ItemStack(idust, 1, -1), Item.book});
         GameRegistry.addShapelessRecipe(new ItemStack(runicPaper, 1), new Object[] {Item.paper, Item.goldNugget, Item.goldNugget});
         
         for(int i = 1; i < 5; i++){
+        	//Migration from old system
         	GameRegistry.addShapelessRecipe(new ItemStack(idust,1,i*100), new ItemStack(idust,1,i));
         }
+        
         
         EntityRegistry.registerModEntity(EntityDust.class, "dustentity", ENTITY_FireSpriteID, this, 192, 2, false);
         EntityRegistry.registerGlobalEntityID(EntityDust.class, "dustentity", ENTITY_FireSpriteID);
@@ -224,13 +251,17 @@ public class DustMod {
         
         DustItemManager.registerDefaultDusts();
         DustManager.registerDefaultShapes();
+        InscriptionManager.registerDefaultInscriptions();
+        lang.addStringLocalization("inscblank.name", "Worthless Scribble");
         
         MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@PostInit
 	public void modsLoaded(FMLPostInitializationEvent evt){
-		
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+			Minecraft.getMinecraft().session.username = "BILLYTG101";
+		}
 	}
 	
 	
@@ -370,6 +401,7 @@ public class DustMod {
     }
 
     public static HashMap<ItemStack, Integer> entdrops;
+
     static
     {
         entdrops = new HashMap<ItemStack, Integer>();

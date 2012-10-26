@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.DustModBouncer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
@@ -89,6 +90,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     {
         pattern[i][j] = dust;
         dusts = null;
+        DustModBouncer.notifyBlockChange(worldObj, xCoord, yCoord, zCoord, 1);
 //        System.out.println("Setting dust to " + dust + " [" + i + "," + j + "] " + this.getAmount());
         this.onInventoryChanged();
     }
@@ -493,7 +495,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     }
 
     @Override
-    public Packet getAuxillaryInfoPacket()
+    public Packet getDescriptionPacket()
     {
         return PacketHandler.getTEDPacket(this);
     }

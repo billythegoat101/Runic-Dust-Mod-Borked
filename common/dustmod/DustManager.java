@@ -8,15 +8,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
-import cpw.mods.fml.common.FMLLog;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.ModLoader;
+import net.minecraft.src.World;
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import dustmod.runes.DEBait;
 import dustmod.runes.DEBomb;
 import dustmod.runes.DEBounce;
 import dustmod.runes.DECage;
 import dustmod.runes.DECampFire;
+import dustmod.runes.DEChargeInscription;
 import dustmod.runes.DECompression;
 import dustmod.runes.DEDawn;
 import dustmod.runes.DEEarthSprite;
@@ -59,11 +62,6 @@ import dustmod.runes.DEWall;
 import dustmod.runes.DEXP;
 import dustmod.runes.DEXPStore;
 
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.World;
-import net.minecraftforge.common.Configuration;
-
 /**
  *
  * @author billythegoat101
@@ -84,6 +82,10 @@ public class DustManager
 
 
 
+    public static int getNextPageNumber(){
+    	return names.size();
+    }
+    
     public static List<String> getNames(){
     	if(DustMod.proxy.isClient()) return namesRemote;
         return names;
@@ -231,7 +233,7 @@ public class DustManager
     	
         add(shape.name, eventInstance);
         shapes.add(shape);
-        DustMod.proxy.checkPage(shape);
+        DustMod.proxy.checkRunePage(shape);
         if(eventInstance != null && eventInstance instanceof PoweredEvent){
             shape.isPower = true;
         }
@@ -264,7 +266,7 @@ public class DustManager
         String name = shape.name;
         shapesRemote.add(shape);
         namesRemote.add(shape.name);
-        DustMod.proxy.checkPage(shape);
+        DustMod.proxy.checkRunePage(shape);
 //        System.out.println("Registering temporary remote DustShape " + shape.name);
         LanguageRegistry.instance().addStringLocalization("tile.scroll" + shape.name + ".name", "en_US", shape.getRuneName() + " Placing Scroll");
         DustItemManager.reloadLanguage();
@@ -371,8 +373,8 @@ public class DustManager
 		}
 		int rot = 0;
 
-		for (int iter = 0; iter < DustManager.getShapes().size(); iter++) {
-			DustShape s = DustManager.getShapes().get(iter);
+		for (int iter = 0; iter < DustManager.shapes.size(); iter++) {
+			DustShape s = DustManager.shapes.get(iter);
 			// System.out.println("Dicks");
 			int[][] temptrim = trim;
 
@@ -1179,6 +1181,34 @@ public class DustManager
         s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, 0});
         DustManager.registerLocalDustShape(s, new DEPowerRelay());
         //</editor-fold>
+        s = new DustShape(10,10,"charchInsc",false,1,1,3,3,46);
+        values = new int[][][]
+        {
+            {
+                {0,0,0, 0,0,0,G, 0,0,0},
+                {0,0,0, 0,0,P,G, P,0,0},
+                {0,P,G, P,P,P,G, P,0,0},
+                
+                {P,G,G, G,G,P,P, G,G,0},
+                {G,G,P, P,G,0,P, P,G,0},
+                {0,G,P, P,0,G,P, P,G,G},
+                {0,G,G, P,P,G,G, G,G,P},
+                
+                {0,0,P, G,P,P,P, G,P,0},
+                {0,0,P, G,P,0,0, 0,0,0},
+                {0,0,0, G,0,0,0, 0,0,0},
+            }
+        };
+        s.setData(values);
+        s.setRuneName("Inscription Enchanting Rune");
+        s.setNotes("Sacrifice:\n\n"
+                + "Defined by the inscription.");
+        s.setDesc("Description:\n\n"
+                + "Placing a dried inscription on this rune along with its required sacrifices will imbue it with energy.");
+        s.setAuthor("billythegoat101");
+        s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, 0});
+        DustManager.registerLocalDustShape(s, new DEChargeInscription());
+        
         //<editor-fold defaultstate="collapsed" desc="scollect">
         s = new DustShape(9, 6, "scollect", false, 2, 3, 2, 3, 35);
         values = new int[][][]
@@ -1227,7 +1257,7 @@ public class DustManager
         s.setNotes("Sacrifice:\n\n"
                 + "-1xMobEgg + 4xEnderPearl + 25XP");
         s.setDesc("Description:\n\n"
-                + "Reassigns a placed spawner to spawn mobs of the specified type.");
+                + "Reassigns a placed spawner to spawn mobs of the specified type. Note:The entity inside won't update visually until you re-log.");
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {0, 0, -1, 0, 0, -1, 0, 0});
         DustManager.registerLocalDustShape(s, new DESpawnerReprog());
@@ -1283,7 +1313,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Teleports you to a teleporation network rune location. The teleportation network frequency on which to send you depends on the block beneath the blaze square in the rune design.");
         s.setAuthor("billythegoat101");
-        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, -1, 0});
+        s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
         DustManager.registerLocalDustShape(s, new DEMiniTele());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Fire Sprite">
@@ -1520,7 +1550,7 @@ public class DustManager
         s.setNotes("Sacrifice:\n\n"
                 + "-1xLiveTestificate + 1xDiamondPickaxe + 1xGoldBlock + 20XP\n"
                 + "OR\n"
-                + "-1xLiveTestificate + 1xDiamondSword + 1xGoldBlock + 20XP");
+                + "-1xLiveTestificate + 1xDiamondShovel + 1xGoldBlock + 20XP");
         s.setDesc("Description:\n\n"
                 + "Enchants and repairs your pick or shovel with Silk Touch I.");
         s.setAuthor("billythegoat101");
@@ -1716,7 +1746,7 @@ public class DustManager
         DustManager.registerLocalDustShape(s, new DEXP());
         //</editor-fold>
 //        System.out.println("Loaded " + DustManager.shapes.size() + " runes.");
-        //last id used: 45
+        //last id used: 46
         //notes for reanimation:
         //all numbers are cut off at the end of the name to preserve lexicon page picture names
     

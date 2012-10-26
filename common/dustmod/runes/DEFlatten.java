@@ -72,21 +72,21 @@ public class DEFlatten extends DustEvent
 
             switch (e.data[0])
             {
-                case 1:
+                case 100:
                     radius = 4;
                     break;
 
-                case 2:
+                case 200:
                     radius = 6;
                     height = 5;
                     break;
 
-                case 3:
+                case 300:
                     radius = 8;
                     height = 7;
                     break;
 
-                case 4:
+                case 400:
                     radius = 10;
                     height = 9;
                     break;

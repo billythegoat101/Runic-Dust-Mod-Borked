@@ -32,7 +32,7 @@ public class DEHideout extends DustEvent
             return;
         }
 
-        e.renderStar = true;
+        e.setRenderStar(true);
         e.setColorStar(255, 255, 255);
         int x = e.getX();
         int y = e.getY();

@@ -30,6 +30,12 @@ public class DESpawnerCollector extends DustEvent
             e.fizzle();
             return;
         }
+        
+
+//        EntityItem ei = new EntityItem(e.worldObj);
+//        ei.setPosition(e.posX, e.posY - e.yOffset, e.posZ);
+//        ei.item = new ItemStack(Block.mobSpawner, 1);
+//        e.worldObj.spawnEntityInWorld(ei);
     }
 
     public void onTick(EntityDust e)
@@ -54,11 +60,11 @@ public class DESpawnerCollector extends DustEvent
             if (e.ticksExisted > 100)
             {
                 e.worldObj.setBlockWithNotify(fin[0], fin[1], fin[2], 0);
-                e.worldObj.markBlockNeedsUpdate(fin[0], fin[1], fin[2]);
                 EntityItem ei = new EntityItem(e.worldObj);
                 ei.setPosition(e.posX, e.posY - e.yOffset, e.posZ);
                 ei.item = new ItemStack(Block.mobSpawner, 1);
                 e.worldObj.spawnEntityInWorld(ei);
+                e.worldObj.markBlockNeedsUpdate(fin[0], fin[1], fin[2]);
             }
         }
 

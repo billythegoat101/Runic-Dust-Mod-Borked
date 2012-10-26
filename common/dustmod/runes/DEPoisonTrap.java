@@ -38,19 +38,19 @@ public class DEPoisonTrap extends DETrap
 
         switch (dustLevel)
         {
-            case 2:
+            case 200:
                 rad = 3;
                 poisondambase = 5;
                 poisondamrand = 2;
                 break;
 
-            case 3:
+            case 300:
                 rad = 4;
                 poisondambase = 7;
                 poisondamrand = 4;
                 break;
 
-            case 4:
+            case 400:
                 rad = 6;
                 poisondambase = 10;
                 poisondamrand = 8;

@@ -41,6 +41,7 @@ public class ItemSpiritSword extends ItemSword
     @Override
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
     {
+//    	System.out.println("UPDATE SWORD");
         if (!itemstack.isItemEnchanted())
         {
             itemstack.addEnchantment(Enchantment.knockback, 10);

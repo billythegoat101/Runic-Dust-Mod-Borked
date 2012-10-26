@@ -209,7 +209,7 @@ public class DEMiniTele extends DustEvent
                     int[] iwarp = VoidTeleManager.voidNetwork.get(temp);
 
 //                        System.out.println("Found warp: " + warp[3] + ":" + warp[4] + " " + iwarp[3] + ":" + iwarp[4] + " dim:" + iwarp[6] + " ver:" + iwarp[7]);
-                    if ((Math.abs(warp[0] - iwarp[0]) < 0.5D && Math.abs(warp[1] - iwarp[1]) < 0.5D && Math.abs(warp[2] - iwarp[2]) < 0.5D) || iwarp[6] != i.worldObj.provider.worldType || iwarp[7] != warp[7])
+                    if ((Math.abs(warp[0] - iwarp[0]) < 0.5D && Math.abs(warp[1] - iwarp[1]) < 0.5D && Math.abs(warp[2] - iwarp[2]) < 0.5D) || iwarp[6] != i.worldObj.provider.dimensionId || iwarp[7] != warp[7])
                     {
 //                            System.out.println("Skipping dead:" + ed.isDead);
                         continue;

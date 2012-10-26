@@ -111,8 +111,10 @@ public class BlockDust extends BlockContainer {
 		this.onBlockActivated(world, i, j, k, (EntityPlayer) entityliving, 0,
 				0, 0, 0);
 
-		if (((EntityPlayer) entityliving).getCurrentEquippedItem() != null) {
-			((EntityPlayer) entityliving).getCurrentEquippedItem().stackSize++;
+		ItemStack equipped = ((EntityPlayer) entityliving).getCurrentEquippedItem();
+		if (equipped != null) {
+			if(equipped.itemID != DustMod.pouch.shiftedIndex)
+				equipped.stackSize++;
 		}
 	}
 
@@ -318,6 +320,15 @@ public class BlockDust extends BlockContainer {
 		if (world.isRemote) {
 			return false;
 		}
+		
+		ItemStack item = p.getCurrentEquippedItem();
+		
+		if(item != null && item.itemID == DustMod.chisel.shiftedIndex){
+			int bid = world.getBlockId(i, j-1, k);
+			if(bid == DustMod.rutBlock.blockID){
+				return DustMod.rutBlock.onBlockActivated(world, i, j-1, k, p, dir, x, y, z);
+			}
+		}
 
 		if (world.getBlockMetadata(i, j, k) == 1) {
 			TileEntityDust ted = (TileEntityDust) world.getBlockTileEntity(i,
@@ -329,8 +340,8 @@ public class BlockDust extends BlockContainer {
 		}
 
 		if (p.isSneaking()) {
-			if (p.getCurrentEquippedItem() == null
-					|| p.getCurrentEquippedItem().itemID != DustMod.tome.shiftedIndex) {
+			if (item == null
+					|| item.itemID != DustMod.tome.shiftedIndex) {
 				onBlockClicked(world, i, j, k, p);
 			}
 
@@ -338,20 +349,29 @@ public class BlockDust extends BlockContainer {
 		}
 
 		if (!world.isRemote
-				&& p.getCurrentEquippedItem() != null
-				&& p.getCurrentEquippedItem().itemID == DustMod.tome.shiftedIndex) {
+				&& item != null
+				&& item.itemID == DustMod.tome.shiftedIndex) {
 			updatePattern(world, i, j, k, p);
 			DustModBouncer.notifyBlockChange(world, i, j, k, 0);
 			return true;
 		}
 
-		if (p.getCurrentEquippedItem() == null
-				|| p.getCurrentEquippedItem().itemID != DustMod.idust.shiftedIndex) {
+		if (item == null
+				|| (item.itemID != DustMod.idust.shiftedIndex 
+				&& item.itemID != DustMod.pouch.shiftedIndex)) {
 			return false;
 		}
 
-		int dust = p.getCurrentEquippedItem().getItemDamage();// mod_DustMod.dustValue(p.getCurrentEquippedItem().itemID);
+		
+
+		boolean isPouch = (item.itemID == DustMod.pouch.shiftedIndex);
+		int dust = item.getItemDamage();// mod_DustMod.dustValue(p.getCurrentEquippedItem().itemID);
+		if(isPouch) dust = ItemPouch.getValue(item);
 		if(dust < 5) dust *= 100;
+		
+		if(isPouch && ItemPouch.getDustAmount(item) <= 0){
+			return false;
+		}
 		// System.out.println("ACTIVATED " + p.getCurrentEquippedItem().itemID +
 		// " " +dust+ " derp " + mod_DustMod.ITEM_DustID+256);
 		Vec3 look = p.getLookVec();
@@ -398,9 +418,9 @@ public class BlockDust extends BlockContainer {
 						ted.setDust(rx, rz, dust);
 
 						if (!p.capabilities.isCreativeMode) {
-							p.getCurrentEquippedItem().stackSize--;
+							ItemPouch.subtractDust(item, 1);
 
-							if (p.getCurrentEquippedItem().stackSize == 0) {
+							if (!isPouch && item.stackSize == 0) {
 								p.destroyCurrentEquippedItem();
 							}
 						}
@@ -436,11 +456,12 @@ public class BlockDust extends BlockContainer {
 			for (int sind = 0; sind < p.inventory.mainInventory.length; sind++) {
 				ItemStack is = p.inventory.mainInventory[sind];
 
-				if (is != null && is.itemID == DustMod.idust.shiftedIndex
-						&& is.getItemDamage() == dust) {
-					is.stackSize--;
+				if (is != null && ((is.itemID == DustMod.idust.shiftedIndex
+						&& is.getItemDamage() == dust) ||
+						(is.itemID == DustMod.pouch.shiftedIndex && ItemPouch.getValue(is) == dust && ItemPouch.getDustAmount(is) > 0))) {
+					ItemPouch.subtractDust(is, 1);
 
-					if (is.stackSize == 0) {
+					if (ItemPouch.getDustAmount(is) == 0 && is.itemID != DustMod.pouch.shiftedIndex) {
 						p.inventory.mainInventory[sind] = null;
 					}
 

@@ -25,13 +25,19 @@ import dustmod.DustShape;
 public class GuiTome extends GuiScreen
 {
 	
-    public static int page = 0;
+    public static int runePage = 0;
+    public static int insPage = 0;
+    
+    public static int type = 0;
 
     /** The X size of the inventory window in pixels. */
     protected int xSize;
 
     /** The Y size of the inventory window in pixels. */
     protected int ySize;
+    
+    /** The starting coords of where the gui is drawn */
+    protected int xStart,yStart;
 
     /**
      * Starting X position for the Gui. Inconsistent use for Gui backgrounds.
@@ -109,7 +115,7 @@ public class GuiTome extends GuiScreen
         String notes = "";
         boolean recolor = false;
 
-        if (getPage() == 0)
+        if ((isRunes() && getRunePage() == 0) || (!isRunes() && getInsPage() == 0))
         {
             name = "Legend";
             notes = "\n\n\n"
@@ -122,16 +128,25 @@ public class GuiTome extends GuiScreen
         }
         else
         {
-            DustShape shape = DustManager.getShape(getPage() - 1);
-            name = shape.getRuneName();
-            notes = showSacrifices ? shape.getNotes() : shape.getDescription();
-            author = "by " + shape.getAuthor();
-            if (shape.isPower)
-            {
-                recolor = true;
-            }
-            Random rand = new Random();
-            randAuthor = (int)(rand.nextInt(derp.length));
+        	if(isRunes()){
+	            DustShape shape = DustManager.getShape(getRunePage() - 1);
+	            name = shape.getRuneName();
+	            notes = showSacrifices ? shape.getNotes() : shape.getDescription();
+	            author = "by " + shape.getAuthor();
+	            if (shape.isPower)
+	            {
+	                recolor = true;
+	            }
+	            Random rand = new Random();
+	            randAuthor = (int)(rand.nextInt(derp.length));
+        	}else{
+        		InscriptionEvent event = InscriptionManager.getEventInOrder(getInsPage() - 1);
+	            name = event.getInscriptionName();
+	            notes = showSacrifices ? event.getNotes() : event.getDescription();
+	            author = "by " + event.getAuthor();
+	            Random rand = new Random();
+	            randAuthor = (int)(rand.nextInt(derp.length));
+        	}
         }
 
         GL11.glColor3f(255, 0, 0);
@@ -153,13 +168,22 @@ public class GuiTome extends GuiScreen
         super.updateScreen();
     }
     
-    public void setPage(int p){
-    	page = p;
+    public void setRunePage(int p){
+    	runePage = p;
 //    	itemstack.setItemDamage(p);
     }
 
-    public int getPage(){
-    	return page;
+    public int getRunePage(){
+    	return runePage;
+//    	return itemstack.getItemDamage();
+    }
+    public void setInsPage(int p){
+    	insPage = p;
+//    	itemstack.setItemDamage(p);
+    }
+    
+    public int getInsPage(){
+    	return insPage;
 //    	return itemstack.getItemDamage();
     }
     
@@ -188,9 +212,9 @@ public class GuiTome extends GuiScreen
             EntityPlayer player = ModLoader.getMinecraftInstance().thePlayer;
             int scroll = 0;
 
-            if (getPage() != 0)
+            if (getRunePage() != 0)
             {
-                scroll = DustManager.getShape(getPage() - 1).id;
+                scroll = DustManager.getShape(getRunePage() - 1).id;
                 ItemStack to = new ItemStack(DustMod.dustScroll, 1, scroll);
                 player.inventory.addItemStackToInventory(to);
             }
@@ -208,7 +232,11 @@ public class GuiTome extends GuiScreen
     {
         super.mouseClicked(x, y, m);
 
-        if (y >= (height / 2 - ySize / 2) && y <= (height / 2 + ySize / 2))
+        if(x < xStart+6 && y-yStart < 100 && y-yStart > 16){
+        	y-=yStart;
+        	if(y > 56) setType(1);
+        	else if(y > 16) setType(0);
+        }else if (y >= (height / 2 - ySize / 2) && y <= (height / 2 + ySize / 2))
         {
             if (x >= width / 2 - xSize / 2 - offX && x <= width / 2 + xSize / 2 - offX)
             {
@@ -227,25 +255,46 @@ public class GuiTome extends GuiScreen
     }
     private void advancePage()
     {
-//        itemstack.setItemDamage(itemstack.getItemDamage() + 1);
-    	setPage(getPage() + 1);
+    	if(isRunes()){
+	//        itemstack.setItemDamage(itemstack.getItemDamage() + 1);
+	    	setRunePage(getRunePage() + 1);
+	
+	        if (getRunePage() >= DustManager.getShapes().size() - DustMod.numSec + 1)
+	        {
+	        	setRunePage(0);
+	        }
+    	} else {
 
-        if (getPage() >= DustManager.getShapes().size() - DustMod.numSec + 1)
-        {
-        	setPage(0);
-        }
+	    	setInsPage(getInsPage() + 1);
+	
+	        if (getInsPage() >= InscriptionManager.getEvents().size() + 1)
+	        {
+	        	setInsPage(0);
+	        }
+    	}
     }
 
     private void retreatPage()
     {
-        setPage(getPage()-1);
-
-        if (getPage() < 0)
-        {
-        	setPage(DustManager.getShapes().size() - DustMod.numSec);
-//        	itemstack.setItemDamage(DustManager.getShapes().size() - DustMod.numSec);
-//            page = DustManager.getShapes().size() - DustMod.numSec;
-        }
+    	if(isRunes()){
+	        setRunePage(getRunePage()-1);
+	
+	        if (getRunePage() < 0)
+	        {
+	        	setRunePage(DustManager.getShapes().size() - DustMod.numSec);
+	//        	itemstack.setItemDamage(DustManager.getShapes().size() - DustMod.numSec);
+	//            page = DustManager.getShapes().size() - DustMod.numSec;
+	        }
+    	} else {
+	        setInsPage(getInsPage()-1);
+	
+	        if (getInsPage() < 0)
+	        {
+	        	setInsPage(InscriptionManager.getEvents().size());
+	//        	itemstack.setItemDamage(DustManager.getShapes().size() - DustMod.numSec);
+	//            page = DustManager.getShapes().size() - DustMod.numSec;
+	        }
+    	}
     }
 
     /**
@@ -259,6 +308,8 @@ public class GuiTome extends GuiScreen
 //        mc.renderEngine.bindTexture(mc.renderEngine.getTexture(RenderDustTable.getPagePath(page)));
         int j = (width - xSize) / 2 - offX;
         int k = (height - ySize) / 2;
+        xStart = j;
+        yStart = k;
         int pageWidth = 70;
         int pageHeight = 56;
         int ox = 4;
@@ -266,17 +317,39 @@ public class GuiTome extends GuiScreen
         float scalex = (float)(xSize - ox * 2) / 256F;
         float scaley = (float)(ySize - oy * 2) / 256F;
         float res = xSize / ySize;
-        drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
+        drawTexturedModalRect(j, k, 24, 0, xSize, ySize);
         GL11.glPushMatrix();
         GL11.glScalef(1 / res, res, 1);
         GL11.glTranslatef(j + ox, k + oy, 0);
         GL11.glScalef(scalex, scaley, 1f);
 //        System.out.println("Scale " + scalex + " " + scaley);
-        if(getPage() == 0)
-            mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
-        else PageHelper.bindExternalTexture(PageHelper.folder + RenderDustTable.getPageName(getPage()) + ".png");
+        if(isRunes()){
+	        if(getRunePage() == 0)
+	            mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        else PageHelper.bindExternalTexture(PageHelper.runeFolder + RenderDustTable.getRunePageName(getRunePage()) + ".png");
+        }else {
+	        if(getInsPage() == 0)
+	            mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        else PageHelper.bindExternalTexture(PageHelper.insFolder + InscriptionManager.getEventInOrder(getInsPage() -1).getIDName() + ".png");
+        }
         drawTexturedModalRect(0, 0, 0, 0, 256, 256);
+        
         GL11.glPopMatrix();
+        
+        if(isRunes()){
+        	mc.renderEngine.bindTexture(i);
+        	drawTexturedModalRect(j-6,k,12,0,12,ySize);
+        }else {
+        	mc.renderEngine.bindTexture(i);
+        	drawTexturedModalRect(j-6,k,0,0,12,ySize);
+        }
+    }
+    
+    public boolean isRunes(){
+    	return type == 0;
+    }
+    public void setType(int type){
+    	this.type = type;
     }
 
     @Override

@@ -69,11 +69,12 @@ public class DEObelisk extends DustEvent
         {
             if (e.data[1] > 0)
             {
-                List<Entity> ents = getEntities(e.worldObj, (double)x + 0.5D, (double)y + (double)e.data[0] + 2D, (double)z + 0.5D, 1D);
+                List<Entity> ents = getEntities(e.worldObj, (double)x + 0.5D, (double)y + /*(double)e.data[0] + */1D, (double)z + 0.5D, 1.5D);
+            	System.out.println("RAWR " + e.data[0] + " " + ents.size());
 
                 for (Entity i: ents)
                 {
-                    i.setPosition((double)x + 0.5D, (double)y + (double)e.data[0] + 3D, (double)z + 0.5D);
+                    i.setPosition((double)x + 0.5D, (double)y + (double)e.data[0] + 2D, (double)z + 0.5D);
                 }
             }
 

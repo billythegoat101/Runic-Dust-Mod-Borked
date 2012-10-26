@@ -4,11 +4,14 @@
  */
 package dustexample;
 
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.GameRegistry;
 import dustexample.examplerunes.DEChestNom;
 import dustexample.examplerunes.DEIceSprite;
 import dustexample.examplerunes.DEMakeBlockFromDustLevel;
@@ -17,6 +20,7 @@ import dustexample.examplerunes.DEMakeItRain;
 import dustexample.examplerunes.DEPain;
 import dustmod.DustItemManager;
 import dustmod.DustManager;
+import dustmod.DustMod;
 import dustmod.DustShape;
 
 /**
@@ -35,21 +39,26 @@ import dustmod.DustShape;
  * @author billythegoat101
  */
 
-//@Mod(modid = "DustModExample1", name = "Dust Mod Example 1", version = "1.0"/*, dependencies="after:DustMod"*/)
-//@NetworkMod(clientSideRequired=false, serverSideRequired=false)
+@Mod(modid = "DustExample", name = "Dust Mod Example 1", version = "1.0",dependencies="after:DustMod")
+@NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class DustExample
 {
-//    @Instance
+    @Instance("DustExample")
     public static DustExample instance;
-	
-//	@PostInit
+    
+	@PostInit
 	public void postInit(FMLPostInitializationEvent evt){
 		registerDusts();
 		registerRunes();
+		registerInscriptions();
 	}
+	
     
 	public void registerDusts() {
 		DustItemManager.registerDust(350, "Glowing Runic Dust", "glowdust", 0xEEEE00, 0xFFFF00, 0xFFFF00);
+		
+		//Register recipe for our dust (2xGlowstoneDust + 1xCoal)
+		GameRegistry.addShapelessRecipe(new ItemStack(DustMod.idust,4,350), new ItemStack(Item.lightStoneDust,1),new ItemStack(Item.lightStoneDust,1),new ItemStack(Item.coal,1,-1));
 	}
 	
     /**
@@ -283,6 +292,8 @@ public class DustExample
 
  */
 
+    public void registerInscriptions(){
+    }
     
     /**
      * Tell forge that your mod content pack requires the Runic Dust mod to be 
@@ -291,9 +302,9 @@ public class DustExample
      * 
      * @return
      */
-//    public String getPriorities()
-//    {
-//        return "required-after:mod_DustMod";
-//    }
+    public String getPriorities()
+    {
+        return "required-after:mod_DustMod";
+    }
     
 }

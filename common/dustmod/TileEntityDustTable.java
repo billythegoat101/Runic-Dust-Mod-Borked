@@ -141,7 +141,7 @@ public class TileEntityDustTable extends TileEntity
     }
 
     @Override
-    public Packet getAuxillaryInfoPacket()
+    public Packet getDescriptionPacket()
     {
         return PacketHandler.getTELPacket(this);
     }

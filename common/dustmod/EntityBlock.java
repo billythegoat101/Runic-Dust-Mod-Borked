@@ -4,8 +4,19 @@
  */
 package dustmod;
 
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraft.src.AxisAlignedBB;
+import net.minecraft.src.Block;
+import net.minecraft.src.BlockSand;
+import net.minecraft.src.DamageSource;
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityFallingSand;
+import net.minecraft.src.EntityLiving;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
+import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
@@ -26,6 +37,7 @@ public class EntityBlock extends EntityFallingSand
     public long parentDustID = -1L;
     public EntityDust parentDust = null;
 
+    public boolean throwing = false;
     public boolean going = false;
     public boolean placeWhenArrived = false;
     public boolean lingerWhenArrived = false;
@@ -110,8 +122,13 @@ public class EntityBlock extends EntityFallingSand
 //            updateDataWatcher();
 //        }
 
-        motionX = motionY = motionZ = 0;
-
+        if(!throwing) motionX = motionY = motionZ = 0;
+        else {
+//        	System.out.println("wat " + motionX + " " + motionY + " " + motionZ);
+        	updateSand();
+//        	this.moveEntity(motionX, motionY, motionZ);
+//        	this.
+        }
         if (justBorn && hasParentDust && parentDust == null)
         {
             parentDust = EntityDustManager.getDustAtID(parentDustID);
@@ -174,7 +191,7 @@ public class EntityBlock extends EntityFallingSand
                     lingering = false;
                     this.updateDataWatcher();
                 }
-                System.out.println("PLACE");
+//                System.out.println("PLACE");
                 this.setPosition(gx,gy,gz);
                 place();
             }
@@ -204,6 +221,136 @@ public class EntityBlock extends EntityFallingSand
         }
         
         this.updateDataWatcher();
+    }
+    
+    public void updateSand(){
+//    	if (this.blockID == 0)
+//        {
+////            this.setDead();
+//        }
+//        else
+//        {
+            this.prevPosX = this.posX;
+            this.prevPosY = this.posY;
+            this.prevPosZ = this.posZ;
+            ++this.fallTime;
+            this.motionY -= 0.03999999910593033D;
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.9800000190734863D;
+            this.motionY *= 0.9800000190734863D;
+            this.motionZ *= 0.9800000190734863D;
+
+            if (!this.worldObj.isRemote)
+            {
+                int var1 = MathHelper.floor_double(this.posX);
+                int var2 = MathHelper.floor_double(this.posY);
+                int var3 = MathHelper.floor_double(this.posZ);
+
+//                if (this.fallTime == 1)
+//                {
+//                    if (this.fallTime == 1 && this.worldObj.getBlockId(var1, var2, var3) == this.blockID)
+//                    {
+//                        this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
+//                    }
+//                    else
+//                    {
+//                        this.setDead();
+//                    }
+//                }
+
+                if (this.onGround)
+                {
+                    this.motionX *= 0.699999988079071D;
+                    this.motionZ *= 0.699999988079071D;
+                    this.motionY *= -0.5D;
+
+                    if (this.worldObj.getBlockId(var1, var2, var3) != Block.pistonMoving.blockID)
+                    {
+                        this.setDead();
+
+                        if ((!this.worldObj.canPlaceEntityOnSide(this.blockID, var1, var2, var3, true, 1, (Entity)null) || BlockSand.canFallBelow(this.worldObj, var1, var2 - 1, var3) || !this.worldObj.setBlockAndMetadataWithNotify(var1, var2, var3, this.blockID, this.field_70285_b)) && !this.worldObj.isRemote && this.field_70284_d)
+                        {
+//                            this.entityDropItem(new ItemStack(this.blockID, 1, this.field_70285_b), 0.0F);
+                        }
+                    }
+                }
+                else if (this.fallTime > 100 && !this.worldObj.isRemote && (var2 < 1 || var2 > 256) || this.fallTime > 600)
+                {
+                    if (this.field_70284_d)
+                    {
+                        this.dropItem(this.blockID, 1);
+                    }
+
+                    this.setDead();
+                }
+            }
+//        }
+            
+            
+            //Collision with entity
+            double knockback = 2D;
+            Vec3 var17 = Vec3.getVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
+            Vec3 var3 = Vec3.getVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            Entity var5 = null;
+            List var6 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            double var7 = 0.0D;
+            Iterator var9 = var6.iterator();
+            float var11;
+
+            while (var9.hasNext())
+            {
+                Entity var10 = (Entity)var9.next();
+
+                if (var10.getClass() != this.getClass() && var10.canBeCollidedWith()/* && (var10 != this.shootingEntity || this.ticksInAir >= 5)*/)
+                {
+                    var11 = 0.3F;
+                    AxisAlignedBB var12 = var10.boundingBox.expand((double)var11, (double)var11, (double)var11);
+                    MovingObjectPosition var13 = var12.calculateIntercept(var17, var3);
+
+                    if (var13 != null)
+                    {
+                        double var14 = var17.distanceTo(var13.hitVec);
+
+                        if (var14 < var7 || var7 == 0.0D)
+                        {
+                            var5 = var10;
+                            var7 = var14;
+                        }
+                    }
+                }
+            }
+            
+
+            if(var5 != null){
+	            if (var5.attackEntityFrom(DamageSource.inWall, 104))
+	            {
+	                if (var5 instanceof EntityLiving)
+	                {
+	                    ++((EntityLiving)var5).arrowHitTempCounter;
+	
+//	                    if (this.knockbackStrength > 0)
+//	                    {
+	                        float var25 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+	
+	                        if (var25 > 0.0F)
+	                        {
+	                        	var5.addVelocity(this.motionX * (double)knockback * 0.6000000238418579D / (double)var25, 0.1D, this.motionZ * (double)knockback * 0.6000000238418579D / (double)var25);
+	                        }
+//	                    }
+	                }
+	
+//	                this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+	                this.setDead();
+	            }
+	            else
+	            {
+	                this.motionX *= -0.10000000149011612D;
+	                this.motionY *= -0.10000000149011612D;
+	                this.motionZ *= -0.10000000149011612D;
+	                this.rotationYaw += 180.0F;
+	                this.prevRotationYaw += 180.0F;
+	            }
+            }
     }
 
     /**
@@ -357,5 +504,21 @@ public class EntityBlock extends EntityFallingSand
         motionY = vy;
         motionZ = vz;
         return dist;
+    }
+    
+    public boolean doesCollideWithWorld(){
+    	int ix = (int)(gx -0.5);
+    	int iy = (int)(gy -0.5);
+    	int iz = (int)(gz -0.5);
+    	for(int i = -1; i <= 1; i++){
+    		for(int j = -1; j <= 1; j++){
+    			for(int k = -1; k <= 1; k++){
+    				if(Math.abs(i+j)!=1 && Math.abs(i+k)!=0) continue;
+    				int bid = worldObj.getBlockId(ix+i, iy+j, iz+k);
+    				if(bid != 0) return true;
+    			}
+    		}
+    	}
+    	return false;
     }
 }

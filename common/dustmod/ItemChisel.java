@@ -34,13 +34,18 @@ public class ItemChisel extends Item
     }
 
     @Override
-    public boolean tryPlaceIntoWorld(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int dir, float x, float y, float z)
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int dir,float x,float y,float z)
     {
         int blockId = world.getBlockId(i, j, k);
-//        if(blockId == Block.grass.blockID) blockId = Block.dirt.blockID;
         int meta = world.getBlockMetadata(i, j, k);
         Block b = Block.blocksList[blockId];
-
+        if(b == DustMod.dust){
+        	j--;
+            blockId = world.getBlockId(i, j, k);
+            meta = world.getBlockMetadata(i, j, k);
+            b = Block.blocksList[blockId];
+        }
+        
         if (b == DustMod.rutBlock)
         {
             itemstack.damageItem(1, p);
@@ -69,7 +74,7 @@ public class ItemChisel extends Item
             ter.maskBlock = blockId;
             ter.maskMeta = meta;
             DustMod.rutBlock.onBlockActivated(world, i, j, k, p,0,0,0,0);
-            System.out.println("Set");
+//            System.out.println("Set");
 //        }
 
 //        System.out.println("Setting to " + blockID + " " + meta);

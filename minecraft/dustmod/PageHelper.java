@@ -36,8 +36,11 @@ import net.minecraft.src.TexturePackBase;
 public class PageHelper
 {
 
-    public static String folder = "./dust_pages/";
+	public static String folder = "./dust_pages/";
+    public static String runeFolder = "./dust_pages/runes/";
+    public static String insFolder = "./dust_pages/inscriptions/";
     public static BufferedImage background;
+    public static BufferedImage backgroundIns;
     public static BufferedImage shade;
     public static BufferedImage colors;
     public static int bgw, bgh;
@@ -57,6 +60,7 @@ public class PageHelper
         try
         {
             background = getImage(DustMod.path + "/pages/background.png");
+            backgroundIns = getImage(DustMod.path + "/pages/backgroundIns.png");
             shade = getImage(DustMod.path + "/pages/shade.png");
             colors = getImage(DustMod.path + "/pages/colors.png");
 
@@ -68,14 +72,140 @@ public class PageHelper
             {
                 System.out.println("Lexicon Folder " + new File(folder).getAbsolutePath() + " created.");
             }
+            new File(runeFolder).mkdirs();
+            new File(insFolder).mkdirs();
 
         } catch (IOException ex)
         {
             Logger.getLogger(PageHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void checkInscriptionImage(InscriptionEvent event){
+    	BufferedImage dust = new BufferedImage(bgw, bgh, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage result = new BufferedImage(bgw, bgh, BufferedImage.TYPE_INT_ARGB);
 
-    public static void checkImage(DustShape shape)
+
+        String name = "" + event.idName;
+//        while (Character.isDigit(name.charAt(name.length() - 1)))
+//        {
+//            name = name.substring(0, name.length() - 1);
+//        }
+        
+        File file = new File(insFolder + name + ".png");
+        if(file.exists()) return;
+        System.out.println("Lexicon Inscription entry for " + name + " not found! Generating...");
+        
+        int[][]values = event.referenceDesign;
+        int width = values.length;
+        int height = values[0].length;
+//        System.out.println("Checking " + name + " " + width + " " + height);
+
+
+        int pxwMax = bgw - 6;
+        int pxhMax = bgh- 6;
+
+        int pxWidth = 0;
+        int pxHeight = 0;
+
+        int dW = 1; //dotWidth
+        int sW = 1; //spaceWidth
+
+        pxWidth = 34;//width * dW + (width - 1) * sW;
+        pxHeight = 34;//height * dW + (height - 1) * sW;
+
+        //Dust
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                int value = values[x][y];
+                if (value != 0)
+                {
+                    int[] loc = getPosition(x, y, dW, sW, bgw, bgh, width, height);
+                    int colorCheck = value;
+                    if (colorCheck == -1)
+                    {
+                        colorCheck = 0;
+                    }
+                    colorCheck *= 2;
+                    colorCheck += 2;
+
+                    if (x < width - 1 && values[x + 1][y] == value)
+                    {
+                        int[] nextLoc = getPosition(x + 1, y, dW, sW, bgw, bgh, width, height);
+                        for (int i = Math.min(loc[0], nextLoc[0]); i < Math.max(loc[0], nextLoc[0]); i++)
+                        {
+                            for (int j = 0; j < dW; j++)
+                            {
+                                dust.setRGB(i, loc[1] + j,  getRandomDustColor(value, false));
+                            }
+                        }
+                    }
+                    if (y < height - 1 && values[x][y + 1] == value)
+                    {
+                        int[] nextLoc = getPosition(x, y + 1, dW, sW, bgw, bgh, width, height);
+                        for (int i = 0; i < dW; i++)
+                        {
+                            for (int j = Math.min(loc[1], nextLoc[1]); j < Math.max(loc[1], nextLoc[1]); j++)
+                            {
+                                dust.setRGB(loc[0] + i, j,  getRandomDustColor(value, false));
+                            }
+                        }
+                    }
+                    for (int i = 0; i < dW; i++)
+                    {
+                        for (int j = 0; j < dW; j++)
+                        {
+                            dust.setRGB(loc[0] + i, loc[1] + j,  getRandomDustColor(value, true));
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //shade and finalization
+        result.getGraphics().drawImage(backgroundIns, 0, 0, null);
+        for (int x = 0; x < result.getWidth(); x++)
+        {
+            for (int y = 0; y < result.getHeight(); y++)
+            {
+                if (dust.getRGB(x, y) != 0)
+                {
+                    result.setRGB(x, y, dust.getRGB(x, y));
+                }
+                int color = result.getRGB(x, y);
+                Color c = new Color(color);
+                int r, g, b;
+                r = c.getRed();
+                g = c.getGreen();
+                b = c.getBlue();
+
+                int shadeColor = shade.getRGB(x, y) & 0x0000FF;
+
+                r = linearColorBurn(shadeColor, r);
+                g = linearColorBurn(shadeColor, g);
+                b = linearColorBurn(shadeColor, b);
+
+                c = new Color(r, g, b);
+                int resultColor = c.getRGB();
+//                    if(resultColor < 0) resultColor = 0;
+                result.setRGB(x, y, resultColor);
+            }
+        }
+//            result.getGraphics().drawImage(shade, 0, 0, null);
+
+        try
+        {
+            ImageIO.write(result, "PNG", new File(insFolder + name + ".png"));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(PageHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void checkRuneImage(DustShape shape)
     {
 
         BufferedImage dust = new BufferedImage(bgw, bgh, BufferedImage.TYPE_INT_ARGB);
@@ -88,9 +218,9 @@ public class PageHelper
 //            name = name.substring(0, name.length() - 1);
 //        }
         
-        File file = new File(folder + name + ".png");
+        File file = new File(runeFolder + name + ".png");
         if(file.exists()) return;
-        System.out.println("Lexicon entry for " + name + " not found! Generating...");
+        System.out.println("Lexicon Rune entry for " + name + " not found! Generating...");
         
         int[][][] values = shape.data;
         int width = shape.data[0][0].length;
@@ -109,14 +239,12 @@ public class PageHelper
 
         pxWidth = width * dW + (width - 1) * sW + dW;
         pxHeight = height * dW + (height - 1) * sW + dW;
-//        System.out.println("check1");
         if (pxWidth > pxwMax || pxHeight > pxhMax)
         {
             dW = 2;
             sW = 2;
             pxWidth = width * dW + (width - 1) * sW;
             pxHeight = height * dW + (height - 1) * sW;
-//            System.out.println("check2");
 
             if (pxWidth > pxwMax || pxHeight > pxhMax)
             {
@@ -124,7 +252,6 @@ public class PageHelper
                 sW = 1;
                 pxWidth = width * dW + (width - 1) * sW;
                 pxHeight = height * dW + (height - 1) * sW;
-//                System.out.println("check3");
 
                 if (pxWidth > pxwMax || pxHeight > pxhMax)
                 {
@@ -132,7 +259,6 @@ public class PageHelper
                     sW = 1;
                     pxWidth = width * dW + (width - 1) * sW;
                     pxHeight = height * dW + (height - 1) * sW;
-//                    System.out.println("check4");
                 }
             }
         }
@@ -259,7 +385,7 @@ public class PageHelper
 
         try
         {
-            ImageIO.write(result, "PNG", new File(folder + name + ".png"));
+            ImageIO.write(result, "PNG", new File(runeFolder + name + ".png"));
         } catch (IOException ex)
         {
             Logger.getLogger(PageHelper.class.getName()).log(Level.SEVERE, null, ex);
@@ -289,6 +415,10 @@ public class PageHelper
         if (y >= 0 && sW < 2)
         {
             rtn[1]++;
+        }
+        if(dW == 2 && sW == 2) {
+        	rtn[0] ++;
+        	rtn[1] ++;
         }
 
         rtn[0] += x * dW;
@@ -395,9 +525,9 @@ public class PageHelper
         TexturePackBase tp = mc.renderEngine.texturePack.getSelectedTexturePack();
         InputStream stream = tp.getResourceAsStream(file);
         if(stream == null){
-        	throw new IllegalArgumentException("[DustMod] Image file not found! " + file);
+        	throw new IllegalArgumentException("[DustMod] Image file not found! " + file + ". Perhaps you installed it wrong?");
         }
-        rtn = ImageIO.read(stream);
+    	rtn = ImageIO.read(stream);
         images.put(file, rtn);
         return rtn;
     }
