@@ -11,6 +11,8 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.DustModBouncer;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityList;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.EnumToolMaterial;
 import net.minecraft.src.IMob;
 import net.minecraft.src.ISaveHandler;
@@ -34,6 +36,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -286,6 +289,16 @@ public class DustMod {
 		EntityDustManager.load(savePath);
 	}
 	
+
+	
+	public static String getUsername(Player p){
+		if(p instanceof EntityPlayer){
+			return ((EntityPlayer)p).username;
+		}else if(p instanceof EntityPlayerMP){
+			return ((EntityPlayerMP)p).username;
+		}
+		return null;
+	}
 
 	
     /**
