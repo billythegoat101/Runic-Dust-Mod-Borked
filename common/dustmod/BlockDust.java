@@ -49,7 +49,7 @@ public class BlockDust extends BlockContainer {
 
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int i, int j) {
-		return blockIndexInTexture;
+		return blockIndexInTexture + (i==1 ? 0:1);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class BlockDust extends BlockContainer {
 		if (block == null) {
 			return false;
 		} else {
-			return world.isBlockSolidOnSide(i, j - 1, k, ForgeDirection.UP);
+			return world.isBlockSolidOnSide(i, j - 1, k, ForgeDirection.UP) || block == Block.glass;
 			// return block.renderAsNormalBlock() || block == Block.glass ||
 			// world.isBlockSolidOnSide(i,j,k,0);
 		}
@@ -310,7 +310,7 @@ public class BlockDust extends BlockContainer {
 	// }
 
 	@Override
-	protected int damageDropped(int i) {
+	public int damageDropped(int i) {
 		return i;
 	}
 
@@ -701,7 +701,7 @@ public class BlockDust extends BlockContainer {
 		}
 
 		// System.out.println("ASNASO " + Arrays.deepToString(map));
-		DustManager.callShape(p.worldObj, (double) sx + (double) dx / 2
+		DustManager.callShape(world, (double) sx + (double) dx / 2
 				+ 0.5D, j + 1D, (double) sz + (double) dz / 2 + 0.5D, map, n,
 				(p == null) ? null : p.username);
 	}

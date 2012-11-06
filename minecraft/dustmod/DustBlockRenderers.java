@@ -66,7 +66,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         int size = TileEntityDust.size;
         float px = 1F / 16F;
         float cellWidth = 1F / size;
-        float h = 0.0F;
+        float h = 0.02F;
         TileEntityDust ted = (TileEntityDust)iblock.getBlockTileEntity(i, j, k);
         float t = 0.02F;
 //        int light = Block.lightValue[block.blockID];
@@ -106,6 +106,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 //                        tes.addVertexWithUV(bx, h, bz-bl, 1, 0);
                     if (meta > 0)
                     {
+                        renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlock(block, i, j, k);
                     }
                     else
@@ -117,6 +118,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         r = r / 255;
                         g = g / 255;
                         b = b / 255;
+                        renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
                 }
@@ -143,6 +145,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
                     if (meta > 0)
                     {
+                        renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlock(block, i, j, k);
                     }
                     else
@@ -154,6 +157,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         r = r / 255;
                         g = g / 255;
                         b = b / 255;
+                        renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
                 }
@@ -180,6 +184,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
                     if (meta > 0)
                     {
+                        renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlock(block, i, j, k);
                     }
                     else
@@ -191,6 +196,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         r = r / 255;
                         g = g / 255;
                         b = b / 255;
+                        renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
                 }
