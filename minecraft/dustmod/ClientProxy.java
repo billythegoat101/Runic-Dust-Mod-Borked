@@ -58,8 +58,8 @@ public class ClientProxy extends CommonProxy {
         
         DustBlockRenderers.dustModelID = RenderingRegistry.getNextAvailableRenderId();
         DustBlockRenderers.rutModelID = RenderingRegistry.getNextAvailableRenderId();
-        DustBlockRenderers.dustModelID = RenderingRegistry.getNextAvailableRenderId();
-        DustBlockRenderers.rutModelID = RenderingRegistry.getNextAvailableRenderId();
+//        DustBlockRenderers.dustModelID = RenderingRegistry.getNextAvailableRenderId();
+//        DustBlockRenderers.rutModelID = RenderingRegistry.getNextAvailableRenderId();
         
         RenderingRegistry.registerBlockHandler(new DustBlockRenderers(DustBlockRenderers.dustModelID));
         RenderingRegistry.registerBlockHandler(new DustBlockRenderers(DustBlockRenderers.rutModelID));

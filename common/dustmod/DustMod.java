@@ -263,7 +263,14 @@ public class DustMod {
 	@PostInit
 	public void modsLoaded(FMLPostInitializationEvent evt){
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
-			Minecraft.getMinecraft().session.username = "BILLYTG101";
+			try{//Debugging
+				Class c = Class.forName("net.minecraft.src.World");
+				Minecraft.getMinecraft().session.username = "BILLYTG101";
+				System.err.println("[DUSTMOD] WARNING: This is being run in a debug environment!");
+			}catch(Exception e){
+				//not debugging
+			}
+			
 		}
 	}
 	

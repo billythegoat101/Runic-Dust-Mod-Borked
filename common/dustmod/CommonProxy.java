@@ -47,7 +47,7 @@ public class CommonProxy implements IGuiHandler{
 	}
 
 	public void registerEventHandlers() {
-		System.out.println("Register");
+//		System.out.println("Register");
 		TickHandler tick = new TickHandler();
 		TickRegistry.registerTickHandler(tick, Side.CLIENT);
 		TickRegistry.registerTickHandler(tick, Side.SERVER);

@@ -81,7 +81,7 @@ public class ItemDust extends ItemReed
             }
         }
 
-        if (!p.canPlayerEdit(i, j, k))
+        if (!p.func_82246_f(i, j, k))
         {
             return false;
         }
@@ -149,10 +149,11 @@ public class ItemDust extends ItemReed
         	}
         }
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromDamage(int meta, int pass) {
+    public int func_82790_a(ItemStack stack, int pass) {
+    	int meta = stack.getItemDamage();
     	return pass == 0 ? DustItemManager.getPrimaryColor(meta) : DustItemManager.getSecondaryColor(meta);
     }
 
