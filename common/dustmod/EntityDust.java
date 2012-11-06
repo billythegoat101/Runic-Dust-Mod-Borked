@@ -46,8 +46,11 @@ public class EntityDust extends Entity
     public static int DW_renderBeam = 24;
     public static int DW_renderStar = 25;
     public static int DW_eventName = 26;
+    public static int DW_beamType = 27;
+    
     public boolean reanimate = false;
     public boolean renderBeam = false;
+    public int beamType = 0;
     public boolean renderStar = false;
     public boolean ignoreRune = false;
     public boolean renderFlamesDust = false;
@@ -126,6 +129,7 @@ public class EntityDust extends Entity
         dataWatcher.addObject(DW_starScale, new Float(starScale).byteValue());
         dataWatcher.addObject(DW_starScaleY, new Float(starScaleY).byteValue());
         dataWatcher.addObject(DW_renderBeam, renderBeam ? (byte) 1 : (byte) 0);
+        dataWatcher.addObject(DW_beamType,new Integer(beamType));
         dataWatcher.addObject(DW_renderStar, renderStar ? (byte) 1 : (byte) 0);
 
         if (eventName == null)
@@ -153,6 +157,7 @@ public class EntityDust extends Entity
         dataWatcher.updateObject(DW_starScale, new Float(starScale).byteValue());
         dataWatcher.updateObject(DW_starScaleY, new Float(starScaleY).byteValue());
         dataWatcher.updateObject(DW_renderBeam, renderBeam ? (byte) 1 : (byte) 0);
+        dataWatcher.updateObject(DW_beamType,new Integer(beamType));
         dataWatcher.updateObject(DW_renderStar, renderStar ? (byte) 1 : (byte) 0);
 
         if (eventName == null)
@@ -180,6 +185,7 @@ public class EntityDust extends Entity
         starScale = new Float(dataWatcher.getWatchableObjectByte(DW_starScale));
         starScaleY = new Float(dataWatcher.getWatchableObjectByte(DW_starScaleY));
         renderBeam = (dataWatcher.getWatchableObjectByte(DW_renderBeam) == (byte) 1);
+        beamType = dataWatcher.getWatchableObjectInt(DW_beamType);
         renderStar = (dataWatcher.getWatchableObjectByte(DW_renderStar) == (byte) 1);
         eventName = dataWatcher.getWatchableObjectString(DW_eventName);
 

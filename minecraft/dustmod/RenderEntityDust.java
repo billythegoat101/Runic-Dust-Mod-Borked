@@ -14,6 +14,7 @@ import net.minecraft.src.Render;
 import net.minecraft.src.RenderHelper;
 import net.minecraft.src.RenderManager;
 import net.minecraft.src.Tessellator;
+import net.minecraft.src.TileEntityBeacon;
 import net.minecraft.src.World;
 
 import org.lwjgl.opengl.GL11;
@@ -101,7 +102,7 @@ public class RenderEntityDust extends Render implements IRenderLast
         RenderHelper.enableStandardItemLighting();
     }
 
-    public void renderBeam(EntityDust e, double x, double y, double z, double i, double j, double k)
+    public void renderBeam1(EntityDust e, double x, double y, double z, double i, double j, double k, float f)
     {
 //        float f2 = (float)entitydragon.field_41013_bH.field_41032_a + f1;
 //        float f3 = MathHelper.sin(f2 * 0.2F) / 2.0F + 0.5F;
@@ -154,6 +155,117 @@ public class RenderEntityDust extends Render implements IRenderLast
         GL11.glPopAttrib();
     }
 
+    public void renderBeam2(EntityDust e, double x, double y, double z, double i, double j, double k, float f)
+    {
+        float var9 = 1f;
+
+        x-=0.5;
+        y+=2;
+        z-=0.5;
+        if (var9 > 0.0F)
+        {
+            Tessellator var10 = Tessellator.instance;
+            RenderHelper.disableStandardItemLighting();
+            var10.setBrightness(Integer.MAX_VALUE);
+            RenderHelper.disableStandardItemLighting();
+            loadTexture("/misc/beam.png");
+            RenderHelper.disableStandardItemLighting();
+            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F);
+            RenderHelper.disableStandardItemLighting();
+            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F);
+            RenderHelper.disableStandardItemLighting();
+            GL11.glDisable(GL11.GL_LIGHTING);
+            RenderHelper.disableStandardItemLighting();
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            RenderHelper.disableStandardItemLighting();
+            GL11.glDisable(GL11.GL_BLEND);
+            RenderHelper.disableStandardItemLighting();
+            GL11.glDepthMask(true);
+            RenderHelper.disableStandardItemLighting();
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+            RenderHelper.disableStandardItemLighting();
+            float var11 = (float)e.worldObj.func_82737_E() + f;
+            float var12 = -var11 * 0.2F - (float)MathHelper.floor_float(-var11 * 0.1F);
+            byte var13 = 1;
+            double var14 = (double)var11 * 0.025D * (1.0D - (double)(var13 & 1) * 2.5D);
+            var10.startDrawingQuads();
+            RenderHelper.disableStandardItemLighting();
+            var10.setColorRGBA(191 + e.rb/4, 191 + e.gb/4, 191 + e.bb/4, 32);
+//          var10.setColorRGBA(255, 255, 255, 32);
+            double var16 = (double)var13 * 0.2D;
+            double var18 = 0.5D + Math.cos(var14 + 2.356194490192345D) * var16;
+            double var20 = 0.5D + Math.sin(var14 + 2.356194490192345D) * var16;
+            double var22 = 0.5D + Math.cos(var14 + (Math.PI / 4D)) * var16;
+            double var24 = 0.5D + Math.sin(var14 + (Math.PI / 4D)) * var16;
+            double var26 = 0.5D + Math.cos(var14 + 3.9269908169872414D) * var16;
+            double var28 = 0.5D + Math.sin(var14 + 3.9269908169872414D) * var16;
+            double var30 = 0.5D + Math.cos(var14 + 5.497787143782138D) * var16;
+            double var32 = 0.5D + Math.sin(var14 + 5.497787143782138D) * var16;
+            double var34 = (double)(256.0F * var9);
+            double var36 = 0.0D;
+            double var38 = 1.0D;
+            double var40 = (double)(-1.0F + var12);
+            double var42 = (double)(256.0F * var9) * (0.5D / var16) + var40;
+            var10.addVertexWithUV(x + var18, y + var34, z + var20, var38, var42);
+            var10.addVertexWithUV(x + var18, y, z + var20, var38, var40);
+            var10.addVertexWithUV(x + var22, y, z + var24, var36, var40);
+            var10.addVertexWithUV(x + var22, y + var34, z + var24, var36, var42);
+            var10.addVertexWithUV(x + var30, y + var34, z + var32, var38, var42);
+            var10.addVertexWithUV(x + var30, y, z + var32, var38, var40);
+            var10.addVertexWithUV(x + var26, y, z + var28, var36, var40);
+            var10.addVertexWithUV(x + var26, y + var34, z + var28, var36, var42);
+            var10.addVertexWithUV(x + var22, y + var34, z + var24, var38, var42);
+            var10.addVertexWithUV(x + var22, y, z + var24, var38, var40);
+            var10.addVertexWithUV(x + var30, y, z + var32, var36, var40);
+            var10.addVertexWithUV(x + var30, y + var34, z + var32, var36, var42);
+            var10.addVertexWithUV(x + var26, y + var34, z + var28, var38, var42);
+            var10.addVertexWithUV(x + var26, y, z + var28, var38, var40);
+            var10.addVertexWithUV(x + var18, y, z + var20, var36, var40);
+            var10.addVertexWithUV(x + var18, y + var34, z + var20, var36, var42);
+            var10.draw();
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDepthMask(false);
+            var10.startDrawingQuads();
+            var10.setColorRGBA(e.rb, e.gb, e.bb, 48);
+//            var10.setColorRGBA(255, 255, 255, 32);
+            double var44 = 0.2D;
+            double var15 = 0.2D;
+            double var17 = 0.8D;
+            double var19 = 0.2D;
+            double var21 = 0.2D;
+            double var23 = 0.8D;
+            double var25 = 0.8D;
+            double var27 = 0.8D;
+            double var29 = (double)(256.0F * var9);
+            double var31 = 0.0D;
+            double var33 = 1.0D;
+            double var35 = (double)(-1.0F + var12);
+            double var37 = (double)(256.0F * var9) + var35;
+            var10.addVertexWithUV(x + var44, y + var29, z + var15, var33, var37);
+            var10.addVertexWithUV(x + var44, y, z + var15, var33, var35);
+            var10.addVertexWithUV(x + var17, y, z + var19, var31, var35);
+            var10.addVertexWithUV(x + var17, y + var29, z + var19, var31, var37);
+            var10.addVertexWithUV(x + var25, y + var29, z + var27, var33, var37);
+            var10.addVertexWithUV(x + var25, y, z + var27, var33, var35);
+            var10.addVertexWithUV(x + var21, y, z + var23, var31, var35);
+            var10.addVertexWithUV(x + var21, y + var29, z + var23, var31, var37);
+            var10.addVertexWithUV(x + var17, y + var29, z + var19, var33, var37);
+            var10.addVertexWithUV(x + var17, y, z + var19, var33, var35);
+            var10.addVertexWithUV(x + var25, y, z + var27, var31, var35);
+            var10.addVertexWithUV(x + var25, y + var29, z + var27, var31, var37);
+            var10.addVertexWithUV(x + var21, y + var29, z + var23, var33, var37);
+            var10.addVertexWithUV(x + var21, y, z + var23, var33, var35);
+            var10.addVertexWithUV(x + var44, y, z + var15, var31, var35);
+            var10.addVertexWithUV(x + var44, y + var29, z + var15, var31, var37);
+            var10.draw();
+            RenderHelper.enableStandardItemLighting();
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glDepthMask(true);
+        }
+    }
+    
     public void renderFlames(EntityDust e, float par2)
     {
 //        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT | GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT);
@@ -373,7 +485,7 @@ public class RenderEntityDust extends Render implements IRenderLast
     @Override
     public void doRender(Entity e, double d, double d1, double d2, float f, float f1)
     {
-    	
+//    	System.out.println("Render entity dust");
         EntityDust dust = (EntityDust)e;
         float ri = (float)dust.ri / 255F;
         float gi = (float)dust.gi / 255F;
@@ -394,7 +506,16 @@ public class RenderEntityDust extends Render implements IRenderLast
         {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)0F, (float) - 2.167F, (float)0F);
-            renderBeam(dust, d, d1/*+EntityDust.yOffset*/, d2, d, 256, d2);
+            switch(dust.beamType){
+            case 0:
+            	renderBeam1(dust, d, d1/*+EntityDust.yOffset*/, d2, d, 256, d2, f);
+            	break;
+            case 1:
+            	renderBeam2(dust, d, d1/*+EntityDust.yOffset*/, d2, d, 256, d2, f);
+            	break;
+        	default:
+            	renderBeam1(dust, d, d1/*+EntityDust.yOffset*/, d2, d, 256, d2, f);
+            }
             GL11.glPopMatrix();
         }
 
