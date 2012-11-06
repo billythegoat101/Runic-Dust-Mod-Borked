@@ -93,7 +93,7 @@ public class DEXPStore extends DustEvent
                     //                    p.experience = 0;
                     if (p.experienceLevel > 0)
                     {
-                        p.removeExperience(1);
+                        p.func_82242_a(-1);
                         e.data[0]++;
                     }
 
@@ -176,7 +176,7 @@ public class DEXPStore extends DustEvent
         {
             EntityPlayer p = (EntityPlayer)i;
 //            p.experienceLevel += e.data[0];
-            p.removeExperience(-e.data[0]);
+            p.func_82242_a(e.data[0]);
             e.data[0] = 0;
             p.addExperience(e.data[1]);
             e.data[1] = 0;

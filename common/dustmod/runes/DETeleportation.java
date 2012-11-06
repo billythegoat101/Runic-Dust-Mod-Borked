@@ -231,7 +231,7 @@ public class DETeleportation extends PoweredEvent
 //                    for(Object o:(ArrayList<EntityDust>)(warps.clone())){
 //                        if(((EntityDust)o).isDead) warps.remove(o);
 //                    }
-                    if (i instanceof EntityPlayer && ((EntityPlayer) i).timeInPortal > 0.8F)
+                    if (i instanceof EntityPlayer && ((EntityPlayer) i).timeUntilPortal < 300)
                     {
                         e.ram = 100;
                     }
@@ -305,7 +305,7 @@ public class DETeleportation extends PoweredEvent
 
                             if (i instanceof EntityPlayer)
                             {
-                                ((EntityPlayer) i).timeInPortal = 0.9F;
+                                ((EntityPlayer) i).timeUntilPortal = 100;
                             }
 
                             VoidTeleManager.skipWarpTick = 10;

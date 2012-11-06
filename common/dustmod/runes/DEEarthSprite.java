@@ -47,8 +47,8 @@ public class DEEarthSprite  extends PoweredEvent
             eb.parentDustID = e.entityDustID;
             eb.parentDust = e;
             registerFollower(e, eb);
-            e.worldObj.spawnEntityInWorld(eb);
             eb.updateDataWatcher();
+            e.worldObj.spawnEntityInWorld(eb);
 //            eb.save = false;
         }
     }

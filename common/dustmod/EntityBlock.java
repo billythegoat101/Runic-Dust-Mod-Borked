@@ -289,8 +289,8 @@ public class EntityBlock extends EntityFallingSand
             
             //Collision with entity
             double knockback = 2D;
-            Vec3 var17 = Vec3.getVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-            Vec3 var3 = Vec3.getVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            Vec3 var17 = this.worldObj.func_82732_R().getVecFromPool(this.posX, this.posY, this.posZ);
+            Vec3 var3 = this.worldObj.func_82732_R().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
             Entity var5 = null;
             List var6 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var7 = 0.0D;

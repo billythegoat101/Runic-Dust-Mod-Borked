@@ -19,15 +19,11 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import dustmod.DustItemManager;
-import dustmod.DustMod;
-import dustmod.DustShape;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GLAllocation;
+import net.minecraft.src.ITexturePack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.RenderEngine;
-import net.minecraft.src.TexturePackBase;
 
 /**
  *
@@ -522,7 +518,7 @@ public class PageHelper
 
         BufferedImage rtn = null;
         Minecraft mc = ModLoader.getMinecraftInstance();
-        TexturePackBase tp = mc.renderEngine.texturePack.getSelectedTexturePack();
+        ITexturePack tp = mc.renderEngine.texturePack.getSelectedTexturePack();
         InputStream stream = tp.getResourceAsStream(file);
         if(stream == null){
         	throw new IllegalArgumentException("[DustMod] Image file not found! " + file + ". Perhaps you installed it wrong?");

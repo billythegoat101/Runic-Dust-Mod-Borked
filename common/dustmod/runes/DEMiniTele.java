@@ -186,7 +186,7 @@ public class DEMiniTele extends DustEvent
 //                    for(Object o:(ArrayList<EntityDust>)(warps.clone())){
 //                        if(((EntityDust)o).isDead) warps.remove(o);
 //                    }
-                if (i instanceof EntityPlayer && ((EntityPlayer) i).timeInPortal > 0.8F)
+                if (i instanceof EntityPlayer && ((EntityPlayer) i).timeUntilPortal < 300)
                 {
                     e.ram = 100;
                 }
@@ -253,7 +253,7 @@ public class DEMiniTele extends DustEvent
 //                            }
                         if (i instanceof EntityPlayer)
                         {
-                            ((EntityPlayer) i).timeInPortal = 0.9F;
+                            ((EntityPlayer) i).timeUntilPortal = 200;
                         }
 
                         VoidTeleManager.skipWarpTick = 10;

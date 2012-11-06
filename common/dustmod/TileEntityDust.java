@@ -10,13 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.src.Block;
 import net.minecraft.src.DustModBouncer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet132TileEntityData;
 import net.minecraft.src.TileEntity;
@@ -390,7 +389,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, Packet132TileEntityData pkt)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
         super.onDataPacket(net, pkt);
 //        System.out.println("DataPacket");
