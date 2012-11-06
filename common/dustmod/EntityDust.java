@@ -13,6 +13,7 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.MathHelper;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
@@ -109,6 +110,7 @@ public class EntityDust extends Entity
     @Override
     protected void entityInit()
     {
+    	System.out.println("Inint datawatcher");
         dataWatcher.addObject(DW_ri, new Integer(ri));
         dataWatcher.addObject(DW_gi, new Integer(gi));
         dataWatcher.addObject(DW_bi, new Integer(bi));
@@ -185,6 +187,7 @@ public class EntityDust extends Entity
         {
             eventName = "";
         }
+    	System.out.println("Update from data " + renderStar);
     }
 
     public void setStarScale(float scale){
@@ -475,13 +478,13 @@ public class EntityDust extends Entity
     	
         if (this.ticksExisted % 10 == 0)
         {
-//        	System.out.println("Update entity " + eventName);
+        	System.out.println("Update entity " + eventName);
             updateEntityFromDataWatcher();
         }
 
         if (event == null)
         {
-        	updateDataWatcher();
+        	//updateDataWatcher();
             super.onEntityUpdate();
             return;
         }
@@ -817,4 +820,12 @@ public class EntityDust extends Entity
 //        return false;
 //    }
 //
+    
+
+
+    @SideOnly(Side.CLIENT)
+    public int getBrightnessForRender(float par1)
+    {
+        return 15728880;
+    }
 }
