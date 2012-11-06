@@ -14,13 +14,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.DustModBouncer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagInt;
-import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetHandler;
 import net.minecraft.src.NetLoginHandler;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet1Login;
 import net.minecraft.src.Packet250CustomPayload;
@@ -358,7 +356,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     }
     
     @Override
-    public void onPacketData(NetworkManager network, Packet250CustomPayload packet, Player player)
+    public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
     {
     	
 //    	System.out.println("Got packet " + packet.channel);
@@ -697,7 +695,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler,
-			NetworkManager manager) {
+			INetworkManager manager) {
 		
 //		System.out.println("Player logged in " + DustMod.proxy.isClient() );
 		DustMod.keyHandler.checkPlayer(player);
@@ -708,29 +706,27 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 		}
         for(DustShape shape:DustManager.shapes){
         	DustEvent e = DustManager.getEvents().get(shape.name); 
-        	if(e.allowed && e.permaAllowed)
+        	if(e.canPlayerKnowRune((EntityPlayer)player) && !e.secret)
         		manager.addToSendQueue(getRuneDeclarationPacket(shape));
         }
 
         for(InscriptionEvent evt:InscriptionManager.events){
-        	System.out.println("Sending event");
+        	if(evt.canPlayerKnowInscription((EntityPlayer)player) && !evt.secret)
         		manager.addToSendQueue(getInscriptionDeclarationPacket(evt));
         }
-        
-        // TODO Send inscription registration packets 
 		
 	}
 
 	@Override
 	public String connectionReceived(NetLoginHandler netHandler,
-			NetworkManager manager) {
+			INetworkManager manager) {
 		return null;
 	}
 
 	//Remote server connection established
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server,
-			int port, NetworkManager manager) {
+			int port, INetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
 		InscriptionManager.resetRemoteInscriptions();
@@ -738,14 +734,14 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler,
-			MinecraftServer server, NetworkManager manager) {
+			MinecraftServer server, INetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
 		InscriptionManager.resetRemoteInscriptions();
 	}
 
 	@Override
-	public void connectionClosed(NetworkManager manager) {
+	public void connectionClosed(INetworkManager manager) {
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
 		InscriptionManager.resetRemoteInscriptions();
@@ -756,7 +752,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler,
-			NetworkManager manager, Packet1Login login) {
+			INetworkManager manager, Packet1Login login) {
 //		System.out.println("Logged in");
 	}
     

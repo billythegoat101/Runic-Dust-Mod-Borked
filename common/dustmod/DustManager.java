@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import dustmod.runes.DEBait;
 import dustmod.runes.DEBomb;
@@ -150,7 +152,7 @@ public class DustManager
         world.spawnEntityInWorld(result);
         
         
-        if ((evt.allowed || ModLoader.getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(name)) && evt.permaAllowed)
+        if (evt.canPlayerKnowRune(MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name)) && evt.permaAllowed)
         {
             evt.init(result);
             result.updateDataWatcher();
@@ -245,7 +247,15 @@ public class DustManager
         }
             if (!eventInstance.secret)
             {
-                eventInstance.allowed = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Allow_" + shape.getRuneName().replace(' ', '_'), Configuration.CATEGORY_GENERAL, eventInstance.allowed).value);
+            	String permission = config.get("[RUNE]Allow_" + shape.getRuneName().replace(' ', '_'), Configuration.CATEGORY_GENERAL, eventInstance.permission).value.toUpperCase();
+
+            	if(permission.equals("TRUE")) permission = "ALL"; //For backwards-compatibilities sake. Permission used to be a boolean
+            	else if(permission.equals("FALSE")) permission = "OPS";
+            	
+            	if(permission.equals("ALL") || permission.equals("NONE") || permission.equals("OPS")){
+            		eventInstance.permission = permission;
+            	}else
+            		eventInstance.permission = "NONE";
             }
 
         config.save();
@@ -1405,7 +1415,7 @@ public class DustManager
                 + "Takes over the mind of a mob to have them fight for you. CURRENTLY BROKEN: Any attempt to summon this rune will automatically fail.");
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {0, 0, 0, 0, 0, 0, 0, 0});
-        DustManager.registerLocalDustShape(s, new DELoyaltySprite().setAllowed(false));
+        DustManager.registerLocalDustShape(s, new DELoyaltySprite().setPermaAllowed(false));
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="hunter">
         s = new DustShape(12, 8, "hunter6", false, 0, 2, 4, 2,  43);
@@ -1437,7 +1447,7 @@ public class DustManager
         s.setDesc("Description:\n\n"
                 + "Allows you to see the location and health of any mob nearby. WARNING: Possiblitity for lag on lower-quality machines. Right-click the rune to disable. ");
         
-        DustManager.registerLocalDustShape(s, new DEHunterVision().setAllowed(false));
+        DustManager.registerLocalDustShape(s, new DEHunterVision().setPermaAllowed(false));
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="bounce">
         s = new DustShape(4, 4, "bounce", false, 0, 0, 0, 0, 22);
@@ -1751,7 +1761,5 @@ public class DustManager
         //all numbers are cut off at the end of the name to preserve lexicon page picture names
     
 	}
-
-    
-    
+	
 }
