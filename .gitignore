@@ -6,6 +6,9 @@ common/
 !common/net/minecraft/src/DustModBouncer.java
 !common/dustmod/
 !common/dustexample/
+!common/dustmoddeco/
+!common/dustmodtestpack/
+
 
 minecraft_server/
 
