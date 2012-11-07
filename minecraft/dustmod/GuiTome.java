@@ -302,6 +302,7 @@ public class GuiTome extends GuiScreen
      */
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
+//    	System.out.println("RAWR " + DustManager.isEmpty() + " " + InscriptionManager.isEmpty());
         int i = mc.renderEngine.getTexture("/dust/tomeGui.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(i);
@@ -324,12 +325,22 @@ public class GuiTome extends GuiScreen
         GL11.glScalef(scalex, scaley, 1f);
 //        System.out.println("Scale " + scalex + " " + scaley);
         if(isRunes()){
-	        if(getRunePage() == 0)
-	            mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        if(getRunePage() == 0){
+	        	if(DustManager.isEmpty()){
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/no_runes.png"));
+	        	}else {
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        	}
+	        }
 	        else PageHelper.bindExternalTexture(PageHelper.runeFolder + RenderDustTable.getRunePageName(getRunePage()) + ".png");
         }else {
-	        if(getInsPage() == 0)
-	            mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        if(getInsPage() == 0){
+	        	if(InscriptionManager.isEmpty()){
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/no_inscriptions.png"));
+	        	}else {
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        	}
+	        }
 	        else PageHelper.bindExternalTexture(PageHelper.insFolder + InscriptionManager.getEventInOrder(getInsPage() -1).getIDName() + ".png");
         }
         drawTexturedModalRect(0, 0, 0, 0, 256, 256);
