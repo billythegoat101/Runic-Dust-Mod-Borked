@@ -193,7 +193,7 @@ public class EntityDust extends Entity
         {
             eventName = "";
         }
-    	System.out.println("Update from data " + renderStar);
+//    	System.out.println("Update from data " + renderStar);
     }
 
     public void setStarScale(float scale){
@@ -484,7 +484,7 @@ public class EntityDust extends Entity
     	
         if (this.ticksExisted % 10 == 0)
         {
-        	System.out.println("Update entity " + eventName);
+//        	System.out.println("Update entity " + eventName);
             updateEntityFromDataWatcher();
         }
 

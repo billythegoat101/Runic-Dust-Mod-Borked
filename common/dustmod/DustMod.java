@@ -41,7 +41,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.0.1")
+@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1")
 @NetworkMod(
 	clientSideRequired = true, 
 	serverSideRequired = false, 
@@ -262,16 +262,16 @@ public class DustMod {
 	
 	@PostInit
 	public void modsLoaded(FMLPostInitializationEvent evt){
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
-			try{//Debugging
-				Class c = Class.forName("net.minecraft.src.World");
-				Minecraft.getMinecraft().session.username = "BILLYTG101";
-				System.err.println("[DUSTMOD] WARNING: This is being run in a debug environment!");
-			}catch(Exception e){
-				//not debugging
-			}
-			
-		}
+//		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+//			try{//Debugging
+//				Class c = Class.forName("net.minecraft.src.World");
+//				Minecraft.getMinecraft().session.username = "BILLYTG101";
+//				System.err.println("[DUSTMOD] WARNING: This is being run in a debug environment!");
+//			}catch(Exception e){
+//				//not debugging
+//			}
+//			
+//		}
 	}
 	
 	
