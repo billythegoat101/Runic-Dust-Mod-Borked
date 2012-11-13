@@ -237,32 +237,39 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[1][0][1] == 0 && rut[1][2][1] == 0)
         {
             block.setBlockBounds(cw, 0, cw, cw + rw, 1F, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (rut[1][0][1] == 0)
         {
             block.setBlockBounds(cw, 0, cw, cw + rw, bi, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (rut[1][2][1] == 0)
         {
             block.setBlockBounds(cw, 1F - bi, cw, cw + rw, 1F, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
 
         block.setBlockBounds(0, 1F - cw, 0, cw, 1F, cw);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
         block.setBlockBounds(1F - cw, 1F - cw, 0, 1F, 1F, cw);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
         block.setBlockBounds(0, 1F - cw, 1F - cw, cw, 1F, 1F);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
         block.setBlockBounds(1F - cw, 1F - cw, 1F - cw, 1F, 1F, 1F);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
 
@@ -271,12 +278,14 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[1][2][2] == 0)
         {
             block.setBlockBounds(cw, 1f - cw, 1f - cw, cw + rw, 1f, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 1, 0))  //above
         {
             block.setBlockBounds(cw, 1f - cw, 1f - cw, cw + rw, 1f, 1f - bi);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -289,6 +298,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
             }
 
             block.setBlockBounds(cw, 1f - cw, 1f - cw, cw + rw, 1f - bi, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -303,12 +313,14 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[1][2][0] == 0)
         {
             block.setBlockBounds(cw, 1f - cw, 0F, cw + rw, 1f, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 1, 0))  //above
         {
             block.setBlockBounds(cw, 1f - cw, bi, cw + rw, 1f, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -321,6 +333,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
             }
 
             block.setBlockBounds(cw, 1f - cw, 0F, cw + rw, 1f - bi, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -335,12 +348,14 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[2][2][1] == 0)
         {
             block.setBlockBounds(1f - cw, 1f - cw, cw, 1f, 1f, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 1, 0))  //above
         {
             block.setBlockBounds(1f - cw, 1f - cw, cw, 1f - bi, 1f, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -353,6 +368,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
             }
 
             block.setBlockBounds(1f - cw, 1f - cw, cw, 1f, 1f - bi, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -367,12 +383,14 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[0][2][1] == 0)
         {
             block.setBlockBounds(0F, 1f - cw, cw, cw, 1f, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 1, 0))  //above
         {
             block.setBlockBounds(bi, 1f - cw, cw, cw, 1f, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -385,6 +403,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
             }
 
             block.setBlockBounds(0F, 1f - cw, cw, cw, 1f - bi, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -397,15 +416,19 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
         //corners
         block.setBlockBounds(0, 0, 0, cw, cw, cw);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
         block.setBlockBounds(1F - cw, 0, 0, 1F, cw, cw);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
         block.setBlockBounds(0, 0, 1F - cw, cw, cw, 1F);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
         block.setBlockBounds(1F - cw, 0, 1F - cw, 1F, cw, 1F);
+        rb.func_83018_a(block);
         rb.renderStandardBlock(block, i, j, k);
         rendered++;
 
@@ -451,6 +474,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
             }
 
             fluid.setBlockBounds(ix, iy, iz, iw, ih, il);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(fluid, i, j, k);
             rendered++;
         }
@@ -458,6 +482,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         {
             //Base middle
             block.setBlockBounds(bi, bi, bi, 1F - bi, 1F - bi, 1F - bi);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -468,18 +493,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[0][1][1] == 0 && rut[2][1][1] == 0)
         {
             block.setBlockBounds(0, cw, cw, 1F, cw + rw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (rut[0][1][1] == 0)
         {
             block.setBlockBounds(0, cw, cw, bi, cw + rw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (rut[2][1][1] == 0)
         {
             block.setBlockBounds(1F - bi, cw, cw, 1F, cw + rw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -488,18 +516,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[1][1][0] == 0 && rut[1][1][2] == 0)
         {
             block.setBlockBounds(cw, cw, 0F, cw + rw, cw + rw, 1F);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (rut[1][1][0] == 0)
         {
             block.setBlockBounds(cw, cw, 0F, cw + rw, cw + rw, bi);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (rut[1][1][2] == 0)
         {
             block.setBlockBounds(cw, cw, 1F - bi, cw + rw, cw + rw, 1F);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -515,18 +546,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[1][0][2] == 0)
         {
             block.setBlockBounds(cw, 0, 1f - cw, cw + rw, cw, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, -1, 0))  //below
         {
             block.setBlockBounds(cw, 0, 1f - cw, cw + rw, cw, 1f - bi);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 0, 1))  //north
         {
             block.setBlockBounds(cw, bi, 1f - cw, cw + rw, cw, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -535,18 +569,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[1][0][0] == 0)
         {
             block.setBlockBounds(cw, 0, 0F, cw + rw, cw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, -1, 0))  //below
         {
             block.setBlockBounds(cw, 0, bi, cw + rw, cw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 0, -1))  //south
         {
             block.setBlockBounds(cw, bi, 0F, cw + rw, cw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -555,18 +592,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[2][0][1] == 0)
         {
             block.setBlockBounds(1f - cw, 0, cw, 1f, cw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, -1, 0))  //below
         {
             block.setBlockBounds(1f - cw, 0, cw, 1f - bi, cw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(1, 0, 0))  //east
         {
             block.setBlockBounds(1f - cw, bi, cw, 1f, cw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -575,18 +615,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[0][0][1] == 0)
         {
             block.setBlockBounds(0F, 0, cw, cw, cw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, -1, 0))  //below
         {
             block.setBlockBounds(bi, 0, cw, cw, cw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(-1, 0, 0))  //west
         {
             block.setBlockBounds(0F, bi, cw, cw, cw, cw + rw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -596,18 +639,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[0][1][2] == 0)
         {
             block.setBlockBounds(0F, cw, 1f - cw, cw, cw + rw, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 0, 1))  //north
         {
             block.setBlockBounds(bi, cw, 1f - cw, cw, cw + rw, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(-1, 0, 0))  //west
         {
             block.setBlockBounds(0F, cw, 1f - cw, cw, cw + rw, 1f - bi);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -616,18 +662,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[2][1][2] == 0)
         {
             block.setBlockBounds(1f - cw, cw, 1f - cw, 1f, cw + rw, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 0, 1))  //north
         {
             block.setBlockBounds(1f - cw, cw, 1f - cw, 1f - bi, cw + rw, 1f);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(1, 0, 0))  //east
         {
             block.setBlockBounds(1f - cw, cw, 1f - cw, 1f, cw + rw, 1f - bi);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -636,18 +685,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[0][1][0] == 0)
         {
             block.setBlockBounds(0, cw, 0f, cw, cw + rw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 0, -1))  //south
         {
             block.setBlockBounds(bi, cw, 0f, cw, cw + rw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(-1, 0, 0))  //west
         {
             block.setBlockBounds(0, cw, bi, cw, cw + rw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
@@ -656,18 +708,21 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         if (rut[2][1][0] == 0)
         {
             block.setBlockBounds(1f - cw, cw, 0f, 1f, cw + rw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(0, 0, -1))  //south
         {
             block.setBlockBounds(1f - cw, cw, 0f, 1f - bi, cw + rw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
         else if (ter.isNeighborSolid(1, 0, 0))  //east
         {
             block.setBlockBounds(1f - cw, cw, bi, 1f, cw + rw, cw);
+            rb.func_83018_a(block);
             rb.renderStandardBlock(block, i, j, k);
             rendered++;
         }
