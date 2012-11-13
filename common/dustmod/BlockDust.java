@@ -125,7 +125,7 @@ public class BlockDust extends BlockContainer {
 		if (block == null) {
 			return false;
 		} else {
-			return world.isBlockSolidOnSide(i, j - 1, k, ForgeDirection.UP) || block == Block.glass;
+			return world.isBlockSolidOnSide(i, j - 1, k, ForgeDirection.UP) || block == Block.glass || block == DustMod.rutBlock;
 			// return block.renderAsNormalBlock() || block == Block.glass ||
 			// world.isBlockSolidOnSide(i,j,k,0);
 		}
