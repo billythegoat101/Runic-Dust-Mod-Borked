@@ -41,7 +41,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1")
+@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1.1")
 @NetworkMod(
 	clientSideRequired = true, 
 	serverSideRequired = false, 
