@@ -81,7 +81,7 @@ public class ItemDust extends ItemReed
             }
         }
 
-        if (!p.func_82246_f(i, j, k))
+        if (!p.func_82247_a(i, j, k, 7, item))
         {
             return false;
         }
@@ -94,13 +94,15 @@ public class ItemDust extends ItemReed
             if (world.canPlaceEntityOnSide(this.blockID, i, j, k, false, dir, (Entity)null))
             {
                 Block var12 = Block.blocksList[this.blockID];
+                int var13 = var12.func_85104_a(world, i, j, k, dir, x, y, z, 0);
+
 
                 if (world.setBlockWithNotify(i, j, k, this.blockID))
                 {
                     if (world.getBlockId(i, j, k) == this.blockID)
                     {
-                        Block.blocksList[this.blockID].updateBlockMetadata(world, i, j, k, dir, x, y, z);
                         Block.blocksList[this.blockID].onBlockPlacedBy(world, i, j, k, p);
+                        Block.blocksList[this.blockID].func_85105_g(world, i, j, k, var13);
                     }
 
                     world.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), var12.stepSound.getStepSound(), (var12.stepSound.getVolume() + 1.0F) / 6.0F, var12.stepSound.getPitch() * 0.99F);
@@ -152,7 +154,7 @@ public class ItemDust extends ItemReed
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int func_82790_a(ItemStack stack, int pass) {
+    public int getColorFromItemStack(ItemStack stack, int pass) {
     	int meta = stack.getItemDamage();
     	return pass == 0 ? DustItemManager.getPrimaryColor(meta) : DustItemManager.getSecondaryColor(meta);
     }
