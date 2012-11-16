@@ -184,7 +184,7 @@ public class RenderEntityDust extends Render implements IRenderLast
             RenderHelper.disableStandardItemLighting();
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             RenderHelper.disableStandardItemLighting();
-            float var11 = (float)e.worldObj.func_82737_E() + f;
+            float var11 = (float)e.worldObj.getTotalWorldTime() + f;
             float var12 = -var11 * 0.2F - (float)MathHelper.floor_float(-var11 * 0.1F);
             byte var13 = 1;
             double var14 = (double)var11 * 0.025D * (1.0D - (double)(var13 & 1) * 2.5D);
