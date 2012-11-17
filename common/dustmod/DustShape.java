@@ -5,10 +5,11 @@
 package dustmod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Random;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
@@ -609,7 +610,7 @@ public class DustShape
     }
     
 
-    public boolean drawOnWorld(World w, int i, int j, int k, EntityPlayer p, int r)
+    public boolean drawOnWorldWhole(World w, int i, int j, int k, EntityPlayer p, int r)
     {
 
         int si = i, sk = k;
@@ -816,6 +817,320 @@ public class DustShape
         updateData();
         return true;
     }
+    
+    public boolean drawOnWorldPart(World w, int i, int j, int k, EntityPlayer p, int r, int itemUse)
+    {
+
+        int si = i, sk = k;
+        int tcx = cy, tcy = cx, tox = oy, toy = ox;
+        int[][][] tdata = new int[height][width][length];
+        
+        si += manRot[r*2];
+        sk += manRot[r*2+1];
+        
+        j++;
+        r = (5-r)%4;
+        //yes, I know this rotation code is bull, but i'm getting fed up with it
+
+        ArrayList<ArrayList<int[][]>> tblocks;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < length; z++)
+                {
+                    tdata[y][x][z] = data[y][x][z];
+                }
+            }
+        }
+
+        for (int rot = 0; rot < r; rot++)
+        {
+            tdata[0] = rotateMatrix(tdata[0]);
+        }
+
+        int tw = (int)Math.floor(data[0].length / 4);
+        tw *= 4;
+        int th = (int)Math.floor(data[0][0].length / 4);
+        th *= 4;
+
+        switch (r)
+        {
+            case 0:
+                break;
+
+            case 1:
+                tox = ox;
+                toy = tw - ((data[0].length + oy) % 4);
+                break;
+
+            case 2:
+                tox = tw - ((data[0].length + oy) % 4);
+                toy = th - ((data[0][0].length + ox) % 4);
+                break;
+
+            case 3:
+                tox = th - ((data[0][0].length + ox) % 4);
+                toy = oy;
+                break;
+        }
+
+        tblocks = updateData(tdata, tox, toy);
+        int[] temp = this.getBlockCoord(tcx, tcy, tox, toy);
+        si -= temp[0];
+        sk -= temp[1];
+//        System.out.println("DICKS offest:" + temp[0] + " " + temp[1] + " do:" + tox + "," + toy + " dim:" + width + "," + length + " r:" + r) ;
+        int[] pDustAmount = new int[1000];
+
+        for (ItemStack is: p.inventory.mainInventory)
+        {
+            if (is != null)
+            {
+            	if(is.itemID == DustMod.idust.shiftedIndex){
+            		pDustAmount[is.getItemDamage()] += is.stackSize;
+            	}else if(is.itemID == DustMod.pouch.shiftedIndex){
+            		int dustID = ItemPouch.getValue(is);
+            		int amt = ItemPouch.getDustAmount(is);
+            		pDustAmount[dustID] += amt;
+            	}
+            }
+        }
+
+//        if (!hasEnough(pDustAmount) && !p.capabilities.isCreativeMode)
+//        {
+//            p.addChatMessage("Not enough dust!");
+////            data = backup;
+////            updateData();
+//            return false;
+//        }
+
+        int[] reduceDustAmount = new int[1000];
+
+        int hasDrawn = 1;
+        
+        
+        Random rand = new Random();
+        for(int check = 0; check < this.width*this.height*2 && hasDrawn > 0; check++){
+        	int x = rand.nextInt(tblocks.size());
+        	int z = rand.nextInt(tblocks.get(0).size());
+            int[][] block = tblocks.get(x).get(z);
+            
+            boolean empty = true;
+            for(int iter = 0; iter < block.length && empty; iter++){
+            	for(int jter = 0; jter < block[0].length && empty; jter++){
+            		if(block[iter][jter] != 0) empty = false;
+            	}
+            }
+            if(empty){
+            	continue;
+            }
+
+            int blockID = w.getBlockId(si + x, j, sk + z);
+            int meta = w.getBlockMetadata(si + x, j, sk + z);
+            if (blockID != 0 && !(DustMod.isDust(blockID)/* && meta == 2*/) && blockID != Block.tallGrass.blockID)
+            {
+            	System.out.println("Check1");
+                continue;
+            }//return false;
+
+            if (w.getBlockId(si + x, j - 1, sk + z) == 0)
+            {
+            	System.out.println("Check2");
+                continue;
+            }//return false;
+
+            if (!DustMod.dust.canPlaceBlockAt(w, si+x, j, sk+z))
+            {
+            	System.out.println("Check3");
+                continue;
+            }//return false;
+            
+            if(blockID != DustMod.dust.blockID){
+            	System.out.println("check4 " + blockID);
+	            w.setBlockWithNotify(si + x, j, sk + z, 0);
+	            w.setBlockWithNotify(si + x, j, sk + z, DustMod.dust.blockID);
+            }
+            TileEntityDust ted;
+            TileEntity te = w.getBlockTileEntity(si + x, j, sk + z);
+
+            if (te != null && te instanceof TileEntityDust)
+            {
+                ted = (TileEntityDust)te;
+                w.setBlockMetadata(si + x, j, sk + z, 0);
+            }
+            else
+            {
+                ted = new TileEntityDust();
+                w.setBlockTileEntity(si + i, j, sk + k, ted);
+            }
+
+//            ted.empty();
+
+            int ix = rand.nextInt(4);
+            int iz = rand.nextInt(4);
+
+            if(ted.getDust(ix,iz) != 0 && block[ix][iz] == 0){
+            	System.out.println("wat");
+            	continue;
+            }
+            
+
+            for (int ii = 0; ii < 4; ii++)
+                for (int ij = 0; ij < 4; ij++)
+                {
+//                    System.out.println("blargh [" + ii + "," + ij + "] " + block[ii][ij]);
+                    ted.setDust(ii, ij, block[ii][ij]);
+
+                    if (block[ii][ij] > 0)
+                    {
+                        reduceDustAmount[block[ii][ij]]++;
+                    }
+                }
+//            if (block[ix][iz] > 0 && ted.getDust(ix, iz) == 0)
+//            {
+//            	System.out.println("PLACE [" + ix + "," + iz + "] " + ted.getDust(ix,iz) + " > " + block[ix][iz]);
+//            	int dust = block[ix][iz];
+//            	
+//            	if(pDustAmount[dust] <= 0) {
+//            		continue;
+//            	}else {
+//	            	hasDrawn--;
+//	                ted.setDust(ix, iz, dust);
+//	                reduceDustAmount[dust]++;
+//	                float red,green,blue;
+//	                int[] color = DustItemManager.getFloorColorRGB(dust);
+//	                red = (float)color[0]/255F;
+//	                green = (float)color[1]/255F;
+//	                blue = (float)color[2]/255F;
+//	                w.spawnParticle("reddust", si+x+((double)ix/4D), j, sk+z+((double)iz/4D), -1 + red, green, blue);
+//            	}
+//            }
+        }
+        
+//        for (int x = 0; x < tblocks.size(); x++)
+//        {
+//            for (int z = 0; z < tblocks.get(0).size(); z++)
+//            {
+//                if (w.getBlockId(si + x, j, sk + z) != 0 && !(DustMod.isDust(w.getBlockId(si + x, j, sk + z)) && w.getBlockMetadata(si + x, j, sk + z) == 2) && w.getBlockId(si + x, j, sk + z) != Block.tallGrass.blockID)
+//                {
+//                    continue;
+//                }//return false;
+//
+//                if (w.getBlockId(si + x, j - 1, sk + z) == 0)
+//                {
+//                    continue;
+//                }//return false;
+//
+//                if (!DustMod.dust.canPlaceBlockAt(w, si+x, j, sk+z))
+//                {
+//                    continue;
+//                }//return false;
+//
+//                w.setBlockWithNotify(si + x, j, sk + z, 0);
+//                w.setBlockWithNotify(si + x, j, sk + z, DustMod.dust.blockID);
+//                TileEntityDust ted;
+//                TileEntity te = w.getBlockTileEntity(si + x, j, sk + z);
+//
+//                if (te != null && te instanceof TileEntityDust)
+//                {
+//                    ted = (TileEntityDust)te;
+//                    w.setBlockMetadata(si + x, j, sk + z, 0);
+//                }
+//                else
+//                {
+//                    ted = new TileEntityDust();
+//                    w.setBlockTileEntity(si + i, j, sk + k, ted);
+//                }
+//
+//                ted.empty();
+//                int[][] block = tblocks.get(x).get(z);
+//
+//                for (int ii = 0; ii < 4; ii++)
+//                    for (int ij = 0; ij < 4; ij++)
+//                    {
+////                        System.out.println("blargh [" + ii + "," + ij + "] " + block[ii][ij]);
+//                        ted.setDust(ii, ij, block[ii][ij]);
+//
+//                        if (block[ii][ij] > 0)
+//                        {
+//                            pDustAmount[block[ii][ij]]++;
+//                        }
+//                    }
+//            }
+//        }
+
+        for (int x = 0; x < tblocks.size(); x++)
+        {
+            for (int z = 0; z < tblocks.get(0).size(); z++)
+            {
+                if (DustMod.isDust(w.getBlockId(si + x, j, sk + z)))
+                {
+                    TileEntityDust ted = (TileEntityDust)w.getBlockTileEntity(si + x, j, sk + z);
+
+                    if (ted.isEmpty())
+                    {
+                        w.setBlockWithNotify(si + x, j, sk + z, 0);
+                    }
+                    else
+                    {
+                        w.markBlockNeedsUpdate(si + x, j, sk + z);
+                    }
+                }
+            }
+        }
+
+//        System.out.println("Dust Used " + Arrays.toString(reduceDustAmount));
+        if (!p.capabilities.isCreativeMode)
+        {
+            for (int id = 1; id < 1000; id++)
+            {
+                for (int sind = 0; sind < p.inventory.mainInventory.length; sind++)
+                {
+                    ItemStack is = p.inventory.mainInventory[sind];
+
+                    if (is != null && reduceDustAmount[id] > 0)
+                    {
+                    	if(is.itemID == DustMod.idust.shiftedIndex && is.getItemDamage() == id){
+	                        while (reduceDustAmount[id] > 0 && is.stackSize > 0)
+	                        {
+	                            is.stackSize--;
+	
+	                            if (is.stackSize == 0)
+	                            {
+	                                p.inventory.mainInventory[sind] = null;
+	                            }
+	
+	                            reduceDustAmount[id] --;
+	                        }
+                    	}else if(is.itemID == DustMod.pouch.shiftedIndex){
+                    		int did = ItemPouch.getValue(is);
+                    		if(did == id){
+                    			while (reduceDustAmount[id] > 0 && ItemPouch.getDustAmount(is) > 0)
+    	                        {
+                    				ItemPouch.subtractDust(is, 1);
+    	
+    	                            reduceDustAmount[id] --;
+    	                        }
+                    		}
+                    	}
+                    
+                    }
+                }
+            }            
+        }
+        InventoryPlayer inv = p.inventory;
+        for(int slot = 0; slot < inv.getSizeInventory(); slot++){
+        	inv.getStackInSlot(slot);
+        }
+        p.inventory.inventoryChanged = true;
+        
+        
+        
+//        data = backup;
+        updateData();
+        return true;
+    }
 
     public boolean isEmpty(int[][] block)
     {
@@ -839,6 +1154,7 @@ public class DustShape
         {
             if (dust[i] < dustAmt[i])
             {
+            	System.out.println("Not enough " + i); 
                 return false;
             }
         }

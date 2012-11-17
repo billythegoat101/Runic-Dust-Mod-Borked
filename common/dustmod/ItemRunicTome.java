@@ -87,7 +87,7 @@ public class ItemRunicTome  extends Item
             }
         }
 
-        if (ds.drawOnWorld(world, i, j, k, p, r))
+        if (ds.drawOnWorldWhole(world, i, j, k, p, r))
         {
 //                itemstack.stackSize--;
         }
