@@ -779,10 +779,7 @@ public class EntityDust extends Entity
         int x = (int) Math.floor(posX);
         int z = (int) Math.floor(posZ);
 
-        for (int i1 = 0; (double) i1 < Math.random() * 5D + 3D; i1++)
-        {
-            worldObj.spawnParticle("largesmoke", (double) x + Math.random() * 2D, (double) posY - 1D - EntityDust.yOffset + Math.random() / 2D, (double) z + Math.random() * 2D, 0.0D, 0.0D, 0.0D);
-        }
+        DustMod.spawnParticles(worldObj,"largesmoke", (double) x, (double) posY - 1D - EntityDust.yOffset, (double) z, 0.0D, 0.0D, 0.0D, (int)(Math.random() * 5D + 3D), 2,0.5,2);
 
         kill();
     }
