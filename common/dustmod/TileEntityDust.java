@@ -87,9 +87,23 @@ public class TileEntityDust extends TileEntity implements IInventory
 
     public void setDust(int i, int j, int dust)
     {
+    	int last = pattern[i][j];
         pattern[i][j] = dust;
         dusts = null;
         DustModBouncer.notifyBlockChange(worldObj, xCoord, yCoord, zCoord, 1);
+        
+        if(dust != 0 && last != dust){
+        	int[] color = DustItemManager.getFloorColorRGB(dust);
+        	java.awt.Color c = new java.awt.Color(color[0],color[1],color[2]);
+        	c = c.darker();
+        	float r =  (float)c.getRed()/255F;
+        	float g =  (float)c.getGreen()/255F;
+        	float b =  (float)c.getBlue()/255F;
+        	
+        	for(int d = 0; d < Math.random()*3; d++){
+        		worldObj.spawnParticle("reddust", xCoord+ (double)i/4D + Math.random()*0.15, yCoord, zCoord+ (double)j/4D + Math.random()*0.15, r-1,g,b);
+        	}
+        }
 //        System.out.println("Setting dust to " + dust + " [" + i + "," + j + "] " + this.getAmount());
         this.onInventoryChanged();
     }
@@ -116,6 +130,12 @@ public class TileEntityDust extends TileEntity implements IInventory
 //            System.out.println("Killing, empty");
             this.invalidate();
             return;
+        }
+        
+        if(Math.random() < 0.12 && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1){
+//        	for(int i = 0; i < 1; i++){
+        		worldObj.spawnParticle("reddust", xCoord + Math.random(), yCoord, zCoord+Math.random(), 0, 0, 0);
+//        	}
         }
 
         ticksExisted++;

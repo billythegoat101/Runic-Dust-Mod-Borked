@@ -416,7 +416,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             {
                 for (int j = 0; j < TileEntityDust.size; j++)
                 {
-                    pattern[i][j] = dis.readInt();
+                	ted.setDust(i,j,dis.readInt());
                 }
             }
 
