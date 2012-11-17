@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.DustModBouncer;
@@ -43,6 +44,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     public static final String CHANNEL_Mouse = "DustMouse";
     public static final String CHANNEL_UseInk = "DustUseInk";
     public static final String CHANNEL_SetInscription = "DustSetInsc";
+    public static final String CHANNEL_SpawnParticles = "DustParticles"; 
     
     public static Packet getTEDPacket(TileEntityDust ted)
     {
@@ -145,8 +147,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         pkt.isChunkDataPacket = true;
         return pkt;
     }
-    
-    
+
 
     public static Packet getRuneDeclarationPacket(DustShape shape)
     {
@@ -355,341 +356,453 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         return pkt;
     }
     
+    public static Packet getParticlePacket(String type, double x, double y, double z, double velx, double vely, double velz, int amt, double rx, double ry, double rz){
+
+    	ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try
+        {
+        	dos.writeFloat((float)x);
+        	dos.writeFloat((float)y);
+        	dos.writeFloat((float)z);
+        	dos.writeFloat((float)velx);
+        	dos.writeFloat((float)vely);
+        	dos.writeFloat((float)velz);
+        	dos.writeInt(amt);
+        	dos.writeFloat((float)rx);
+        	dos.writeFloat((float)ry);
+        	dos.writeFloat((float)rz);
+        	
+        	dos.writeInt(type.length());
+        	dos.writeChars(type);
+        }
+        catch (IOException e)
+        {
+            // UNPOSSIBLE? -cpw
+        }
+
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = CHANNEL_SpawnParticles;
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = false;
+        return pkt;
+    }
+    
+    
+    
+    private static void onTEDPacket(byte[] data, Player player){
+    	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+        int x, y, z;
+        TileEntityDust ted;
+        World world = DustMod.proxy.getClientWorld();
+
+        try
+        {
+            x = dis.readInt();
+            y = dis.readInt();
+            z = dis.readInt();
+            ted = (TileEntityDust)world.getBlockTileEntity(x, y, z);
+
+            if (ted == null)
+            {
+                return;
+            }
+
+            int[][] pattern = ted.getPattern();
+
+            for (int i = 0; i < TileEntityDust.size; i++)
+            {
+                for (int j = 0; j < TileEntityDust.size; j++)
+                {
+                    pattern[i][j] = dis.readInt();
+                }
+            }
+
+            DustModBouncer.notifyBlockChange(world, x, y, z, 0);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onTELPacket(byte[] data, Player player){
+    	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+        int x, y, z;
+        TileEntityDustTable tel;
+        World world = DustMod.proxy.getClientWorld();
+
+        try
+        {
+            x = dis.readInt();
+            y = dis.readInt();
+            z = dis.readInt();
+            tel = (TileEntityDustTable)world.getBlockTileEntity(x, y, z);
+
+            if (tel == null)
+            {
+                return;
+            }
+
+            tel.page = dis.readInt();
+            DustModBouncer.notifyBlockChange(world, x, y, z, 0);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onTERPacket(byte[] data, Player player){
+    	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+        int x, y, z;
+        TileEntityRut ter;
+        World world = DustMod.proxy.getClientWorld();
+
+        try
+        {
+            x = dis.readInt();
+            y = dis.readInt();
+            z = dis.readInt();
+            ter = (TileEntityRut)world.getBlockTileEntity(x, y, z);
+
+            if (ter == null)
+            {
+                return;
+            }
+
+            ter.maskBlock = dis.readInt();
+            ter.maskMeta = dis.readInt();
+            ter.fluid = dis.readInt();
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    for (int k = 0; k < 3; k++)
+                    {
+                        ter.ruts[i][j][k] = dis.readInt();
+                    }
+                }
+            }
+
+            DustModBouncer.notifyBlockChange(world, x, y, z, 0);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onRuneDeclarationPacket(byte[] data, Player player){
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        int w,h,l,id,ox,oy,cx,cy,pageNumber,nameLen, pNameLen,authorLen, notesLen, descLen;
+        String name,pName,author,notes,desc;
+        boolean powered,solid;
+        try
+        {
+            w = dis.readInt();//dos.writeInt(shape.width);
+            h = dis.readInt();//dos.writeInt(shape.height);
+            l = dis.readInt();//dos.writeInt(shape.length);
+            id = dis.readInt();//dos.writeInt(shape.id);
+            ox = dis.readInt();//dos.writeInt(shape.ox);
+            oy = dis.readInt();//dos.writeInt(shape.oy);
+            cx = dis.readInt();//dos.writeInt(shape.cx);
+            cy = dis.readInt();//dos.writeInt(shape.cy);
+            pageNumber = dis.readInt();
+            powered = dis.readBoolean();
+            solid = dis.readBoolean();
+            nameLen = dis.readInt();
+            pNameLen = dis.readInt();
+            authorLen = dis.readInt();
+            notesLen = dis.readInt();
+            descLen = dis.readInt();
+            name = "";
+            for(int i = 0; i < nameLen; i++)
+                name += dis.readChar();
+            pName = "";
+            for(int i = 0; i < pNameLen; i++)
+                pName += dis.readChar();
+            author = "";
+            for(int i = 0; i < authorLen; i++)
+                author += dis.readChar();
+            notes = "";
+            for(int i = 0; i < notesLen; i++)
+                notes += dis.readChar();
+            desc = "";
+            for(int i = 0; i < descLen; i++)
+                desc += dis.readChar();
+
+            int[][][] design = new int[h][w][l];
+            
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    for (int z = 0; z < l; z++)
+                    {
+                        design[y][x][z] = dis.readInt();//dos.writeInt(shape.getDataAt(x, y, z));
+                    }
+                }
+            }
+            
+            int[] manRot = new int[8];
+            for(int i = 0; i < 8; i++){
+            	manRot[i] = dis.readInt();
+            }
+            
+            DustShape shape = new DustShape(w,l,name,solid,ox,oy,cx,cy,pageNumber,id);
+            shape.setData(design);
+            shape.setRuneName(pName);
+            shape.setNotes(notes);
+            shape.setDesc(desc);
+            shape.setAuthor(author);
+            shape.isPower = powered;
+            shape.manRot = manRot;
+            
+            shape.isRemote = true;
+            
+            DustManager.registerRemoteDustShape(shape);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onInscriptionDeclarationPacket(byte[] data, Player player){
+    	System.out.println("Insc recieved");
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        int w,h,id,idNameLen, nameLen,authorLen, notesLen, descLen;
+        String idname,name,author,notes,desc;
+        try
+        {
+        	w = dis.readInt();
+        	h = dis.readInt();
+            id = dis.readInt();//dos.writeInt(shape.id);
+            idNameLen = dis.readInt();
+            nameLen = dis.readInt();
+            descLen = dis.readInt();
+            notesLen = dis.readInt();
+            authorLen = dis.readInt();
+            idname = "";
+            for(int i = 0; i < idNameLen; i++)
+                idname += dis.readChar();
+            name = "";
+            for(int i = 0; i < nameLen; i++)
+                name += dis.readChar();
+            desc = "";
+            for(int i = 0; i < descLen; i++)
+                desc += dis.readChar();
+            notes = "";
+            for(int i = 0; i < notesLen; i++)
+                notes += dis.readChar();
+            author = "";
+            for(int i = 0; i < authorLen; i++)
+                author += dis.readChar();
+
+            int[][] design = new int[w][h];
+            
+            for (int x = 0; x < w; x++)
+            {
+                for (int y = 0; y < h; y++)
+                {
+                    design[x][y] = dis.readInt();//dos.writeInt(shape.getDataAt(x, y, z));
+                }
+            }
+            
+            InscriptionEvent event = new InscriptionEvent(design, idname, name, id);
+            event.setAuthor(author);
+            event.setDescription(desc);
+            event.setNotes(notes);
+            InscriptionManager.registerRemoteInscriptionEvent(event);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onSetInscriptionPacket(byte[] data, Player player){
+    	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+    	int[] design = new int[16*16];
+        try
+        {
+        	for(int i = 0; i < design.length;i++){
+        		design[i] = dis.readInt();
+        	}
+        	
+        	EntityPlayer ep = (EntityPlayer)player;
+        	ItemStack stack = ep.getCurrentEquippedItem();
+        	if(stack != null){
+        		if(stack.getItemDamage() == 0)
+        			stack.setItemDamage(1);
+        		NBTTagCompound tag = stack.getTagCompound();
+        		if(tag == null){
+        			tag = new NBTTagCompound();
+        			stack.setTagCompound(tag);
+        		}
+            	for(int i = 0; i < 16; i++){
+            		for(int j = 0; j < 16; j++){
+            			tag.setInteger(i + "," + j, design[i*16 + j]);
+            		}
+            	}
+            	EntityPlayerMP mp = (EntityPlayerMP)player;
+            	mp.sendInventoryToPlayer();
+        	}
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onDustDeclarationPacket(byte[] data, Player player){
+    	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        int value, primaryColor, secondaryColor, floorColor;
+        int idNameLen, nameLen;
+        String idName, name;
+        try
+        {
+        	value = dis.readInt();
+        	primaryColor= dis.readInt();
+        	secondaryColor = dis.readInt();
+        	floorColor = dis.readInt();
+        	
+        	idNameLen = dis.readInt();
+        	nameLen = dis.readInt();
+
+        	idName = "";
+            for(int i = 0; i < idNameLen; i++)
+                idName += dis.readChar();
+            name = "";
+            for(int i = 0; i < nameLen; i++)
+                name += dis.readChar();
+            
+            DustItemManager.registerRemoteDust(value, name, idName, primaryColor, secondaryColor, floorColor);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onMousePacket(byte[] data, Player player){
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+    	int keyID;
+    	boolean pressed;
+        try
+        {
+        	keyID = dis.readInt();
+        	pressed = dis.readBoolean();
+
+        	DustMod.keyHandler.setKey(player, keyID, pressed);
+        	
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onUseInkPacket(byte[] data, Player player){
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+    	int slot, amt;
+        try
+        {
+        	slot = dis.readInt();
+        	amt = dis.readInt();
+        	
+        	EntityPlayer ep = (EntityPlayer)player;
+        	ItemStack stack = ep.inventory.getStackInSlot(slot);
+        	ItemInk.reduce(stack, amt);
+        	ep.inventory.setInventorySlotContents(slot, stack);
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    private static void onParticlePacket(byte[] data, Player player){
+
+    	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+        double x, y, z, vx,vy,vz;
+        double rx,ry,rz;
+        int amt;
+        String type = "";
+        int typeLen;
+
+        World world = null;
+        try
+        {
+            x = dis.readFloat();
+            y = dis.readFloat();
+            z = dis.readFloat();
+            
+            vx = dis.readFloat();
+            vy = dis.readFloat();
+            vz = dis.readFloat();
+            
+            amt = dis.readInt();
+            rx = dis.readFloat();
+            ry = dis.readFloat();
+            rz = dis.readFloat();
+            
+            typeLen = dis.readInt();
+            for(int i = 0; i < typeLen; i++){
+            	type += dis.readChar();
+            }
+            
+            
+            world = ((EntityPlayer)player).worldObj;//MinecraftServer.getServer().worldServerForDimension(dimension);
+            
+            Random rand = new Random((long)(x+y+z+world.getWorldTime()));
+            for(int i = 0; i < amt; i++){
+            	double nx = x + rand.nextDouble()*(rx*2) - rx;
+            	double ny = y + rand.nextDouble()*(ry*2) - ry;
+            	double nz = z + rand.nextDouble()*(rz*2) - rz;
+            	world.spawnParticle(type, nx, ny, nz, vx, vy, vz);
+            }
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+    }
+    
+    
+    
     @Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
     {
     	
+    	
 //    	System.out.println("Got packet " + packet.channel);
     	byte[] data = packet.data;
     	String channel = packet.channel;
-    	
-        if (channel.equals(CHANNEL_TEDust))
-        {
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-            int x, y, z;
-            TileEntityDust ted;
-            World world = DustMod.proxy.getClientWorld();
-
-            try
-            {
-                x = dis.readInt();
-                y = dis.readInt();
-                z = dis.readInt();
-                ted = (TileEntityDust)world.getBlockTileEntity(x, y, z);
-
-                if (ted == null)
-                {
-                    return;
-                }
-
-                int[][] pattern = ted.getPattern();
-
-                for (int i = 0; i < TileEntityDust.size; i++)
-                {
-                    for (int j = 0; j < TileEntityDust.size; j++)
-                    {
-                        pattern[i][j] = dis.readInt();
-                    }
-                }
-
-                DustModBouncer.notifyBlockChange(world, x, y, z, 0);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
-        }
-        else if (channel.equals(CHANNEL_TELexicon))
-        {
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-            int x, y, z;
-            TileEntityDustTable tel;
-            World world = DustMod.proxy.getClientWorld();
-
-            try
-            {
-                x = dis.readInt();
-                y = dis.readInt();
-                z = dis.readInt();
-                tel = (TileEntityDustTable)world.getBlockTileEntity(x, y, z);
-
-                if (tel == null)
-                {
-                    return;
-                }
-
-                tel.page = dis.readInt();
-                DustModBouncer.notifyBlockChange(world, x, y, z, 0);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
-        }
-        else if (channel.equals(CHANNEL_TERut))
-        {
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-            int x, y, z;
-            TileEntityRut ter;
-            World world = DustMod.proxy.getClientWorld();
-
-            try
-            {
-                x = dis.readInt();
-                y = dis.readInt();
-                z = dis.readInt();
-                ter = (TileEntityRut)world.getBlockTileEntity(x, y, z);
-
-                if (ter == null)
-                {
-                    return;
-                }
-
-                ter.maskBlock = dis.readInt();
-                ter.maskMeta = dis.readInt();
-                ter.fluid = dis.readInt();
-
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        for (int k = 0; k < 3; k++)
-                        {
-                            ter.ruts[i][j][k] = dis.readInt();
-                        }
-                    }
-                }
-
-                DustModBouncer.notifyBlockChange(world, x, y, z, 0);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+        if (channel.equals(CHANNEL_TEDust)){
+            onTEDPacket(data,player);
+        }else if (channel.equals(CHANNEL_TELexicon)){
+            onTELPacket(data, player);
+        }else if (channel.equals(CHANNEL_TERut)){
+            onTERPacket(data,player);
         }else if(channel.equals(CHANNEL_DMRune)){
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-
-            int w,h,l,id,ox,oy,cx,cy,pageNumber,nameLen, pNameLen,authorLen, notesLen, descLen;
-            String name,pName,author,notes,desc;
-            boolean powered,solid;
-            try
-            {
-                w = dis.readInt();//dos.writeInt(shape.width);
-                h = dis.readInt();//dos.writeInt(shape.height);
-                l = dis.readInt();//dos.writeInt(shape.length);
-                id = dis.readInt();//dos.writeInt(shape.id);
-                ox = dis.readInt();//dos.writeInt(shape.ox);
-                oy = dis.readInt();//dos.writeInt(shape.oy);
-                cx = dis.readInt();//dos.writeInt(shape.cx);
-                cy = dis.readInt();//dos.writeInt(shape.cy);
-                pageNumber = dis.readInt();
-                powered = dis.readBoolean();
-                solid = dis.readBoolean();
-                nameLen = dis.readInt();
-                pNameLen = dis.readInt();
-                authorLen = dis.readInt();
-                notesLen = dis.readInt();
-                descLen = dis.readInt();
-                name = "";
-                for(int i = 0; i < nameLen; i++)
-                    name += dis.readChar();
-                pName = "";
-                for(int i = 0; i < pNameLen; i++)
-                    pName += dis.readChar();
-                author = "";
-                for(int i = 0; i < authorLen; i++)
-                    author += dis.readChar();
-                notes = "";
-                for(int i = 0; i < notesLen; i++)
-                    notes += dis.readChar();
-                desc = "";
-                for(int i = 0; i < descLen; i++)
-                    desc += dis.readChar();
-
-                int[][][] design = new int[h][w][l];
-                
-                for (int y = 0; y < h; y++)
-                {
-                    for (int x = 0; x < w; x++)
-                    {
-                        for (int z = 0; z < l; z++)
-                        {
-                            design[y][x][z] = dis.readInt();//dos.writeInt(shape.getDataAt(x, y, z));
-                        }
-                    }
-                }
-                
-                int[] manRot = new int[8];
-                for(int i = 0; i < 8; i++){
-                	manRot[i] = dis.readInt();
-                }
-                
-                DustShape shape = new DustShape(w,l,name,solid,ox,oy,cx,cy,pageNumber,id);
-                shape.setData(design);
-                shape.setRuneName(pName);
-                shape.setNotes(notes);
-                shape.setDesc(desc);
-                shape.setAuthor(author);
-                shape.isPower = powered;
-                shape.manRot = manRot;
-                
-                shape.isRemote = true;
-                
-                DustManager.registerRemoteDustShape(shape);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+        	onRuneDeclarationPacket(data,player);
         }else if(channel.equals(CHANNEL_DustItem)){
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-
-            int value, primaryColor, secondaryColor, floorColor;
-            int idNameLen, nameLen;
-            String idName, name;
-            try
-            {
-            	value = dis.readInt();
-            	primaryColor= dis.readInt();
-            	secondaryColor = dis.readInt();
-            	floorColor = dis.readInt();
-            	
-            	idNameLen = dis.readInt();
-            	nameLen = dis.readInt();
-
-            	idName = "";
-                for(int i = 0; i < idNameLen; i++)
-                    idName += dis.readChar();
-                name = "";
-                for(int i = 0; i < nameLen; i++)
-                    name += dis.readChar();
-                
-                DustItemManager.registerRemoteDust(value, name, idName, primaryColor, secondaryColor, floorColor);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+            onDustDeclarationPacket(data,player);
         }else if(channel.equals(CHANNEL_Mouse)){
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-
-        	int keyID;
-        	boolean pressed;
-            try
-            {
-            	keyID = dis.readInt();
-            	pressed = dis.readBoolean();
-
-            	DustMod.keyHandler.setKey(player, keyID, pressed);
-            	
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+        	onMousePacket(data,player);
         }else if(channel.equals(CHANNEL_UseInk)){
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-
-        	int slot, amt;
-            try
-            {
-            	slot = dis.readInt();
-            	amt = dis.readInt();
-            	
-            	EntityPlayer ep = (EntityPlayer)player;
-            	ItemStack stack = ep.inventory.getStackInSlot(slot);
-            	ItemInk.reduce(stack, amt);
-            	ep.inventory.setInventorySlotContents(slot, stack);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+        	onUseInkPacket(data,player);
         }else if(channel.equals(CHANNEL_SetInscription)){
-        	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-
-        	int[] design = new int[16*16];
-            try
-            {
-            	for(int i = 0; i < design.length;i++){
-            		design[i] = dis.readInt();
-            	}
-            	
-            	EntityPlayer ep = (EntityPlayer)player;
-            	ItemStack stack = ep.getCurrentEquippedItem();
-            	if(stack != null){
-            		if(stack.getItemDamage() == 0)
-            			stack.setItemDamage(1);
-            		NBTTagCompound tag = stack.getTagCompound();
-            		if(tag == null){
-            			tag = new NBTTagCompound();
-            			stack.setTagCompound(tag);
-            		}
-                	for(int i = 0; i < 16; i++){
-                		for(int j = 0; j < 16; j++){
-                			tag.setInteger(i + "," + j, design[i*16 + j]);
-                		}
-                	}
-                	EntityPlayerMP mp = (EntityPlayerMP)player;
-                	mp.sendInventoryToPlayer();
-            	}
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+        	onSetInscriptionPacket(data,player);
         }else if(channel.equals(CHANNEL_DeclareInscription)){
-        	System.out.println("Insc recieved");
-            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-
-            int w,h,id,idNameLen, nameLen,authorLen, notesLen, descLen;
-            String idname,name,author,notes,desc;
-            try
-            {
-            	w = dis.readInt();
-            	h = dis.readInt();
-                id = dis.readInt();//dos.writeInt(shape.id);
-                idNameLen = dis.readInt();
-                nameLen = dis.readInt();
-                descLen = dis.readInt();
-                notesLen = dis.readInt();
-                authorLen = dis.readInt();
-                idname = "";
-                for(int i = 0; i < idNameLen; i++)
-                    idname += dis.readChar();
-                name = "";
-                for(int i = 0; i < nameLen; i++)
-                    name += dis.readChar();
-                desc = "";
-                for(int i = 0; i < descLen; i++)
-                    desc += dis.readChar();
-                notes = "";
-                for(int i = 0; i < notesLen; i++)
-                    notes += dis.readChar();
-                author = "";
-                for(int i = 0; i < authorLen; i++)
-                    author += dis.readChar();
-
-                int[][] design = new int[w][h];
-                
-                for (int x = 0; x < w; x++)
-                {
-                    for (int y = 0; y < h; y++)
-                    {
-                        design[x][y] = dis.readInt();//dos.writeInt(shape.getDataAt(x, y, z));
-                    }
-                }
-                
-                InscriptionEvent event = new InscriptionEvent(design, idname, name, id);
-                event.setAuthor(author);
-                event.setDescription(desc);
-                event.setNotes(notes);
-                InscriptionManager.registerRemoteInscriptionEvent(event);
-            }
-            catch (IOException e)
-            {
-                return;
-            }
+        	onInscriptionDeclarationPacket(data,player);
+        }else if(channel.equals(CHANNEL_SpawnParticles)){
+        	onParticlePacket(data,player);
         }
     }
 

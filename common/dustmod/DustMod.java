@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.DustModBouncer;
@@ -18,30 +18,32 @@ import net.minecraft.src.IMob;
 import net.minecraft.src.ISaveHandler;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.Packet;
+import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1.1")
+@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1.2")
 @NetworkMod(
 	clientSideRequired = true, 
 	serverSideRequired = false, 
@@ -54,7 +56,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 		PacketHandler.CHANNEL_Mouse, 
 		PacketHandler.CHANNEL_UseInk, 
 		PacketHandler.CHANNEL_SetInscription, 
-		PacketHandler.CHANNEL_DeclareInscription})
+		PacketHandler.CHANNEL_DeclareInscription,
+		PacketHandler.CHANNEL_SpawnParticles})
 public class DustMod {
 
 	@Instance("DustMod")
@@ -307,6 +310,20 @@ public class DustMod {
 		return null;
 	}
 
+	public static void spawnParticles(World world, String type, double x, double y, double z, double velx, double vely, double velz, int amt, double radius){
+		spawnParticles(world,type,x,y,z,
+				velx,vely,velz,
+				amt,
+				radius,radius,radius);
+	}
+	public static void spawnParticles(World world, String type, double x, double y, double z, double velx, double vely, double velz, int amt, double rx, double ry, double rz){
+		Packet packet = PacketHandler.getParticlePacket(type, x, y, z, velx, vely, velz, amt, rx,ry,rz);
+//		FMLClientHandler.instance().sendPacket(packet);
+		world.spawnParticle(type, x, y, z, velx, vely, velz);
+		PacketDispatcher.sendPacketToAllInDimension(packet, world.getWorldInfo().getDimension());
+//		PacketDispatcher.sendPacketToAllPlayers(packet);
+	}
+	
 	
     /**
      * Returns if item.shiftedIndex equals the dust item id. Not sure why this 
