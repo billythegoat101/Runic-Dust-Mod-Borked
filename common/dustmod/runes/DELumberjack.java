@@ -74,7 +74,7 @@ public class DELumberjack extends DustEvent
                 rad = 16;
                 break;
         }
-        if (e.ticksExisted % 10 == 0)
+        if (Math.random() < 0.08)
         {
             for (int i = -rad; i <= rad; i++)
             {
@@ -223,22 +223,22 @@ public class DELumberjack extends DustEvent
         switch (dustID)
         {
             case 100:
-                dustchance = 0.2D;
+                dustchance = 0.02D;
                 maxDust = 1;
                 break;
 
             case 200:
-                dustchance = 0.25D;
+                dustchance = 0.065D;
                 maxDust = 1;
                 break;
 
             case 300:
-                dustchance = 0.2D;
+                dustchance = 0.1D;
                 maxDust = 2;
                 break;
 
             case 400:
-                dustchance = 0.25D;
+                dustchance = 0.187D;
                 maxDust = 2;
                 break;
         }
@@ -309,13 +309,15 @@ public class DELumberjack extends DustEvent
         Random rand = new Random();
         double width = 1.3d;
         double height = 1.3d;
-        double var8 = 10.0D;
-        for (int var1 = 0; var1 < 20; ++var1)
-        {
-            double rx = rand.nextGaussian() * 0.02D;
-            double ry = rand.nextGaussian() * 0.02D;
-            double rz = rand.nextGaussian() * 0.02D;
-            world.spawnParticle("explode", x + (double) (y * 2.0F) - (double) width - rx * var8, y + (double) (rand.nextFloat() * height) - ry * var8, z + (double) (rand.nextFloat() * width * 2.0F) - (double) width - rz * var8, rx, ry, rz);
-        }
+//        double var8 = 10.0D;
+//        for (int var1 = 0; var1 < 20; ++var1)
+//        {
+//            double rx = rand.nextGaussian() * 0.02D;
+//            double ry = rand.nextGaussian() * 0.02D;
+//            double rz = rand.nextGaussian() * 0.02D;
+//            world.spawnParticle("explode", x + (double) (y * 2.0F) - (double) width - rx * var8, y + (double) (rand.nextFloat() * height) - ry * var8, z + (double) (rand.nextFloat() * width * 2.0F) - (double) width - rz * var8, rx, ry, rz);
+//        }
+        
+        DustMod.spawnParticles(world,"explode",x + width/2, y + height/2, z + width/2, 0, 0, 0, 5, width,height,width);
     }
 }

@@ -7,6 +7,7 @@ package dustmod.runes;
 import java.util.List;
 
 import dustmod.DustEvent;
+import dustmod.DustMod;
 import dustmod.EntityDust;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
@@ -32,7 +33,7 @@ public class DEObelisk extends DustEvent
 //            return;
 //        }
 //
-        e.renderBeam = true;
+//        e.renderBeam = true;
         e.setColorBeam(114, 53, 62);
         ItemStack[] sacrifice = new ItemStack[1];
         sacrifice[0] = new ItemStack(Block.oreIron, 2);
@@ -53,13 +54,35 @@ public class DEObelisk extends DustEvent
 //            e.data[1] = e.ri;
 //            e.ri = 0;
 //        }
-        
+
+        int height = 16;
+    	
+    	if(Math.random() < 0.9){
+    		double r = (double)e.ticksExisted/20;
+    		double ri = 0.3;
+    		double rad = 0.8;
+    		double h = height;
+    		if(e.ticksExisted < 100){
+    			h = height* ((double)e.ticksExisted/100);
+    		}
+    		
+    		if(e.data[1] == -1){
+    			h = e.data[0];
+    		}
+    		for(double i = 0; i < h; i+= 0.3){
+    			if(Math.random() < 0.13)
+    			DustMod.spawnParticles(e.worldObj, "witchMagic", 
+    					e.posX + Math.cos(r)*rad, i + e.posY, e.posZ + Math.sin(r)*rad,
+    					0, 1, 0, 3, 0.02);
+    			r += ri;
+    		}
+    	}
+    	
         if (e.ticksExisted < ticksperblock * 2)
         {
             return;
         }
 
-        int height = 16;
         World world = e.worldObj;
         int x = (int)e.getX();
         int y = (int)e.getY();
@@ -74,7 +97,8 @@ public class DEObelisk extends DustEvent
 
                 for (Entity i: ents)
                 {
-                    i.setPosition((double)x + 0.5D, (double)y + (double)e.data[0] + 2D, (double)z + 0.5D);
+                	if(i != e)
+                		i.setPosition((double)x + 0.5D, (double)y + (double)e.data[0] + 2D, (double)z + 0.5D);
                 }
             }
 

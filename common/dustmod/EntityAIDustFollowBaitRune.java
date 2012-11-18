@@ -79,6 +79,11 @@ public class EntityAIDustFollowBaitRune extends EntityAIBase
     {
         super.updateTask();
         theEntity.getNavigator().tryMoveToXYZ(movePosX, movePosY, movePosZ, speed);
+        
+        if(Math.random() < 0.2){
+        	DustMod.spawnParticles(theEntity.worldObj, "smoke", theEntity.posX, theEntity.posY+theEntity.height/2, theEntity.posZ,
+        			0, Math.random() * 0.05, 0, (int)(Math.random()*20), 0.75, theEntity.height/2, 0.75);
+        }
     }
 
     /**
