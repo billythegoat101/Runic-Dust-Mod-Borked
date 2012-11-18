@@ -118,6 +118,9 @@ public class DustManager
 //        result.posY = y-0.8;//EntityDust.yOffset;
 //        result.posZ = z;
         result.dustPoints = points;
+        for(int i = 0; i < rot; i++){
+        	map = DustShape.rotateMatrix(map);
+        }
         result.dusts = map;
         result.rot = rot;
         result.summonerUN = (username == null) ? "" : username;
