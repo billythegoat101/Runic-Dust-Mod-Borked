@@ -317,11 +317,12 @@ public class DustMod {
 				radius,radius,radius);
 	}
 	public static void spawnParticles(World world, String type, double x, double y, double z, double velx, double vely, double velz, int amt, double rx, double ry, double rz){
-		Packet packet = PacketHandler.getParticlePacket(type, x, y, z, velx, vely, velz, amt, rx,ry,rz);
-//		FMLClientHandler.instance().sendPacket(packet);
-		world.spawnParticle(type, x, y, z, velx, vely, velz);
+		spawnParticles(world,type,new double[]{x,y,z},velx, vely, velz, amt, rx, ry,rz);
+	}
+	
+	public static void spawnParticles(World world, String type, double[] locations, double velx, double vely, double velz, int amt, double rx, double ry, double rz){
+		Packet packet = PacketHandler.getParticlePacket(type, locations, velx, vely, velz, amt, rx,ry,rz);
 		PacketDispatcher.sendPacketToAllInDimension(packet, world.getWorldInfo().getDimension());
-//		PacketDispatcher.sendPacketToAllPlayers(packet);
 	}
 	
 	

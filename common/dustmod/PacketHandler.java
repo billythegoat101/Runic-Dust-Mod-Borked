@@ -356,16 +356,17 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         return pkt;
     }
     
-    public static Packet getParticlePacket(String type, double x, double y, double z, double velx, double vely, double velz, int amt, double rx, double ry, double rz){
+    public static Packet getParticlePacket(String type, double[] loc, double velx, double vely, double velz, int amt, double rx, double ry, double rz){
 
     	ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
         DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-        	dos.writeFloat((float)x);
-        	dos.writeFloat((float)y);
-        	dos.writeFloat((float)z);
+        	dos.writeInt(loc.length);
+        	for(double i:loc){
+        		dos.writeFloat((float)i);
+        	}
         	dos.writeFloat((float)velx);
         	dos.writeFloat((float)vely);
         	dos.writeFloat((float)velz);
@@ -729,7 +730,9 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     private static void onParticlePacket(byte[] data, Player player){
 
     	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
-        double x, y, z, vx,vy,vz;
+    	int locLength;
+    	double[] locations;
+        double vx,vy,vz;
         double rx,ry,rz;
         int amt;
         String type = "";
@@ -738,10 +741,12 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         World world = null;
         try
         {
-            x = dis.readFloat();
-            y = dis.readFloat();
-            z = dis.readFloat();
-            
+        	locLength = dis.readInt();
+        	locations = new double[locLength];
+        	for(int i = 0; i < locLength; i++){
+        		locations[i] = dis.readFloat();
+        	}
+        	
             vx = dis.readFloat();
             vy = dis.readFloat();
             vz = dis.readFloat();
@@ -759,12 +764,17 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             
             world = ((EntityPlayer)player).worldObj;//MinecraftServer.getServer().worldServerForDimension(dimension);
             
-            Random rand = new Random((long)(x+y+z+world.getWorldTime()));
-            for(int i = 0; i < amt; i++){
-            	double nx = x + rand.nextDouble()*(rx*2) - rx;
-            	double ny = y + rand.nextDouble()*(ry*2) - ry;
-            	double nz = z + rand.nextDouble()*(rz*2) - rz;
-            	world.spawnParticle(type, nx, ny, nz, vx, vy, vz);
+            for(int l = 0; l < locLength/3; l++){
+            	double x = locations[l*3];
+            	double y = locations[l*3+1];
+            	double z = locations[l*3+2];
+	            Random rand = new Random((long)(x+y+z+world.getWorldTime()));
+	            for(int i = 0; i < amt; i++){
+	            	double nx = x + rand.nextDouble()*(rx*2) - rx;
+	            	double ny = y + rand.nextDouble()*(ry*2) - ry;
+	            	double nz = z + rand.nextDouble()*(rz*2) - rz;
+	            	world.spawnParticle(type, nx, ny, nz, vx, vy, vz);
+	            }
             }
         }
         catch (IOException e)
