@@ -181,7 +181,7 @@ public class TileEntityDust extends TileEntity implements IInventory
             int ind = d.get(rand.nextInt(d.size()));
             this.setDust((int) Math.floor(ind / size), ind % size, 0);
             toDestroy = (int) Math.round(Math.random() * 200D + 100D);
-            worldObj.markBlockNeedsUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 
             if (this.isEmpty() && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 10)
             {

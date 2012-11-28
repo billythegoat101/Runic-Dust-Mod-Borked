@@ -64,7 +64,7 @@ public class DESpawnerCollector extends DustEvent
                 ei.setPosition(e.posX, e.posY - e.yOffset, e.posZ);
                 ei.item = new ItemStack(Block.mobSpawner, 1);
                 e.worldObj.spawnEntityInWorld(ei);
-                e.worldObj.markBlockNeedsUpdate(fin[0], fin[1], fin[2]);
+                e.worldObj.markBlockForUpdate(fin[0], fin[1], fin[2]);
             }
         }
 

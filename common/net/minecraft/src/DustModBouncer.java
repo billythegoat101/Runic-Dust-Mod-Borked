@@ -86,7 +86,7 @@ public class DustModBouncer {
     public static void notifyBlockChange(World w, int i, int j, int k, int l)
     {
         w.notifyBlockChange(i, j, k, l);
-        w.markBlockNeedsUpdate(i, j, k);
+        w.markBlockForUpdate(i, j, k);
     }
     public static int damageDropped(Block b, int i)
     {

@@ -268,17 +268,24 @@ public class EntityBlock extends EntityFallingSand
                     {
                         this.setDead();
 
-                        if ((!this.worldObj.canPlaceEntityOnSide(this.blockID, var1, var2, var3, true, 1, (Entity)null) || BlockSand.canFallBelow(this.worldObj, var1, var2 - 1, var3) || !this.worldObj.setBlockAndMetadataWithNotify(var1, var2, var3, this.blockID, this.field_70285_b)) && !this.worldObj.isRemote && this.field_70284_d)
+                        if (this.worldObj.canPlaceEntityOnSide(this.blockID, var1, var2, var3, true, 1, (Entity)null) && !BlockSand.canFallBelow(this.worldObj, var1, var2 - 1, var3) && this.worldObj.setBlockAndMetadataWithNotify(var1, var2, var3, this.blockID, this.metadata))
                         {
-//                            this.entityDropItem(new ItemStack(this.blockID, 1, this.field_70285_b), 0.0F);
+                            if (Block.blocksList[this.blockID] instanceof BlockSand)
+                            {
+                                ((BlockSand)Block.blocksList[this.blockID]).onFinishFalling(this.worldObj, var1, var2, var3, this.metadata);
+                            }
+                        }
+                        else if (this.shouldDropItem)
+                        {
+                            this.entityDropItem(new ItemStack(this.blockID, 1, Block.blocksList[this.blockID].damageDropped(this.metadata)), 0.0F);
                         }
                     }
                 }
                 else if (this.fallTime > 100 && !this.worldObj.isRemote && (var2 < 1 || var2 > 256) || this.fallTime > 600)
                 {
-                    if (this.field_70284_d)
+                    if (this.shouldDropItem)
                     {
-                        this.dropItem(this.blockID, 1);
+                        this.entityDropItem(new ItemStack(this.blockID, 1, Block.blocksList[this.blockID].damageDropped(this.metadata)), 0.0F);
                     }
 
                     this.setDead();

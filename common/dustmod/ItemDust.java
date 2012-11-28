@@ -81,7 +81,7 @@ public class ItemDust extends ItemReed
             }
         }
 
-        if (!p.func_82247_a(i, j, k, 7, item))
+        if (!p.canPlayerEdit(i, j, k, 7, item))
         {
             return false;
         }

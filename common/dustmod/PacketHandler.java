@@ -650,7 +650,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             		}
             	}
             	EntityPlayerMP mp = (EntityPlayerMP)player;
-            	mp.sendInventoryToPlayer();
+            	//mp.upsendInventoryToPlayer(); //TEST find replacement
         	}
         }
         catch (IOException e)

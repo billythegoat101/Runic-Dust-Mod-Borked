@@ -765,7 +765,7 @@ public class DustShape
                     }
                     else
                     {
-                        w.markBlockNeedsUpdate(si + x, j, sk + z);
+                        w.markBlockForUpdate(si + x, j, sk + z);
                     }
                 }
             }
@@ -1074,7 +1074,7 @@ public class DustShape
                     }
                     else
                     {
-                        w.markBlockNeedsUpdate(si + x, j, sk + z);
+                        w.markBlockForUpdate(si + x, j, sk + z);
                     }
                 }
             }
