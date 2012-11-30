@@ -31,7 +31,29 @@ import dustmod.TileEntityDust;
  */
 public class DEChestNom extends DustEvent
 {
-    
+
+	/**
+	 * Called to set the graphical components of the rune
+     * @param e EntityDust instance
+	 */
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        /***GRAPHICS**/
+        
+        //To make it look cool. This enables the rune to have that glowing spinning star effect.
+        e.setRenderStar(true);
+        
+        //Make the star slightly bigger than the chest so that it shines through and looks cool.
+        e.setStarScale(2.2F);
+        
+        //Sets the color of the star (both inside and out) to look yellow.
+        e.setColorStar(255, 255, 0); 
+        //Use EntityDust.setColorInner and setColorOuter to change inner and outer separately.
+		
+    }
+	
     /**
      * Called when a rune of this type is created in the world
      * @param e EntityDust instance
@@ -81,17 +103,6 @@ public class DEChestNom extends DustEvent
         World world = e.worldObj;
         world.setBlockWithNotify(e.getX(), e.getY(), e.getZ(), Block.chest.blockID);
         
-        /***GRAPHICS**/
-        
-        //To make it look cool. This enables the rune to have that glowing spinning star effect.
-        e.setRenderStar(true);
-        
-        //Make the star slightly bigger than the chest so that it shines through and looks cool.
-        e.setStarScale(2.2F);
-        
-        //Sets the color of the star (both inside and out) to look yellow.
-        e.setColorStar(255, 255, 0); 
-        //Use EntityDust.setColorInner and setColorOuter to change inner and outer separately.
     }
     
     /**

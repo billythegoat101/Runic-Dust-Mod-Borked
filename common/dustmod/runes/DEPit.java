@@ -19,6 +19,13 @@ public class DEPit extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+		e.setRenderStar(true);
+    }
 
     public void onInit(EntityDust e)
     {

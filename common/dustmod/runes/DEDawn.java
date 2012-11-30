@@ -18,10 +18,20 @@ import net.minecraft.src.ItemStack;
 public class DEDawn extends DustEvent
 {
     public static boolean oneActive = false;
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(false);
+    	
+    }
+	
     public void onInit(EntityDust e)
     {
-        e.renderBeam = false;
-        e.renderStar = true;
+		e.setRenderStar(true);
+		e.setRenderBeam(false);
         ItemStack[] req = this.sacrifice(e, new ItemStack[] {new ItemStack(Item.redstone, 4), new ItemStack(Item.dyePowder, 1, 4)});
 
         if (req[0].stackSize != 0 || req[1].stackSize != 0)
@@ -40,8 +50,8 @@ public class DEDawn extends DustEvent
         {
             oneActive = false;
             e.data[0] = 0;
-            e.renderBeam = false;
-            e.renderStar = true;
+    		e.setRenderStar(true);
+    		e.setRenderBeam(false);
         }
 
         long time = e.worldObj.getWorldTime() + 1000;
@@ -58,8 +68,8 @@ public class DEDawn extends DustEvent
 
         if (e.data[0] == 1)
         {
-            e.renderBeam = true;
-            e.renderStar = false;
+    		e.setRenderStar(false);
+    		e.setRenderBeam(true);
         }
 
         if (e.data[0] == 1 && e.worldObj.isDaytime())

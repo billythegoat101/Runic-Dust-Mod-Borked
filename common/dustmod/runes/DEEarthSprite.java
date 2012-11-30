@@ -20,12 +20,23 @@ public class DEEarthSprite  extends PoweredEvent
         super();
     }
 
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setFollow(true);
+        e.setRenderBeam(true);
+        e.setColorStarInner(255, 0, 0);
+        e.setColorStarOuter(255, 0, 0);
+    	
+    }
     public void onInit(EntityDust e)
     {
         super.onInit(e);
 //        e.renderBeam = true;
-        e.follow = true;
-        e.renderStar = true;
+        e.setFollow(true);
+        e.setRenderBeam(true);
         e.setColorStarInner(255, 0, 0);
         e.setColorStarOuter(255, 0, 0);
         ItemStack[] req = new ItemStack[] {new ItemStack(Block.glass.blockID, 16, 0),
@@ -56,9 +67,9 @@ public class DEEarthSprite  extends PoweredEvent
     public void onTick(EntityDust e)
     {
         super.onTick(e);
-        e.renderStar = false;
-        e.renderBeam = false;
-        e.follow = true;
+		e.setRenderStar(false);
+		e.setRenderBeam(false);
+        e.setFollow(true);
         World worldObj = e.worldObj;
         EntityPlayer p = e.worldObj.getPlayerEntityByName(e.summonerUN);
 

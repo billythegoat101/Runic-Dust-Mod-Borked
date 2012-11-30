@@ -24,6 +24,14 @@ public abstract class DETrap extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -35,11 +43,11 @@ public abstract class DETrap extends DustEvent
             return;
         }
 
-        e.renderStar = true;
+		e.setRenderStar(true);
     }
     public void onTick(EntityDust e)
     {
-        e.renderStar = true;
+		e.setRenderStar(true);
 
         if (e.ticksExisted < 80)
         {

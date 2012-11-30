@@ -25,7 +25,17 @@ public class DESpeed extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
 
+        e.setStarScale(1.12F);
+        e.setColorStarOuter(0, 255, 0);
+        e.setRenderStar(true);
+		
+    }
+    
     public void onInit(EntityDust e)
     {
         ItemStack[] req = new ItemStack[]
@@ -78,9 +88,9 @@ public class DESpeed extends DustEvent
             }
         }
 
-        e.starScale = 1.12F;
+        e.setStarScale(1.12F);
         e.setColorStarOuter(0, 255, 0);
-        e.renderStar = true;
+        e.setRenderStar(true);
         e.fade();
     }
 

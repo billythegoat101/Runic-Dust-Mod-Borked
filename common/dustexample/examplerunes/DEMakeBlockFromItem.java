@@ -32,6 +32,19 @@ public class DEMakeBlockFromItem extends DustEvent
     {
         super();
     }
+	
+	/**
+	 * Called to set the graphical components of the rune
+     * @param e EntityDust instance
+	 */
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        /**Graphics**/
+        e.setRenderBeam(true);
+		
+    }
 
     @Override
     public void onInit(EntityDust e)
@@ -59,8 +72,9 @@ public class DEMakeBlockFromItem extends DustEvent
         }
 
         /**Graphics**/
-        e.renderBeam = true;
-
+        //Since this rune requires the sacrifice to be tallied, some of the graphics are 
+        //set during the onInit instead of initGraphics.
+        
         //Depending on which item was found (iron,gold,diamond) set the color of the beam.
         switch (e.data[0])
         {
@@ -79,7 +93,7 @@ public class DEMakeBlockFromItem extends DustEvent
         //This is usually used for runes that sometimes end up destroying themselves
         //in the midst of doing their task.
         //However, some runes should leave this as false because it acts as a nice off-switch
-        e.ignoreRune = true;
+        e.setRenderBeam(true);
     }
 
     @Override

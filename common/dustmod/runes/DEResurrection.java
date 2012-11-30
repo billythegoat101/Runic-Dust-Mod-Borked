@@ -25,10 +25,20 @@ import net.minecraft.src.ItemStack;
  */
 public class DEResurrection extends DustEvent
 {
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+		
+    }
+	
     public void onInit(EntityDust e)
     {
-        e.renderBeam = true;
-        e.renderStar = true;
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
         ItemStack[] sac = new ItemStack[] {new ItemStack(Item.ghastTear, 1), new ItemStack(Block.slowSand, 4)};
         sac = this.sacrifice(e, sac);
 
@@ -143,7 +153,7 @@ public class DEResurrection extends DustEvent
 
     public void onTick(EntityDust e)
     {
-        e.starScale += 0.001;
+        e.setStarScale(e.getStarScale() + 0.001F);
 
         if (e.ticksExisted > 120)
         {

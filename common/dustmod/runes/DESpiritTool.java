@@ -20,6 +20,18 @@ import net.minecraft.src.ItemStack;
  */
 public class DESpiritTool extends DustEvent
 {
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+        e.setColorStarOuter(0,0,255);
+        e.setColorBeam(0,0,255);
+		
+    }
+	
     public void onInit(EntityDust e)
     {
 //        int compare = mod_DustMod.compareDust(mod_DustMod.lapisDID, e.dustID);
@@ -28,8 +40,8 @@ public class DESpiritTool extends DustEvent
 //            return;
 //        }
 //
-        e.renderBeam = true;
-        e.renderStar = true;
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
         e.setColorStarOuter(0,0,255);
         e.setColorBeam(0,0,255);
 //
@@ -132,7 +144,7 @@ public class DESpiritTool extends DustEvent
 
     public void onTick(EntityDust e)
     {
-        e.starScale += 0.001;
+        e.setStarScale(e.getStarScale() + 0.001F);
 
         if (e.ticksExisted > 20)
         {

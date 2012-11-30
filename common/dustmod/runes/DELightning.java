@@ -15,6 +15,7 @@ import net.minecraft.src.*;
  */
 public class DELightning extends DETrap
 {
+	
     @Override
     public void onInit(EntityDust e)
     {

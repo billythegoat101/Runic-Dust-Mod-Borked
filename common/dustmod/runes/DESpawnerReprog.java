@@ -26,6 +26,16 @@ public class DESpawnerReprog extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+        e.setStarScale(1.05F);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -34,9 +44,9 @@ public class DESpawnerReprog extends DustEvent
 //            e.fizzle();
 //            return;
 //        }
-        e.renderBeam = true;
-        e.renderStar = true;
-        e.starScale = 1.05F;
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+        e.setStarScale(1.05F);
         //        //<editor-fold defaultstate="collapsed" desc="old">
         //        //get sacrifice
         //        ArrayList<EntityItem> itemstacks = new ArrayList<EntityItem>();

@@ -26,6 +26,16 @@ public abstract class PoweredEvent extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+    	e.setRenderStar(true);
+    	e.setStarScale(1.0F);
+    	e.setColorStar(255,255,255);
+		
+    }
 
     @Override
     public void onInit(EntityDust e)
@@ -47,9 +57,9 @@ public abstract class PoweredEvent extends DustEvent
 
         e.setFuel(this.getStartFuel());
         e.requiresFuel = true;
-        e.renderStar = true;
-        e.setColorStar(255, 255, 255);
-        e.starScale = 1.0F;
+    	e.setRenderStar(true);
+    	e.setStarScale(1.0F);
+    	e.setColorStar(255,255,255);
     }
 
     @Override
@@ -93,11 +103,11 @@ public abstract class PoweredEvent extends DustEvent
 
         if (e.isFueledExternally())
         {
-            e.starScale = 1.04F;
+            e.setStarScale(1.04F);
         }
         else
         {
-            e.starScale = 1F;
+            e.setStarScale(1F);
         }
 
         if (!this.isPaused(e))

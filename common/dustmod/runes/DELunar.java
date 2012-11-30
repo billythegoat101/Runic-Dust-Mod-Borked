@@ -16,10 +16,18 @@ import net.minecraft.src.ItemStack;
 public class DELunar extends DustEvent
 {
     public static boolean oneActive = false;
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+		
+    }
+	
     public void onInit(EntityDust e)
     {
-        e.renderBeam = false;
-        e.renderStar = true;
+        e.setRenderStar(true);
         ItemStack[] req = this.sacrifice(e, new ItemStack[] {new ItemStack(Item.netherStalkSeeds, 4), new ItemStack(Item.dyePowder, 1, 4)});
 
         if (req[0].stackSize != 0 || req[1].stackSize != 0)
@@ -37,8 +45,8 @@ public class DELunar extends DustEvent
         {
             oneActive = false;
             e.data[0] = 0;
-            e.renderBeam = false;
-            e.renderStar = true;
+    		e.setRenderBeam(false);
+            e.setRenderStar(true);
         }
 
         long time = e.worldObj.getWorldTime() + 1000;
@@ -55,8 +63,8 @@ public class DELunar extends DustEvent
 
         if (e.data[0] == 1)
         {
-            e.renderBeam = true;
-            e.renderStar = false;
+    		e.setRenderBeam(true);
+    		e.setRenderStar(false);
         }
 
         if (e.data[0] == 1 && !e.worldObj.isDaytime())

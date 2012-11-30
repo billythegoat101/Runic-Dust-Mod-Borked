@@ -19,10 +19,18 @@ public class DECage extends DETrap
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+    	
+    }
 
     public void onInit(EntityDust e)
     {
-        e.renderStar = true;
+        e.setRenderStar(true);
         ItemStack[] req = new ItemStack[] {new ItemStack(Item.ingotIron, 6), new ItemStack(Item.dyePowder, 8, 4)};
         req = this.sacrifice(e, req);
 
@@ -35,7 +43,7 @@ public class DECage extends DETrap
 
     public void onTick(EntityDust e)
     {
-        e.renderStar = true;
+        e.setRenderStar(true);
 
         if (e.ticksExisted < 80)
         {

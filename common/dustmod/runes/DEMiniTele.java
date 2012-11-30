@@ -28,6 +28,14 @@ public class DEMiniTele extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -125,7 +133,7 @@ public class DEMiniTele extends DustEvent
 //                }
 //            }
 //        }
-        e.renderStar = true;
+        e.setRenderStar(true);
 //        e.starScaleY = 2F;
     }
 

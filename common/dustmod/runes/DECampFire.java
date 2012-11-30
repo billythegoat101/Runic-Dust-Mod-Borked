@@ -30,6 +30,13 @@ public class DECampFire extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+    	
+    }
 
     @Override
     public void onInit(EntityDust e)

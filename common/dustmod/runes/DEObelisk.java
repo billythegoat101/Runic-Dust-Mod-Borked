@@ -23,6 +23,15 @@ import net.minecraft.src.World;
 public class DEObelisk extends DustEvent
 {
     public static final int ticksperblock = 20;
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+//      e.setRenderBeam(true);
+        e.setColorBeam(114, 53, 62);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -32,8 +41,8 @@ public class DEObelisk extends DustEvent
 //            e.fizzle();
 //            return;
 //        }
-//
-//        e.renderBeam = true;
+
+        e.setRenderBeam(true);
         e.setColorBeam(114, 53, 62);
         ItemStack[] sacrifice = new ItemStack[1];
         sacrifice[0] = new ItemStack(Block.oreIron, 2);
@@ -57,26 +66,26 @@ public class DEObelisk extends DustEvent
 
         int height = 16;
     	
-    	if(Math.random() < 0.9){
-    		double r = (double)e.ticksExisted/20;
-    		double ri = 0.3;
-    		double rad = 0.8;
-    		double h = height;
-    		if(e.ticksExisted < 100){
-    			h = height* ((double)e.ticksExisted/100);
-    		}
-    		
-    		if(e.data[1] == -1){
-    			h = e.data[0];
-    		}
-    		for(double i = 0; i < h; i+= 0.3){
-    			if(Math.random() < 0.13)
-    			DustMod.spawnParticles(e.worldObj, "witchMagic", 
-    					e.posX + Math.cos(r)*rad, i + e.posY, e.posZ + Math.sin(r)*rad,
-    					0, 1, 0, 3, 0.02);
-    			r += ri;
-    		}
-    	}
+//    	if(Math.random() < 0.9){
+//    		double r = (double)e.ticksExisted/20;
+//    		double ri = 0.3;
+//    		double rad = 0.8;
+//    		double h = height;
+//    		if(e.ticksExisted < 100){
+//    			h = height* ((double)e.ticksExisted/100);
+//    		}
+//    		
+//    		if(e.data[1] == -1){
+//    			h = e.data[0];
+//    		}
+//    		for(double i = 0; i < h; i+= 0.3){
+//    			if(Math.random() < 0.13)
+//    			DustMod.spawnParticles(e.worldObj, "witchMagic", 
+//    					e.posX + Math.cos(r)*rad, i + e.posY, e.posZ + Math.sin(r)*rad,
+//    					0, 1, 0, 3, 0.02);
+//    			r += ri;
+//    		}
+//    	}
     	
         if (e.ticksExisted < ticksperblock * 2)
         {

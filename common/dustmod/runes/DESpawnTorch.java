@@ -19,6 +19,14 @@ public class DESpawnTorch extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -38,16 +46,15 @@ public class DESpawnTorch extends DustEvent
 
         if (e.data[0] == 1)
         {
-            e.renderBeam = true;
+    		e.setRenderBeam(true);
             e.setColorBeam(255,255,255);
         }
         else
         {
+        	e.setIgnoreRune(true);
             e.posY += 0.35;
-            e.renderStar = true;
-            e.ignoreRune = true;
-            world.setBlock(x, y, z, 0);
-            world.setBlockAndMetadataWithNotify(x, y, z, Block.torchWood.blockID, 0);
+    		e.setRenderStar(true);
+    		e.setRenderBeam(false);
         }
     }
 
@@ -56,6 +63,15 @@ public class DESpawnTorch extends DustEvent
     {
         super.onTick(e);
 
+        if(e.data[0] == 0 && e.ticksExisted == 0){
+            World world = e.worldObj;
+            int x = e.getX();
+            int y = e.getY();
+            int z = e.getZ();
+            world.setBlock(x, y, z, 0);
+            world.setBlockAndMetadataWithNotify(x, y, z, Block.torchWood.blockID, 0);
+        }
+        
         if(e.data[0] == 1 && e.ticksExisted%10 == 0){
             List<EntityItem> items = this.getItems(e);
             for(EntityItem i:items){
@@ -76,7 +92,7 @@ public class DESpawnTorch extends DustEvent
         {
             if (e.worldObj.getBlockId(e.getX(), e.getY(), e.getZ()) != Block.torchWood.blockID)
             {
-//                e.fade();
+                e.fade();
                 e.kill();
             }
         }

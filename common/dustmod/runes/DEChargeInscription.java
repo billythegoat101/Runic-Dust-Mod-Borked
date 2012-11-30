@@ -11,7 +11,18 @@ import dustmod.InscriptionEvent;
 import dustmod.InscriptionManager;
 
 public class DEChargeInscription extends DustEvent {
+
 	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderBeam(true);
+        e.setRenderStar(true);
+        e.setColorStarOuter(0,0,255);
+        e.setColorBeam(0,0,255);
+    	
+    }
 	
 	@Override
 	protected void onInit(EntityDust e) {
@@ -25,7 +36,7 @@ public class DEChargeInscription extends DustEvent {
 	@Override
 	protected void onTick(EntityDust e) {
 		super.onTick(e);
-        e.setStarScale(e.starScale + 0.005F);
+        e.setStarScale(e.getStarScale() + 0.005F);
         if (e.ticksExisted > 20)
         {
         	ItemStack inscription;

@@ -19,6 +19,17 @@ public class DESilkTouchEnch extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+        e.setColorStarOuter(0, 0, 255);
+        e.setColorBeam(0, 0, 255);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -45,8 +56,8 @@ public class DESilkTouchEnch extends DustEvent
             return;
         }
 
-        e.renderBeam = true;
-        e.renderStar = true;
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
         e.setColorStarOuter(0, 0, 255);
         e.setColorBeam(0, 0, 255);
 //        e.data = item;
@@ -57,7 +68,7 @@ public class DESilkTouchEnch extends DustEvent
 
     public void onTick(EntityDust e)
     {
-        e.starScale += 0.001;
+        e.setStarScale(e.getStarScale() + 0.001F);
 
         if (e.ticksExisted > 20)
         {

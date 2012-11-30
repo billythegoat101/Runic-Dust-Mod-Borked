@@ -32,6 +32,25 @@ public class DEIceSprite extends PoweredEvent
     {
         super();
     }
+
+	/**
+	 * Called to set the graphical components of the rune
+     * @param e EntityDust instance
+	 */
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+        
+        /**GRAPHICS**/
+        
+        //Star color and such
+        e.setRenderStar(true);
+        e.setColorStarOuter(0,255,255);
+        
+        //Set this rune sprite to hover around the player and follow him
+        e.setFollow(true);
+		
+    }
     
     @Override
     public void onInit(EntityDust e)
@@ -53,15 +72,6 @@ public class DEIceSprite extends PoweredEvent
             e.fizzle();
             return;
         }
-        
-        /**GRAPHICS**/
-        
-        //Star color and such
-        e.renderStar = true;
-        e.setColorStarOuter(0,255,255);
-        
-        //Set this rune sprite to hover around the player and follow him
-        e.follow = true;
     }
     
     @Override

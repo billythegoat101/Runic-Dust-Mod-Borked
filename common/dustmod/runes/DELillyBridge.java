@@ -24,6 +24,15 @@ public class DELillyBridge extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+        e.setColorStarOuter(0, 255, 0);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -38,7 +47,7 @@ public class DELillyBridge extends DustEvent
 
         e.rotationYaw = ((e.rot+1)%4)*90;
 
-        e.renderStar = true;
+		e.setRenderStar(true);
         e.setColorStarOuter(0, 255, 0);
     }
 

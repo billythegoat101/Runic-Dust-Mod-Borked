@@ -17,12 +17,22 @@ public class DEFireRain extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderBeam(true);
+        e.setColorStarOuter(255, 0, 0);
+        e.setColorBeam(255, 0, 0);
+    	
+    }
 
     public void onInit(EntityDust e)
     {
         super.onInit(e);
-        e.renderStar = true;
-        e.setColorStarOuter(255, 0, 0);
+		e.setRenderBeam(true);
+        e.setColorBeam(255, 0, 0);
         ItemStack[] req = new ItemStack[] {new ItemStack(Item.blazeRod, 4)};
         req = this.sacrifice(e, req);
 

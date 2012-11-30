@@ -26,12 +26,22 @@ public class DEFireSprite extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+        e.setFollow(true);
+        e.setColorStarInner(255, 0, 0);
+		
+    }
 
     public void onInit(EntityDust e)
     {
         super.onInit(e);
-        e.renderStar = true;
-        e.follow = true;
+		e.setRenderStar(true);
+        e.setFollow(true);
         e.setColorStarInner(255, 0, 0);
         ItemStack[] sacrifice = new ItemStack[] {new ItemStack(Item.ghastTear, 1), new ItemStack(Item.fireballCharge, 2)};
         this.sacrifice(e, sacrifice);

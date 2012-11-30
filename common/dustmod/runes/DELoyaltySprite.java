@@ -19,11 +19,19 @@ public class DELoyaltySprite extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
         super.onInit(e);
-//        e.renderStar = true;
+//		e.setRenderStar(true);
 //
 //        ItemStack[] req = this.sacrifice(e, new ItemStack[]{new ItemStack(Item.ghastTear, 4, -1)});
 //        if (!checkSacrifice(req) || !takeXP(e,10)) {
@@ -31,7 +39,10 @@ public class DELoyaltySprite extends PoweredEvent
 //            return;
 //        }
 //        ModLoader.getMinecraftInstance().thePlayer.sendChatMessage("The loyalty sprite rune is currently out of order.");
+        
         e.reanimate = true;
+        EntityPlayerMP mp = (EntityPlayerMP)e.worldObj.getPlayerEntityByName(e.summonerUN);
+        if(mp != null) mp.sendChatToPlayer("The loyalty sprite rune is currently out of order.");
     }
 
     public void onTick(EntityDust e)
@@ -106,7 +117,7 @@ public class DELoyaltySprite extends PoweredEvent
 
             slave.extinguish();
             e.toFollow = slave;
-            e.follow = true;
+            e.setFollow(true);
             boolean attacking = false;
 
             if (slave instanceof EntityCreature)

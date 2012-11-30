@@ -19,6 +19,15 @@ public class DEForcefield extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+    	e.setRenderStar(true);
+        e.setColorStarOuter(0, 128, 62);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -36,7 +45,7 @@ public class DEForcefield extends PoweredEvent
         }
 
         e.setColorStarOuter(0, 128, 62);
-        e.renderStar = true;
+        e.setRenderStar(true);
         e.data[1] = dustStrength/100;
         e.sacrificeWaiting = 600;
         this.addSacrificeList(new Sacrifice(99), new Sacrifice(99));

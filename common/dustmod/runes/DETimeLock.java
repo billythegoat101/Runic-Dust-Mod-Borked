@@ -17,6 +17,16 @@ public class DETimeLock extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+        e.setColorStarInner(0, 255, 255);
+        e.setColorStarOuter(0, 255, 255);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -30,7 +40,7 @@ public class DETimeLock extends PoweredEvent
             return;
         }
 
-        e.renderStar = true;
+		e.setRenderStar(true);
         e.setColorStarInner(0, 255, 255);
         e.setColorStarOuter(0, 255, 255);
         int[] center = new int[4];

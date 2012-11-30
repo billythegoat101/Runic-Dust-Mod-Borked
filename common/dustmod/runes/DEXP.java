@@ -19,16 +19,28 @@ public class DEXP extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+		e.setRenderFireOnRune(true);
+        e.setColorFire(0,255,0);
+        e.setColorBeam(255, 255, 255);
+		
+    }
 
     public void onInit(EntityDust e)
     {
         super.onInit(e);
-        e.renderBeam = true;
-        e.renderStar = true;
-        e.renderFlamesDust = true;
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+		e.setRenderFireOnRune(true);
         e.setColorFire(0,255,0);
-        e.data[0] = 24000;
         e.setColorBeam(255, 255, 255);
+        e.data[0] = 24000;
         e.posY += 1D;
         int hostile = 1;
         int passive = 1;
@@ -99,12 +111,12 @@ public class DEXP extends PoweredEvent
 //        System.out.println("HUNGRY " + e.data);
         if (e.ticksExisted < 60)
         {
-            e.renderBeam = false;
+    		e.setRenderBeam(false);
             return;
         }
         else
         {
-            e.renderBeam = true;
+    		e.setRenderBeam(true);
         }
 
         EntityPlayer player = e.worldObj.getPlayerEntityByName(e.summonerUN);

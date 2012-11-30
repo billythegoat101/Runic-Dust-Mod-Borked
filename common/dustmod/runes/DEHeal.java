@@ -19,6 +19,17 @@ public class DEHeal extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setStarScale(1.12F);
+        e.setColorStarInner(255, 255, 255);
+        e.setColorStarOuter(255, -255, -255);
+		e.setRenderBeam(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -84,10 +95,10 @@ public class DEHeal extends DustEvent
             }
         }
 
-        e.starScale = 1.12F;
+        e.setStarScale(1.12F);
         e.setColorStarInner(255, 255, 255);
         e.setColorStarOuter(255, -255, -255);
-        e.renderStar = true;
+		e.setRenderBeam(true);
         //entityplayersp.addPotionEffect(new PotionEffect(Potion.regeneration.id, 3, 2));
     }
 

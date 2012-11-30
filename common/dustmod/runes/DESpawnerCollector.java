@@ -17,11 +17,19 @@ public class DESpawnerCollector extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
 
+		e.setRenderBeam(true);
+		e.setStarScale(1.05F);
+		
+    }
     public void onInit(EntityDust e)
     {
-        e.renderStar = true;
-        e.starScale = 1.05F;
+		e.setRenderBeam(true);
+		e.setStarScale(1.05F);
         ItemStack[] req = new ItemStack[] {new ItemStack(Block.oreGold, 6)};
         req = this.sacrifice(e, req);
 

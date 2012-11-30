@@ -32,6 +32,16 @@ public class DEBait extends PoweredEvent
         super();
     }
 
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+        e.setStarScale(1.005F);
+        e.setColorStarOuter(255, 1, 1);
+    	
+    	
+    }
+    
     public void onInit(EntityDust e)
     {
         super.onInit(e);
@@ -41,7 +51,7 @@ public class DEBait extends PoweredEvent
 //            return;
 //        }
 //        e.renderBeam = true;
-        e.renderStar = true;
+        e.setRenderStar(true);
         //get sacrifice
 //        if(itemstacks.size() == 0){
 //            e.kill();
@@ -104,7 +114,7 @@ public class DEBait extends PoweredEvent
         }
 
         e.data[0] = entClass;
-        e.starScale = 1.005F;
+        e.setStarScale(1.005F);
         e.setColorStarOuter(255, 1, 1);
     }
 

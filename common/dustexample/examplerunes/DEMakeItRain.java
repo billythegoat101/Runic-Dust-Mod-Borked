@@ -27,6 +27,18 @@ public class DEMakeItRain extends DustEvent
     {
         super();
     }
+	
+	/**
+	 * Called to set the graphical components of the rune
+     * @param e EntityDust instance
+	 */
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+		//no graphics!
+    	
+    }
     
     @Override
     public void onInit(EntityDust e)

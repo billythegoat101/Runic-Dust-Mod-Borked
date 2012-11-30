@@ -23,10 +23,22 @@ public class DESpawnRecord extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
+        e.setColorStarOuter(0, 255, 0);
+        e.setColorBeam(0, 255, 0);
+		
+    }
 
     public void onInit(EntityDust e)
     {
-        e.renderBeam = e.renderStar = true;
+		e.setRenderStar(true);
+		e.setRenderBeam(true);
         e.setColorStarOuter(0, 255, 0);
         e.setColorBeam(0, 255, 0);
         ItemStack[] sacrifice = new ItemStack[] {new ItemStack(Item.diamond, 1)};
@@ -41,7 +53,7 @@ public class DESpawnRecord extends DustEvent
 
     public void onTick(EntityDust e)
     {
-        e.starScale += 0.0001;
+        e.setStarScale(e.getStarScale() + 0.001F);
 
         if (e.ticksExisted > 120)
         {

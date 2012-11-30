@@ -25,6 +25,13 @@ public class DEBounce extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+    	
+    }
 
     public void onInit(EntityDust e)
     {

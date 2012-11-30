@@ -19,6 +19,14 @@ public class DEEggifier extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+    	
+    }
 
     @Override
     public void onInit(EntityDust e)
@@ -33,7 +41,7 @@ public class DEEggifier extends DustEvent
             return;
         }
 
-        e.renderStar = true;
+        e.setRenderStar(true);
         e.setColorStar(255, 2555, 255);
         e.sacrificeWaiting = 600;
 
@@ -61,7 +69,7 @@ public class DEEggifier extends DustEvent
 //            if(e.data[0] == 0) return;
 //            System.out.println("EntityType " + e.data[0]);
 //        }
-        e.starScale += 0.001;
+        e.setStarScale(e.getStarScale() + 0.001F);
 
         if (e.ticksExisted > 120)
         {

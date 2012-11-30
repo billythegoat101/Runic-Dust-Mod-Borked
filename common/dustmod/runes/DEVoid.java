@@ -25,6 +25,16 @@ public class DEVoid extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+        e.setColorStarInner(255, 0, 255);
+        e.setColorStarOuter(255, 0, 255);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -34,14 +44,14 @@ public class DEVoid extends DustEvent
             return;
         }
 
-        e.renderStar = true;
+		e.setRenderStar(true);
         e.setColorStarInner(255, 0, 255);
         e.setColorStarOuter(255, 0, 255);
         List<EntityItem> sacrifice = this.getItems(e);
 
         if (sacrifice == null || sacrifice.isEmpty())
         {
-            e.starScale = 1.02F;
+        	e.setStarScale(1.02F);
             e.data[0] = 1;
         }
         else
@@ -87,7 +97,7 @@ public class DEVoid extends DustEvent
             if (e.ticksExisted > 35)
             {
                 e.ticksExisted += 3;
-                e.starScale -= 0.001;
+                e.setStarScale(e.getStarScale() - 0.001F);
             }
 
             if (e.ticksExisted > 100)

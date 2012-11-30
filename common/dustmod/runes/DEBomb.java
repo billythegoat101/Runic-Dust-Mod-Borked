@@ -19,6 +19,15 @@ public class DEBomb extends DustEvent
     {
         super();
     }
+    
+    @Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+
+        e.setRenderStar(true);
+    	
+    }
 
     @Override
     public void onInit(EntityDust e)
@@ -76,13 +85,13 @@ public class DEBomb extends DustEvent
         int f = fuse[0];
         e.data[0] = c;
         e.data[1] = f;
-        e.renderStar = true;
+        e.setRenderStar(true);
     }
     public void onTick(EntityDust e)
     {
         int f = getTime(e.data[1]);
         int c = e.data[0];
-        e.renderStar = true;
+        e.setRenderStar(true);
 
         
         if (e.ticksExisted < f * 30)

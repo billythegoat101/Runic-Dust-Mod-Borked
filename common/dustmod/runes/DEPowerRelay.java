@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import dustmod.EntityDust;
-import dustmod.PoweredEvent;
-import dustmod.TileEntityDust;
-
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.World;
+import dustmod.DustMod;
+import dustmod.EntityDust;
+import dustmod.PoweredEvent;
+import dustmod.TileEntityDust;
 
 /**
  *
@@ -29,6 +30,13 @@ public class DEPowerRelay extends PoweredEvent
     {
         super();
         networks = new HashMap<EntityDust, List<EntityDust>>();
+    }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+    	
+		
     }
 
     @Override
@@ -66,6 +74,7 @@ public class DEPowerRelay extends PoweredEvent
         {
             disperseFuel(e);
         }
+        drawConnections(e);
     }
 
     @Override
@@ -258,4 +267,72 @@ public class DEPowerRelay extends PoweredEvent
     }
 
     public HashMap<EntityDust, List<EntityDust>> networks;
+    
+    
+    public void drawConnections(EntityDust e){
+        checkNetwork(e);
+        List<EntityDust> network = networks.get(e);
+
+        if (network == null)
+        {
+            network = new ArrayList<EntityDust>();
+            networks.put(e, network);
+        }
+        EntityDust[] arr = new EntityDust[network.size()];
+        network.toArray(arr);
+        
+        for(EntityDust i:arr){
+            drawConnection(e.worldObj, new double[]{e.posX-0.5, e.posY, e.posZ-0.5}, new double[]{i.posX-1.5, i.posY, i.posZ-0.5});
+        }
+    }
+    
+    
+    public void drawConnection(World world, double[] loc1, double[] loc2){
+    	double x,y,a,b,c,d,h;
+    	double scale = 4;
+    	h = (loc2[0] - loc1[0])/8; //max height
+    	c= loc1[1]; //initial height
+    	
+    	d = (loc1[0]-loc2[0])*(loc1[0]-loc2[0]) + (loc1[1]-loc2[1])*(loc1[1]-loc2[1]) + (loc1[2]-loc2[2])*(loc1[2]-loc2[2]);
+
+    	d = Math.sqrt(d);
+    	a = (-4*h+4*c)/d;
+    	b = (-4*h+4*c)/Math.sqrt(d);
+    	
+    	a = (4*c-4*h)/((loc2[0]-loc1[0])*(loc2[0]-loc1[0]));
+    	b = (4*h-4*c)/(loc2[0]-loc1[0]);
+    	
+//    	ArrayList<Double> particles = new ArrayList<Double>();
+    	int iter = 0;
+    	double[] locations = new double[((int)Math.abs((loc2[0]*2 - loc1[0])/0.5)+1)*3+1];
+    	
+    	
+    	double minx = Math.min(loc1[0], loc2[0]);
+    	double maxx = Math.max(loc1[0], loc2[0]);
+    	for(x=minx;x < maxx; x+=0.5){
+//    		y = a*x*x + b*x + c;
+    		double perc = (x - minx)/(maxx*2-minx);
+    		double z = loc1[2] + (loc2[2]-loc1[2])*perc;
+    		y= -(x*x)/4 + h;
+    		y = -Math.pow((x-((loc2[0]-loc1[0])/2)),2)/(d/h/3.9) + c + h;
+    		
+    		y = -Math.pow((x-((loc2[0]-loc1[0])/2)),2)/(d*2) + c + h;
+//    		System.out.println("Penis " + x + " " + y);
+//    		System.out.printf("Penis {0} {1}", x,y);
+//    		DustMod.spawnParticles(world, "reddust", x, y, 0.5, 1, 0, 0, 5, 0.01);
+    		locations[iter] = x;
+    		locations[iter+1] = y;
+    		locations[iter+2] = z;
+    		iter += 3;
+//    		particles.add(x);
+//    		particles.add(y);
+//    		particles.add(0.5);
+    	}
+//    	System.out.println("You're a dick " + iter + " " + locations.length);
+    	
+//		DustMod.spawnParticles(world, "reddust", x, y, 0.5, 1, 0, 0, 5, 0.01);
+//    	Double[] locations = new Double[particles.size()];
+//    	locations = particles.toArray(locations);
+		DustMod.spawnParticles(world, "reddust", locations, 0, 1, 0, 2, 0.01, 0.01, 0.01);
+    }
 }

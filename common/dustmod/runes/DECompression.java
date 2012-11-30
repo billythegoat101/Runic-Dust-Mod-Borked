@@ -22,6 +22,17 @@ public class DECompression extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderBeam(true);
+        e.setRenderStar(true);
+        e.setColorStarOuter(0, 0, 255);
+        e.setColorBeam(0, 0, 255);
+    	
+    }
 
     public void onInit(EntityDust e)
     {
@@ -52,16 +63,16 @@ public class DECompression extends DustEvent
 
         System.out.println("Diamond amt " + diamondAmt);
         e.data[0] = diamondAmt;
-        e.renderBeam = true;
-        e.renderStar = true;
+        e.setRenderBeam(true);
+        e.setRenderStar(true);
         e.setColorStarOuter(0, 0, 255);
         e.setColorBeam(0, 0, 255);
     }
 
     public void onTick(EntityDust e)
     {
-        e.starScale += 0.001;
-
+        e.setStarScale(e.getStarScale() + 0.001F);
+        
         if (e.ticksExisted > 20)
         {
             int dAmt = e.data[0];

@@ -22,6 +22,17 @@ import net.minecraft.src.World;
  */
 public class DELumberjack extends DustEvent
 {
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+        e.setColorStarOuter(77, 65, 47);
+        e.setColorStarInner(77, 65, 47);
+        e.setStarScale(1.12F);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -38,10 +49,10 @@ public class DELumberjack extends DustEvent
         }
 
         e.data[0] = e.dustID;
-        e.renderStar = true;
+        e.setRenderStar(true);
         e.setColorStarOuter(77, 65, 47);
         e.setColorStarInner(77, 65, 47);
-        e.starScale = 1.2F;
+        e.setStarScale(1.12F);
         int x = e.getX();
         int y = e.getY();
         int z = e.getZ();

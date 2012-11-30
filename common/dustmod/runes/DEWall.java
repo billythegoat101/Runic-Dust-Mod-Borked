@@ -23,10 +23,16 @@ import dustmod.EntityDust;
 public class DEWall extends DustEvent
 {
     public static final int ticksperblock = 7;
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+		
+    }
 
     public void onInit(EntityDust e)
     {
-        e.ignoreRune = true;
+        e.setIgnoreRune(true);
         ItemStack[] req = this.sacrifice(e, new ItemStack[] {new ItemStack(Block.oreIron, 5)});
 
         if (req[0].stackSize != 0 || !this.takeXP(e, 3))

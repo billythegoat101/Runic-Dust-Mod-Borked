@@ -21,6 +21,17 @@ public class DELiftTerrain extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderBeam(true);
+        e.setColorStar(255, 255, 0);
+		e.setRenderFireOnRuts(true);
+        e.setColorFire(0,0,255);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -33,7 +44,7 @@ public class DELiftTerrain extends DustEvent
             return;
         }
 
-        e.renderStar = true;
+		e.setRenderBeam(true);
         e.setColorStar(255, 255, 0);
         int a, b, c, d;
 
@@ -79,7 +90,7 @@ public class DELiftTerrain extends DustEvent
                 break;
         }
 
-        e.renderFlamesRut = true;
+		e.setRenderFireOnRuts(true);
         e.setColorFire(0,0,255);
 //        List<Entity> ents = this.getEntities(e, 3D);
 //        boolean found = false;

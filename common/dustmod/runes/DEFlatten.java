@@ -14,6 +14,15 @@ import net.minecraft.src.*;
 public class DEFlatten extends DustEvent
 {
     public int tickRate = 20;
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setColorStarOuter(114, 53, 62);
+		e.setRenderStar(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
@@ -59,7 +68,7 @@ public class DEFlatten extends DustEvent
         }
 
         e.setColorStarOuter(114, 53, 62);
-        e.renderStar = true;
+		e.setRenderStar(true);
         e.data[0] = dustStrength;
     }
 
