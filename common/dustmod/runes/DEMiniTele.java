@@ -6,17 +6,17 @@ package dustmod.runes;
 
 import java.util.List;
 
-import dustmod.DustEvent;
-import dustmod.EntityBlock;
-import dustmod.EntityDust;
-import dustmod.TileEntityDust;
-import dustmod.VoidTeleManager;
-
+import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import dustmod.DustEvent;
+import dustmod.EntityBlock;
+import dustmod.EntityDust;
+import dustmod.TileEntityDust;
+import dustmod.VoidTeleManager;
 
 /**
  *
@@ -53,51 +53,58 @@ public class DEMiniTele extends DustEvent
             return;
         }
 
-        Integer[] fnd = null;
-
-        for (Integer[] i : e.dustPoints)
-        {
-            TileEntity te = world.getBlockTileEntity(i[0], i[1], i[2]);
-
-            if (te != null && te instanceof TileEntityDust)
-            {
-                TileEntityDust ted = (TileEntityDust) te;
-                int gamt = 8;
-                int bamt = 6;
-
-//                System.out.println("CHECKING");
-                for (int x = 0; x < 4; x++)
-                {
-                    for (int y = 0; y < 4; y++)
-                    {
-//                        System.out.print(ted.getDust(x, y) + ",");
-                        if (ted.getDust(x, y) == 2)
-                        {
-                            gamt--;
-                        }
-
-                        if (ted.getDust(x, y) == 4)
-                        {
-                            bamt--;
-                        }
-                    }
-
-//                    System.out.println();
-                }
-
-                if (gamt == 0 && bamt == 0)
-                {
-                    fnd = i;
-                    e.data[0] = world.getBlockId(i[0], i[1] - 1, i[2]);
+//        Integer[] fnd = null;
+//
+//        for (Integer[] i : e.dustPoints)
+//        {
+//            TileEntity te = world.getBlockTileEntity(i[0], i[1], i[2]);
+//
+//            if (te != null && te instanceof TileEntityDust)
+//            {
+//                TileEntityDust ted = (TileEntityDust) te;
+//                int gamt = 8;
+//                int bamt = 6;
+//
+////                System.out.println("CHECKING");
+//                for (int x = 0; x < 4; x++)
+//                {
+//                    for (int y = 0; y < 4; y++)
+//                    {
+////                        System.out.print(ted.getDust(x, y) + ",");
+//                        if (ted.getDust(x, y) == 2)
+//                        {
+//                            gamt--;
+//                        }
+//
+//                        if (ted.getDust(x, y) == 4)
+//                        {
+//                            bamt--;
+//                        }
+//                    }
+//
+////                    System.out.println();
+//                }
+//
+//                if (gamt == 0 && bamt == 0)
+//                {
+//                    fnd = i;
+//                    e.data[0] = world.getBlockId(i[0], i[1] - 1, i[2]);
+//                    world.setBlockWithNotify(i[0],i[1]-1, i[2], Block.brick.blockID);
 //                    System.out.println("Warp ID set to " + e.data[0] + " " + Block.blocksList[e.data[0]].getBlockName());
-                }
-            }
-            else
-            {
-//                System.out.println("dewrp");
-            }
-        }
-
+//                }
+//            }
+//            else
+//            {
+////                System.out.println("dewrp");
+//            }
+//        }
+        
+        int cx, cy, cz;
+        cx = (int)e.posX - (e.posX<0?1:0);
+        cy = (int)e.posY - 1;
+        cz = (int)e.posZ - (e.posZ<0?1:0);
+//        world.setBlockWithNotify(cx,cy,cz, Block.brick.blockID);
+        e.data[0] = world.getBlockId(cx,cy,cz);
 //        for (int x = -1; x <= 1 && fnd != null; x++) {
 //            for (int z = -1; z <= 1; z++) {
 //                if (x == 0 || z == 0) {

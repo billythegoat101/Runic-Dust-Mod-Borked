@@ -20,12 +20,20 @@ public class DETeleportation extends PoweredEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+        e.setRenderStar(true);
+		
+    }
 
     public void onInit(EntityDust e)
     {
         super.onInit(e);
         World world = e.worldObj;
-        ItemStack[] req = this.sacrifice(e, new ItemStack[] {new ItemStack(Item.enderPearl, 1)});
+        ItemStack[] req = this.sacrifice(e, new ItemStack[] {new ItemStack(Item.eyeOfEnder, 1)});
 
         if (req[0].stackSize != 0 || !takeXP(e, 20))
         {
@@ -35,6 +43,7 @@ public class DETeleportation extends PoweredEvent
 
         Integer[] fnd = null;
 
+        System.out.println("Check");
         for (Integer[] i : e.dustPoints)
         {
             TileEntity te = world.getBlockTileEntity(i[0], i[1], i[2]);
@@ -45,12 +54,12 @@ public class DETeleportation extends PoweredEvent
                 int gamt = 10;
                 int bamt = 4;
 
-//                System.out.println("CHECKING");
+                System.out.println("CHECKING");
                 for (int x = 0; x < 4; x++)
                 {
                     for (int y = 0; y < 4; y++)
                     {
-//                        System.out.print(ted.getDust(x, y) + ",");
+                        System.out.print(ted.getDust(x, y) + ",");
                         if (ted.getDust(x, y) == 2)
                         {
                             gamt--;
@@ -62,19 +71,19 @@ public class DETeleportation extends PoweredEvent
                         }
                     }
 
-//                    System.out.println();
+                    System.out.println();
                 }
 
                 if (gamt == 0 && bamt == 0)
                 {
                     fnd = i;
                     e.data[0] = world.getBlockId(i[0], i[1] - 1, i[2]);
-//                    System.out.println("Warp ID set to " + e.data[0]);
+                    System.out.println("Warp ID set to " + e.data[0] + " " + (Block.blocksList[e.data[0]].getBlockName()));
                 }
             }
             else
             {
-//                System.out.println("dewrp");
+                System.out.println("dewrp");
             }
         }
 
@@ -137,10 +146,12 @@ public class DETeleportation extends PoweredEvent
         e.rotationYaw = ((e.rot+1)%4)*90;
         
         int cx,cy,cz;
-        cx = (int)(e.posX)-1;
+        cx = (int)(e.posX);
         cy = (int)e.posY-1;
         cz = (int)(e.posZ);
         
+        if(cx < 0) cx--;
+        if(cz < 0) cz--;
         switch(e.rot){
         case 0:
         	cx++;
@@ -158,9 +169,10 @@ public class DETeleportation extends PoweredEvent
 //        e.worldObj.setBlockWithNotify(cx,cy,cz,Block.brick.blockID);
         e.data[0] = e.worldObj.getBlockId(cx,cy,cz);
 
+//        System.out.println("Derp set " + e.data[0] + " " + Block.blocksList[e.data[0]].getBlockName() + " " + e.rot);
         e.posY += 1.5D;
-        e.renderStar = true;
-        e.starScaleY = 2F;
+        e.setRenderStar(true);
+        e.setStarScaleY(2.0F);
     }
 
     public void onTick(EntityDust e)
@@ -275,6 +287,7 @@ public class DETeleportation extends PoweredEvent
                             if (i instanceof EntityLiving)
                             {
                                 addFuel(e, -1600);
+                                ((EntityLiving) i).setPositionAndRotation(iwarp[0] + 0.5D, iwarp[1] + 0.6D, iwarp[2]  + 0.5D, e.rotationYaw, i.rotationPitch);
                                 ((EntityLiving) i).setPositionAndUpdate(iwarp[0] + 0.5D, iwarp[1] + 0.6D, iwarp[2]  + 0.5D);
                                 ((EntityLiving) i).attackEntityFrom(DamageSource.magic, 6);
                             }
@@ -288,6 +301,7 @@ public class DETeleportation extends PoweredEvent
                             i.posY = iwarp[1] + 0.6D;
                             i.posZ = iwarp[2] + 0.5D;
                             i.rotationYaw = iwarp[5];
+                            i.setPositionAndRotation(iwarp[0] + 0.5D, iwarp[1] + 0.6D, iwarp[2]+0.5D, iwarp[5], i.rotationPitch);
 //                            System.out.println("Sending to dimension " + i.worldObj.worldProvider.worldType);
 //                            System.out.println("new loc " + i.posX + " " + i.posY + " " + i.posZ);
 //                            System.out.println("DELTA " + dx + " " + dy + " " + dz);
@@ -354,5 +368,10 @@ public class DETeleportation extends PoweredEvent
     public boolean isPaused(EntityDust e)
     {
         return false;
+    }
+    
+    public int[] findBlock(EntityDust e){
+    	int[] block = new int[2];
+    	return block;
     }
 }

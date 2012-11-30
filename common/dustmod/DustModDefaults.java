@@ -946,7 +946,7 @@ public class DustModDefaults {
         DustManager.registerLocalDustShape(s, new DESpawnerReprog());
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="tele">
-        s = new DustShape(12, 10, "tele6", false, 1, 0, 3, 8, 30);
+        s = new DustShape(12, 10, "tele7", false, 1, 0, 3, 8, 30);
         values = new int[][][]
         {
             {

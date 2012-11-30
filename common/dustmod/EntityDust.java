@@ -119,7 +119,7 @@ public class EntityDust extends Entity
     @Override
     protected void entityInit()
     {
-    	System.out.println("Inint datawatcher");
+//    	System.out.println("Inint datawatcher");
         dataWatcher.addObject(DW_ri, new Integer(ri));
         dataWatcher.addObject(DW_gi, new Integer(gi));
         dataWatcher.addObject(DW_bi, new Integer(bi));
