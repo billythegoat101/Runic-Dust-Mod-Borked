@@ -71,6 +71,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
     public boolean renderDust(RenderBlocks renderblocks, IBlockAccess iblock, int i, int j, int k, Block block)
     {
     	int meta = iblock.getBlockMetadata(i,j,k);
+    	boolean drawHightlight = (meta == 1 || meta == 3);
 //    	meta = 3;
 //    	if(meta == 3){
 //	        renderblocks.func_83018_a(Block.woodSingleSlab);
@@ -96,6 +97,8 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         float bx, bz, bw, bl;
         int[] col;
         float r, g, b;
+        
+        float highlightHeight = 0.125f;
 
         for (int x = 0; x < size + 1; x++)
         {
@@ -134,8 +137,16 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
-                    if(meta == 3){
-                        block.setBlockBounds(bx, t, bz, bx + bw, 0.125F, bz + bl);
+                    if(drawHightlight){
+                        if(meta == 3) {
+                        	tes.setColorOpaque_F(1, 1, 1);
+                            block.setBlockBounds(bx, t, bz, bx + bw, highlightHeight, bz + bl);
+                        }
+                        else{
+                        	tes.setColorOpaque_F(1, 0.68f, 0.68f);
+                            block.setBlockBounds(bx, t, bz, bx + bw, t+h, bz + bl);
+                        }
+                        tes.setBrightness(15728880);
                     	this.renderGlowPoint(renderblocks,block,i,j,k,x,z,midArray[x][z],horizArray,vertArray);
                     }
                 }
@@ -177,8 +188,15 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
-                    if(meta == 3){
-                        block.setBlockBounds(bx, t, bz, bx + bw, 0.125F, bz + bl);
+                    if(drawHightlight){
+                        if(meta == 3) {
+                        	tes.setColorOpaque_F(1, 1, 1);
+                            block.setBlockBounds(bx, t, bz, bx + bw, highlightHeight, bz + bl);
+                        }else{
+                        	tes.setColorOpaque_F(1, 0.68f, 0.68f);
+                            block.setBlockBounds(bx, t, bz, bx + bw, t+h, bz + bl);
+                        }
+                        tes.setBrightness(15728880);
                     	this.renderGlowIgnoreSide(renderblocks,block,i,j,k,new boolean[]{true,true,false,false});
                     }
                 }
@@ -220,8 +238,15 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
-                    if(meta == 3){
-                        block.setBlockBounds(bx, t, bz, bx + bw, 0.125f, bz + bl);
+                    if(drawHightlight){
+                        if(meta == 3) {
+                        	tes.setColorOpaque_F(1, 1, 1);
+                            block.setBlockBounds(bx, t, bz, bx + bw, highlightHeight, bz + bl);
+                        }else{
+                        	tes.setColorOpaque_F(1, 0.68f, 0.68f);
+                            block.setBlockBounds(bx, t, bz, bx + bw, t+h, bz + bl);
+                        }
+                        tes.setBrightness(15728880);
                     	this.renderGlowIgnoreSide(renderblocks,block,i,j,k,new boolean[]{false,false,true,true});
                     }
                 }
@@ -793,25 +818,12 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
     }
     
     private void renderGlowIgnoreSide(RenderBlocks rb, Block b, int i, int j, int k, boolean[] ignore){
-//    	if(true)return;
     	GL11.glPushMatrix();
     	GL11.glScalef(1, 0.2f, 0);
     	GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-//        GL11.glEnable(GL11.GL_BLEND);
-//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-//        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        Tessellator var8 = Tessellator.instance;
-        var8.setColorOpaque_F(1, 1, 1);
-        var8.setBrightness(15728880);
-//        var8.disableColor();
         double dif = 0.001;
         int tex = 32;
         rb.func_83018_a(b);
-//        block.setBlockBounds(0, 0, 0, 1, 0.5f, 1);
-//        rb.func_83018_a(block);
-//        rb.overrideBlockTexture = 48;
-//        rb.renderStandardBlock(b, i, j, k);
-//        rb.overrideBlockTexture = tex;
         if(!ignore[0])
         	renderEastFace(rb, 128, b, i, j, k-dif, tex);
         if(!ignore[1])
@@ -820,13 +832,6 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         	renderNorthFace(rb, 128, b, i-dif, j, k, tex);
         if(!ignore[3])
         	renderSouthFace(rb, 128, b, i+dif, j, k, tex);
-//        block.setBlockBounds(0, 0, 0, 1, 1, 1);
-//        rb.overrideBlockTexture = -1;
-        
-//    	rb.renderEastFace(Block.dirt, i, j, k+1, 16*2);
-//    	rb.renderWestFace(Block.dirt, i, j, k-1, 16*2);
-//    	rb.renderNorthFace(Block.dirt, i+1, j, k, 16*2);
-//    	rb.renderSouthFace(Block.dirt, i-1, j, k, 16*2);
     	GL11.glPopAttrib();
     	
     	GL11.glPopMatrix();
@@ -834,25 +839,9 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
     
     private void renderGlowPoint(RenderBlocks rb, Block b, int i, int j, int k, int x, int y, int dust, int[][] horiz, int[][] vert){
-//    	GL11.glPushMatrix();
-//    	GL11.glScalef(1, 0.2f, 0);
-//    	
-//    	GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-//        GL11.glEnable(GL11.GL_BLEND);
-//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-//        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        Tessellator var8 = Tessellator.instance;
-        var8.setColorOpaque_F(1, 1, 1);
-        var8.setBrightness(15728880);
-//        var8.disableColor();
+
         double dif = 0.001;
         int tex = 32;
-//        rb.func_83018_a(b);
-////        b.setBlockBounds((float)b.getBlockBoundsMinX(), (float)b.getBlockBoundsMaxY(), (float)b.getBlockBoundsMinZ(), 
-////        				 (float)b.getBlockBoundsMaxX(), 0.5F, (float)b.getBlockBoundsMaxZ());
-//        b.setBlockBounds(0, 0, 0, 1, 0.5f, 1);
-//        rb.renderStandardBlock(b, i, j, k);
-//        rb.func_83018_a(block);
 
         rb.func_83018_a(b);
         if(dust != horiz[x][y])
@@ -863,15 +852,6 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
         	renderNorthFace(rb, 128, b, i-dif, j, k, tex);
         if(dust != vert[x+1][y])
         	renderSouthFace(rb, 128, b, i+dif, j, k, tex);
-//        block.setBlockBounds(0, 0, 0, 1, 1, 1);
-
-//    	rb.renderEastFace(Block.dirt, i, j, k+1, 16*2);
-//    	rb.renderWestFace(Block.dirt, i, j, k-1, 16*2);
-//    	rb.renderNorthFace(Block.dirt, i+1, j, k, 16*2);
-//    	rb.renderSouthFace(Block.dirt, i-1, j, k, 16*2);
-//    	GL11.glPopAttrib();
-//    	
-//    	GL11.glPopMatrix();
     }
 
     

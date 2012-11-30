@@ -74,7 +74,7 @@ public class DEPowerRelay extends PoweredEvent
         {
             disperseFuel(e);
         }
-        drawConnections(e);
+//        drawConnections(e);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class DEPowerRelay extends PoweredEvent
 
         for (EntityDust i: ents)
         {
-            if (i.requiresFuel && i.event != this)
+            if (i.requiresFuel && i.event != this && i.event != null)
             {
                 needPower++;
                 int want = ((PoweredEvent)i.event).powerWanted(i);
