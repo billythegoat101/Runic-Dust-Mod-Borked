@@ -122,6 +122,8 @@ public class DustManager
         	map = DustShape.rotateMatrix(map);
         }
         result.dusts = map;
+        result.runeWidth = map[0].length/4;
+        result.runeLength = map.length/4;
         result.rot = rot;
         result.summonerUN = (username == null) ? "" : username;
 
@@ -157,6 +159,7 @@ public class DustManager
         
         if (evt.canPlayerKnowRune(MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name)) && evt.permaAllowed)
         {
+            evt.initGraphics(result);
             evt.init(result);
             result.updateDataWatcher();
         }

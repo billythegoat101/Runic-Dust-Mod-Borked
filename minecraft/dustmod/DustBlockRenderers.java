@@ -1,5 +1,7 @@
 package dustmod;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.ModLoader;
@@ -10,6 +12,12 @@ import dustmod.DustItemManager;
 import dustmod.TileEntityDust;
 import dustmod.TileEntityRut;
 
+
+/**
+ *  4
+ * 3 2
+ *  5
+ */
 public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
 	public static int dustModelID;
@@ -62,11 +70,17 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
     public boolean renderDust(RenderBlocks renderblocks, IBlockAccess iblock, int i, int j, int k, Block block)
     {
+    	int meta = iblock.getBlockMetadata(i,j,k);
+//    	meta = 3;
+//    	if(meta == 3){
+//	        renderblocks.func_83018_a(Block.woodSingleSlab);
+//	        renderGlow(renderblocks,iblock,Block.woodSingleSlab,i,j,k);
+//    	}
 //        System.out.println("render");
         int size = TileEntityDust.size;
         float px = 1F / 16F;
         float cellWidth = 1F / size;
-        float h = 0.02F;
+        float h = 0.025F;
         TileEntityDust ted = (TileEntityDust)iblock.getBlockTileEntity(i, j, k);
         float t = 0.02F;
 //        int light = Block.lightValue[block.blockID];
@@ -76,13 +90,12 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 //        renderblocks.overrideBlockTexture = 0;
 //        tes.startDrawingQuads();
         int[][][] rendArray = ted.getRendArrays();
-        int[][] midArray = rendArray[0];
-        int[][] horizArray = rendArray[1];
-        int[][] vertArray = rendArray[2];
+        int[][] midArray = rendArray[0]; //Actual points 
+        int[][] horizArray = rendArray[1]; //horizontal connectors
+        int[][] vertArray = rendArray[2]; //vertical connectors
         float bx, bz, bw, bl;
         int[] col;
         float r, g, b;
-        int meta = iblock.getBlockMetadata(i, j, k);
 
         for (int x = 0; x < size + 1; x++)
         {
@@ -104,7 +117,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 //                        tes.addVertexWithUV(bx-bw, h, bz, 0, 1);
 //                        tes.addVertexWithUV(bx-bw, h, bz-bl, 0, 0);
 //                        tes.addVertexWithUV(bx, h, bz-bl, 1, 0);
-                    if (meta > 0)
+                    if (meta > 0 && meta != 3)
                     {
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlock(block, i, j, k);
@@ -120,6 +133,10 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         b = b / 255;
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
+                    }
+                    if(meta == 3){
+                        block.setBlockBounds(bx, t, bz, bx + bw, 0.125F, bz + bl);
+                    	this.renderGlowPoint(renderblocks,block,i,j,k,x,z,midArray[x][z],horizArray,vertArray);
                     }
                 }
 
@@ -143,7 +160,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
                     block.setBlockBounds(bx, t, bz, bx + bw, t + h, bz + bl);
 
-                    if (meta > 0)
+                    if (meta > 0 && meta != 3)
                     {
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlock(block, i, j, k);
@@ -159,6 +176,10 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         b = b / 255;
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
+                    }
+                    if(meta == 3){
+                        block.setBlockBounds(bx, t, bz, bx + bw, 0.125F, bz + bl);
+                    	this.renderGlowIgnoreSide(renderblocks,block,i,j,k,new boolean[]{true,true,false,false});
                     }
                 }
 
@@ -182,7 +203,7 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
                     block.setBlockBounds(bx, t, bz, bx + bw, t + h, bz + bl);
 
-                    if (meta > 0)
+                    if (meta > 0 && meta != 3)
                     {
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlock(block, i, j, k);
@@ -199,10 +220,19 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
                         renderblocks.func_83018_a(block);
                         renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, r, g, b);
                     }
+                    if(meta == 3){
+                        block.setBlockBounds(bx, t, bz, bx + bw, 0.125f, bz + bl);
+                    	this.renderGlowIgnoreSide(renderblocks,block,i,j,k,new boolean[]{false,false,true,true});
+                    }
                 }
             }
         }
 
+
+        block.setBlockBounds(0, 0, 0, 0, 0, 0);
+        renderblocks.func_83018_a(block);
+        renderblocks.renderStandardBlockWithColorMultiplier(block, i, j, k, 1, 1, 1);
+        
 //        tes.draw();
 //        tes.startDrawingQuads();
 //        Block.lightValue[block.blockID] = light;
@@ -739,7 +769,561 @@ public class DustBlockRenderers implements ISimpleBlockRenderingHandler{
 
         return true;
     }
+    
+    
+    private void renderGlow(RenderBlocks rb, Block block, int i, int j, int k){
 
+    	GL11.glPushMatrix();
+    	GL11.glScalef(1, 0.2f, 0);
+    	
+    	GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        Tessellator var8 = Tessellator.instance;
+        var8.setColorOpaque_F(1, 1, 1);
+        var8.setBrightness(15728880);
+//        var8.disableColor();
+        double dif = 0.001;
+        int tex = 32;
+    	renderEastFace(rb, 32, block, i, j, k-dif, tex);
+    	renderWestFace(rb, 32, block, i, j, k+dif, tex);
+    	renderNorthFace(rb, 32, block, i-dif, j, k, tex);
+    	renderSouthFace(rb, 32, block, i+dif, j, k, tex);
+    	GL11.glPopAttrib();
+    	
+    	GL11.glPopMatrix();
+    }
+    
+    private void renderGlowIgnoreSide(RenderBlocks rb, Block b, int i, int j, int k, boolean[] ignore){
+//    	if(true)return;
+    	GL11.glPushMatrix();
+    	GL11.glScalef(1, 0.2f, 0);
+    	GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+//        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        Tessellator var8 = Tessellator.instance;
+        var8.setColorOpaque_F(1, 1, 1);
+        var8.setBrightness(15728880);
+//        var8.disableColor();
+        double dif = 0.001;
+        int tex = 32;
+        rb.func_83018_a(b);
+//        block.setBlockBounds(0, 0, 0, 1, 0.5f, 1);
+//        rb.func_83018_a(block);
+//        rb.overrideBlockTexture = 48;
+//        rb.renderStandardBlock(b, i, j, k);
+//        rb.overrideBlockTexture = tex;
+        if(!ignore[0])
+        	renderEastFace(rb, 128, b, i, j, k-dif, tex);
+        if(!ignore[1])
+        	renderWestFace(rb, 128, b, i, j, k+dif, tex);
+        if(!ignore[2])
+        	renderNorthFace(rb, 128, b, i-dif, j, k, tex);
+        if(!ignore[3])
+        	renderSouthFace(rb, 128, b, i+dif, j, k, tex);
+//        block.setBlockBounds(0, 0, 0, 1, 1, 1);
+//        rb.overrideBlockTexture = -1;
+        
+//    	rb.renderEastFace(Block.dirt, i, j, k+1, 16*2);
+//    	rb.renderWestFace(Block.dirt, i, j, k-1, 16*2);
+//    	rb.renderNorthFace(Block.dirt, i+1, j, k, 16*2);
+//    	rb.renderSouthFace(Block.dirt, i-1, j, k, 16*2);
+    	GL11.glPopAttrib();
+    	
+    	GL11.glPopMatrix();
+    }
+
+    
+    private void renderGlowPoint(RenderBlocks rb, Block b, int i, int j, int k, int x, int y, int dust, int[][] horiz, int[][] vert){
+//    	GL11.glPushMatrix();
+//    	GL11.glScalef(1, 0.2f, 0);
+//    	
+//    	GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+//        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        Tessellator var8 = Tessellator.instance;
+        var8.setColorOpaque_F(1, 1, 1);
+        var8.setBrightness(15728880);
+//        var8.disableColor();
+        double dif = 0.001;
+        int tex = 32;
+//        rb.func_83018_a(b);
+////        b.setBlockBounds((float)b.getBlockBoundsMinX(), (float)b.getBlockBoundsMaxY(), (float)b.getBlockBoundsMinZ(), 
+////        				 (float)b.getBlockBoundsMaxX(), 0.5F, (float)b.getBlockBoundsMaxZ());
+//        b.setBlockBounds(0, 0, 0, 1, 0.5f, 1);
+//        rb.renderStandardBlock(b, i, j, k);
+//        rb.func_83018_a(block);
+
+        rb.func_83018_a(b);
+        if(dust != horiz[x][y])
+        	renderEastFace(rb, 128, b, i, j, k-dif, tex);
+        if(dust != horiz[x][y+1])
+        	renderWestFace(rb, 128, b, i, j, k+dif, tex);
+        if(dust != vert[x][y])
+        	renderNorthFace(rb, 128, b, i-dif, j, k, tex);
+        if(dust != vert[x+1][y])
+        	renderSouthFace(rb, 128, b, i+dif, j, k, tex);
+//        block.setBlockBounds(0, 0, 0, 1, 1, 1);
+
+//    	rb.renderEastFace(Block.dirt, i, j, k+1, 16*2);
+//    	rb.renderWestFace(Block.dirt, i, j, k-1, 16*2);
+//    	rb.renderNorthFace(Block.dirt, i+1, j, k, 16*2);
+//    	rb.renderSouthFace(Block.dirt, i-1, j, k, 16*2);
+//    	GL11.glPopAttrib();
+//    	
+//    	GL11.glPopMatrix();
+    }
+
+    
+    /*
+    * Renders the given texture to the east (z-negative) face of the block.  Args: block, x, y, z, texture
+    */
+   public void renderEastFace(RenderBlocks rb, int height, Block par1Block, double par2, double par4, double par6, int par8)
+   {
+       Tessellator var9 = Tessellator.instance;
+
+       if (rb.overrideBlockTexture >= 0)
+       {
+           par8 = rb.overrideBlockTexture;
+       }
+
+       int var10 = (par8 & 15) << 4;
+       int var11 = par8 & 240;
+       double var12 = ((double)var10 + rb.field_83021_g * (double)16) / 256.0D;
+       double var14 = ((double)var10 + rb.field_83026_h * (double)16 - 0.01D) / 256.0D;
+       double var16 = ((double)(var11 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+       double var18 = ((double)(var11 + 16) - rb.field_83027_i * (double)16 - 0.01D) / 256.0D;
+       double var20;
+
+       if (rb.flipTexture)
+       {
+           var20 = var12;
+           var12 = var14;
+           var14 = var20;
+       }
+
+       if (rb.field_83021_g < 0.0D || rb.field_83026_h > 1.0D)
+       {
+           var12 = (double)(((float)var10 + 0.0F) / 256.0F);
+           var14 = (double)(((float)var10 + 15.99F) / 256.0F);
+       }
+
+       if (rb.field_83027_i < 0.0D || rb.field_83024_j > 1.0D)
+       {
+           var16 = (double)(((float)var11 + 0.0F) / 256.0F);
+           var18 = (double)(((float)var11 + 15.99F) / 256.0F);
+       }
+
+       var20 = var14;
+       double var22 = var12;
+       double var24 = var16;
+       double var26 = var18;
+
+       if (rb.uvRotateEast == 2)
+       {
+           var12 = ((double)var10 + rb.field_83027_i * (double)height) / 256.0D;
+           var16 = ((double)(var11 + 16) - rb.field_83021_g * (double)height) / 256.0D;
+           var14 = ((double)var10 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)(var11 + 16) - rb.field_83026_h * (double)height) / 256.0D;
+           var24 = var16;
+           var26 = var18;
+           var20 = var12;
+           var22 = var14;
+           var16 = var18;
+           var18 = var24;
+       }
+       else if (rb.uvRotateEast == 1)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+           var16 = ((double)var11 + rb.field_83026_h * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83027_i * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83021_g * (double)height) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var12 = var14;
+           var14 = var22;
+           var24 = var18;
+           var26 = var16;
+       }
+       else if (rb.uvRotateEast == 3)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83021_g * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83026_h * (double)height - 0.01D) / 256.0D;
+           var16 = ((double)var11 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83027_i * (double)height - 0.01D) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var24 = var16;
+           var26 = var18;
+       }
+
+       double var28 = par2 + rb.field_83021_g;
+       double var30 = par2 + rb.field_83026_h;
+       double var32 = par4 + rb.field_83027_i;
+       double var34 = par4 + rb.field_83024_j;
+       double var36 = par6 + rb.field_83025_k;
+
+       if (rb.enableAO)
+       {
+           var9.setColorOpaque_F(rb.colorRedTopLeft, rb.colorGreenTopLeft, rb.colorBlueTopLeft);
+           var9.setBrightness(rb.brightnessTopLeft);
+           var9.addVertexWithUV(var28, var34, var36, var20, var24);
+           var9.setColorOpaque_F(rb.colorRedBottomLeft, rb.colorGreenBottomLeft, rb.colorBlueBottomLeft);
+           var9.setBrightness(rb.brightnessBottomLeft);
+           var9.addVertexWithUV(var30, var34, var36, var12, var16);
+           var9.setColorOpaque_F(rb.colorRedBottomRight, rb.colorGreenBottomRight, rb.colorBlueBottomRight);
+           var9.setBrightness(rb.brightnessBottomRight);
+           var9.addVertexWithUV(var30, var32, var36, var22, var26);
+           var9.setColorOpaque_F(rb.colorRedTopRight, rb.colorGreenTopRight, rb.colorBlueTopRight);
+           var9.setBrightness(rb.brightnessTopRight);
+           var9.addVertexWithUV(var28, var32, var36, var14, var18);
+       }
+       else
+       {
+           var9.addVertexWithUV(var28, var34, var36, var20, var24);
+           var9.addVertexWithUV(var30, var34, var36, var12, var16);
+           var9.addVertexWithUV(var30, var32, var36, var22, var26);
+           var9.addVertexWithUV(var28, var32, var36, var14, var18);
+       }
+   }
+
+   /**
+    * Renders the given texture to the west (z-positive) face of the block.  Args: block, x, y, z, texture
+    */
+   public void renderWestFace(RenderBlocks rb, int height, Block par1Block, double par2, double par4, double par6, int par8)
+   {
+       Tessellator var9 = Tessellator.instance;
+
+       if (rb.overrideBlockTexture >= 0)
+       {
+           par8 = rb.overrideBlockTexture;
+       }
+
+       int var10 = (par8 & 15) << 4;
+       int var11 = par8 & 240;
+       double var12 = ((double)var10 + rb.field_83021_g * (double)16) / 256.0D;
+       double var14 = ((double)var10 + rb.field_83026_h * (double)16 - 0.01D) / 256.0D;
+       double var16 = ((double)(var11 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+       double var18 = ((double)(var11 + 16) - rb.field_83027_i * (double)16 - 0.01D) / 256.0D;
+       double var20;
+
+       if (rb.flipTexture)
+       {
+           var20 = var12;
+           var12 = var14;
+           var14 = var20;
+       }
+
+       if (rb.field_83021_g < 0.0D || rb.field_83026_h > 1.0D)
+       {
+           var12 = (double)(((float)var10 + 0.0F) / 256.0F);
+           var14 = (double)(((float)var10 + 15.99F) / 256.0F);
+       }
+
+       if (rb.field_83027_i < 0.0D || rb.field_83024_j > 1.0D)
+       {
+           var16 = (double)(((float)var11 + 0.0F) / 256.0F);
+           var18 = (double)(((float)var11 + 15.99F) / 256.0F);
+       }
+
+       var20 = var14;
+       double var22 = var12;
+       double var24 = var16;
+       double var26 = var18;
+
+       if (rb.uvRotateWest == 1)
+       {
+           var12 = ((double)var10 + rb.field_83027_i * (double)height) / 256.0D;
+           var18 = ((double)(var11 + 16) - rb.field_83021_g * (double)height) / 256.0D;
+           var14 = ((double)var10 + rb.field_83024_j * (double)height) / 256.0D;
+           var16 = ((double)(var11 + 16) - rb.field_83026_h * (double)height) / 256.0D;
+           var24 = var16;
+           var26 = var18;
+           var20 = var12;
+           var22 = var14;
+           var16 = var18;
+           var18 = var24;
+       }
+       else if (rb.uvRotateWest == 2)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+           var16 = ((double)var11 + rb.field_83021_g * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83027_i * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83026_h * (double)height) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var12 = var14;
+           var14 = var22;
+           var24 = var18;
+           var26 = var16;
+       }
+       else if (rb.uvRotateWest == 3)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83021_g * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83026_h * (double)height - 0.01D) / 256.0D;
+           var16 = ((double)var11 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83027_i * (double)height - 0.01D) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var24 = var16;
+           var26 = var18;
+       }
+
+       double var28 = par2 + rb.field_83021_g;
+       double var30 = par2 + rb.field_83026_h;
+       double var32 = par4 + rb.field_83027_i;
+       double var34 = par4 + rb.field_83024_j;
+       double var36 = par6 + rb.field_83022_l;
+
+       if (rb.enableAO)
+       {
+           var9.setColorOpaque_F(rb.colorRedTopLeft, rb.colorGreenTopLeft, rb.colorBlueTopLeft);
+           var9.setBrightness(rb.brightnessTopLeft);
+           var9.addVertexWithUV(var28, var34, var36, var12, var16);
+           var9.setColorOpaque_F(rb.colorRedBottomLeft, rb.colorGreenBottomLeft, rb.colorBlueBottomLeft);
+           var9.setBrightness(rb.brightnessBottomLeft);
+           var9.addVertexWithUV(var28, var32, var36, var22, var26);
+           var9.setColorOpaque_F(rb.colorRedBottomRight, rb.colorGreenBottomRight, rb.colorBlueBottomRight);
+           var9.setBrightness(rb.brightnessBottomRight);
+           var9.addVertexWithUV(var30, var32, var36, var14, var18);
+           var9.setColorOpaque_F(rb.colorRedTopRight, rb.colorGreenTopRight, rb.colorBlueTopRight);
+           var9.setBrightness(rb.brightnessTopRight);
+           var9.addVertexWithUV(var30, var34, var36, var20, var24);
+       }
+       else
+       {
+           var9.addVertexWithUV(var28, var34, var36, var12, var16);
+           var9.addVertexWithUV(var28, var32, var36, var22, var26);
+           var9.addVertexWithUV(var30, var32, var36, var14, var18);
+           var9.addVertexWithUV(var30, var34, var36, var20, var24);
+       }
+   }
+
+   /**
+    * Renders the given texture to the north (x-negative) face of the block.  Args: block, x, y, z, texture
+    */
+   public void renderNorthFace(RenderBlocks rb, int height, Block par1Block, double par2, double par4, double par6, int par8)
+   {
+       Tessellator var9 = Tessellator.instance;
+
+       if (rb.overrideBlockTexture >= 0)
+       {
+           par8 = rb.overrideBlockTexture;
+       }
+
+       int var10 = (par8 & 15) << 4;
+       int var11 = par8 & 240;
+       double var12 = ((double)var10 + rb.field_83025_k * (double)16) / 256.0D;
+       double var14 = ((double)var10 + rb.field_83022_l * (double)16 - 0.01D) / 256.0D;
+       double var16 = ((double)(var11 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+       double var18 = ((double)(var11 + 16) - rb.field_83027_i * (double)16 - 0.01D) / 256.0D;
+       double var20;
+
+       if (rb.flipTexture)
+       {
+           var20 = var12;
+           var12 = var14;
+           var14 = var20;
+       }
+
+       if (rb.field_83025_k < 0.0D || rb.field_83022_l > 1.0D)
+       {
+           var12 = (double)(((float)var10 + 0.0F) / 256.0F);
+           var14 = (double)(((float)var10 + 15.99F) / 256.0F);
+       }
+
+       if (rb.field_83027_i < 0.0D || rb.field_83024_j > 1.0D)
+       {
+           var16 = (double)(((float)var11 + 0.0F) / 256.0F);
+           var18 = (double)(((float)var11 + 15.99F) / 256.0F);
+       }
+
+       var20 = var14;
+       double var22 = var12;
+       double var24 = var16;
+       double var26 = var18;
+
+       if (rb.uvRotateNorth == 1)
+       {
+           var12 = ((double)var10 + rb.field_83027_i * (double)height) / 256.0D;
+           var16 = ((double)(var11 + 16) - rb.field_83022_l * (double)height) / 256.0D;
+           var14 = ((double)var10 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)(var11 + 16) - rb.field_83025_k * (double)height) / 256.0D;
+           var24 = var16;
+           var26 = var18;
+           var20 = var12;
+           var22 = var14;
+           var16 = var18;
+           var18 = var24;
+       }
+       else if (rb.uvRotateNorth == 2)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+           var16 = ((double)var11 + rb.field_83025_k * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83027_i * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83022_l * (double)height) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var12 = var14;
+           var14 = var22;
+           var24 = var18;
+           var26 = var16;
+       }
+       else if (rb.uvRotateNorth == 3)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83025_k * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83022_l * (double)height - 0.01D) / 256.0D;
+           var16 = ((double)var11 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83027_i * (double)height - 0.01D) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var24 = var16;
+           var26 = var18;
+       }
+
+       double var28 = par2 + rb.field_83021_g;
+       double var30 = par4 + rb.field_83027_i;
+       double var32 = par4 + rb.field_83024_j;
+       double var34 = par6 + rb.field_83025_k;
+       double var36 = par6 + rb.field_83022_l;
+
+       if (rb.enableAO)
+       {
+           var9.setColorOpaque_F(rb.colorRedTopLeft, rb.colorGreenTopLeft, rb.colorBlueTopLeft);
+           var9.setBrightness(rb.brightnessTopLeft);
+           var9.addVertexWithUV(var28, var32, var36, var20, var24);
+           var9.setColorOpaque_F(rb.colorRedBottomLeft, rb.colorGreenBottomLeft, rb.colorBlueBottomLeft);
+           var9.setBrightness(rb.brightnessBottomLeft);
+           var9.addVertexWithUV(var28, var32, var34, var12, var16);
+           var9.setColorOpaque_F(rb.colorRedBottomRight, rb.colorGreenBottomRight, rb.colorBlueBottomRight);
+           var9.setBrightness(rb.brightnessBottomRight);
+           var9.addVertexWithUV(var28, var30, var34, var22, var26);
+           var9.setColorOpaque_F(rb.colorRedTopRight, rb.colorGreenTopRight, rb.colorBlueTopRight);
+           var9.setBrightness(rb.brightnessTopRight);
+           var9.addVertexWithUV(var28, var30, var36, var14, var18);
+       }
+       else
+       {
+           var9.addVertexWithUV(var28, var32, var36, var20, var24);
+           var9.addVertexWithUV(var28, var32, var34, var12, var16);
+           var9.addVertexWithUV(var28, var30, var34, var22, var26);
+           var9.addVertexWithUV(var28, var30, var36, var14, var18);
+       }
+   }
+
+   /**
+    * Renders the given texture to the south (x-positive) face of the block.  Args: block, x, y, z, texture
+    */
+   public void renderSouthFace(RenderBlocks rb, int height, Block par1Block, double par2, double par4, double par6, int par8)
+   {
+       Tessellator var9 = Tessellator.instance;
+
+       if (rb.overrideBlockTexture >= 0)
+       {
+           par8 = rb.overrideBlockTexture;
+       }
+
+       int var10 = (par8 & 15) << 4;
+       int var11 = par8 & 240;
+       double var12 = ((double)var10 + rb.field_83025_k * (double)16) / 256.0D;
+       double var14 = ((double)var10 + rb.field_83022_l * (double)16 - 0.01D) / 256.0D;
+       double var16 = ((double)(var11 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+       double var18 = ((double)(var11 + 16) - rb.field_83027_i * (double)16 - 0.01D) / 256.0D;
+       double var20;
+
+       if (rb.flipTexture)
+       {
+           var20 = var12;
+           var12 = var14;
+           var14 = var20;
+       }
+
+       if (rb.field_83025_k < 0.0D || rb.field_83022_l > 1.0D)
+       {
+           var12 = (double)(((float)var10 + 0.0F) / 256.0F);
+           var14 = (double)(((float)var10 + 15.99F) / 256.0F);
+       }
+
+       if (rb.field_83027_i < 0.0D || rb.field_83024_j > 1.0D)
+       {
+           var16 = (double)(((float)var11 + 0.0F) / 256.0F);
+           var18 = (double)(((float)var11 + 15.99F) / 256.0F);
+       }
+
+       var20 = var14;
+       double var22 = var12;
+       double var24 = var16;
+       double var26 = var18;
+
+       if (rb.uvRotateSouth == 2)
+       {
+           var12 = ((double)var10 + rb.field_83027_i * (double)height) / 256.0D;
+           var16 = ((double)(var11 + 16) - rb.field_83025_k * (double)height) / 256.0D;
+           var14 = ((double)var10 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)(var11 + 16) - rb.field_83022_l * (double)height) / 256.0D;
+           var24 = var16;
+           var26 = var18;
+           var20 = var12;
+           var22 = var14;
+           var16 = var18;
+           var18 = var24;
+       }
+       else if (rb.uvRotateSouth == 1)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83024_j * (double)height) / 256.0D;
+           var16 = ((double)var11 + rb.field_83022_l * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83027_i * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83025_k * (double)height) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var12 = var14;
+           var14 = var22;
+           var24 = var18;
+           var26 = var16;
+       }
+       else if (rb.uvRotateSouth == 3)
+       {
+           var12 = ((double)(var10 + 16) - rb.field_83025_k * (double)height) / 256.0D;
+           var14 = ((double)(var10 + 16) - rb.field_83022_l * (double)height - 0.01D) / 256.0D;
+           var16 = ((double)var11 + rb.field_83024_j * (double)height) / 256.0D;
+           var18 = ((double)var11 + rb.field_83027_i * (double)height - 0.01D) / 256.0D;
+           var20 = var14;
+           var22 = var12;
+           var24 = var16;
+           var26 = var18;
+       }
+
+       double var28 = par2 + rb.field_83026_h;
+       double var30 = par4 + rb.field_83027_i;
+       double var32 = par4 + rb.field_83024_j;
+       double var34 = par6 + rb.field_83025_k;
+       double var36 = par6 + rb.field_83022_l;
+
+       if (rb.enableAO)
+       {
+           var9.setColorOpaque_F(rb.colorRedTopLeft, rb.colorGreenTopLeft, rb.colorBlueTopLeft);
+           var9.setBrightness(rb.brightnessTopLeft);
+           var9.addVertexWithUV(var28, var30, var36, var22, var26);
+           var9.setColorOpaque_F(rb.colorRedBottomLeft, rb.colorGreenBottomLeft, rb.colorBlueBottomLeft);
+           var9.setBrightness(rb.brightnessBottomLeft);
+           var9.addVertexWithUV(var28, var30, var34, var14, var18);
+           var9.setColorOpaque_F(rb.colorRedBottomRight, rb.colorGreenBottomRight, rb.colorBlueBottomRight);
+           var9.setBrightness(rb.brightnessBottomRight);
+           var9.addVertexWithUV(var28, var32, var34, var20, var24);
+           var9.setColorOpaque_F(rb.colorRedTopRight, rb.colorGreenTopRight, rb.colorBlueTopRight);
+           var9.setBrightness(rb.brightnessTopRight);
+           var9.addVertexWithUV(var28, var32, var36, var12, var16);
+       }
+       else
+       {
+           var9.addVertexWithUV(var28, var30, var36, var22, var26);
+           var9.addVertexWithUV(var28, var30, var34, var14, var18);
+           var9.addVertexWithUV(var28, var32, var34, var20, var24);
+           var9.addVertexWithUV(var28, var32, var36, var12, var16);
+       }
+   }
+
+    
 
 
 }

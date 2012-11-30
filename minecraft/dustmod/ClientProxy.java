@@ -7,6 +7,7 @@ import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -55,6 +56,9 @@ public class ClientProxy extends CommonProxy {
 	public void registerRenderInformation() {
         MinecraftForgeClient.preloadTexture(DustMod.path + "/dustrItems.png");
         MinecraftForgeClient.preloadTexture(DustMod.path + "/dustBlocks.png");
+        
+//        TextureFXManager.instance().addAnimation(new TextureDustFX(0));
+        TextureFXManager.instance().addAnimation(new TextureGlowFX(2*16));
         
         DustBlockRenderers.dustModelID = RenderingRegistry.getNextAvailableRenderId();
         DustBlockRenderers.rutModelID = RenderingRegistry.getNextAvailableRenderId();

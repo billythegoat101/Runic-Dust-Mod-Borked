@@ -29,6 +29,8 @@ import net.minecraft.src.World;
 public class EntityDust extends Entity
 {
 
+	public static final int birthLength = 20*5;
+	
     public static int DW_ri = 10;
     public static int DW_gi = 11;
     public static int DW_bi = 12;
@@ -47,23 +49,27 @@ public class EntityDust extends Entity
     public static int DW_renderStar = 25;
     public static int DW_eventName = 26;
     public static int DW_beamType = 27;
+    public static int DW_justBorn = 28;
+    
+    public boolean justBorn = true;
+    public boolean doFizzle = false;
     
     public boolean reanimate = false;
-    public boolean renderBeam = false;
-    public int beamType = 0;
-    public boolean renderStar = false;
-    public boolean ignoreRune = false;
-    public boolean renderFlamesDust = false;
-    public boolean renderFlamesRut = false;
-    public boolean fade = false;
-    public boolean follow = false;
+    protected  boolean renderBeam = false;
+    protected int beamType = 0;
+    protected boolean renderStar = false;
+    protected boolean ignoreRune = false;
+    protected boolean renderFlamesDust = false;
+    protected boolean renderFlamesRut = false;
+    protected boolean fade = false;
+    protected boolean follow = false;
     public Entity toFollow = null;
     public int ri, gi, bi; //inside star
     public int ro, go, bo; //outside star
     public int rb, gb, bb; //beam
     public int rf, gf, bf; //fire
-    public float starScale = 1F;
-    public float starScaleY = 1F;
+    protected float starScale = 1F;
+    protected float starScaleY = 1F;
     public int sacrificeWaiting = -1;
     public int fuelAmount = 0;
     public boolean requiresFuel = false;
@@ -85,6 +91,7 @@ public class EntityDust extends Entity
     public int[] data;
     public String summonerUN;
     public static final double yOffset = 0;//-1.5D;
+    protected int runeWidth,runeLength;
 //    public int lifetime = -1;
 
     public EntityDust(World world)
@@ -100,7 +107,6 @@ public class EntityDust extends Entity
         this.noClip = true;
         renderDistanceWeight = 50.0D;
         data = new int[16];
-
     }
     
 
@@ -131,6 +137,7 @@ public class EntityDust extends Entity
         dataWatcher.addObject(DW_renderBeam, renderBeam ? (byte) 1 : (byte) 0);
         dataWatcher.addObject(DW_beamType,new Integer(beamType));
         dataWatcher.addObject(DW_renderStar, renderStar ? (byte) 1 : (byte) 0);
+        dataWatcher.addObject(DW_justBorn, justBorn ? (byte) 1 : (byte) 0);
 
         if (eventName == null)
         {
@@ -159,7 +166,8 @@ public class EntityDust extends Entity
         dataWatcher.updateObject(DW_renderBeam, renderBeam ? (byte) 1 : (byte) 0);
         dataWatcher.updateObject(DW_beamType,new Integer(beamType));
         dataWatcher.updateObject(DW_renderStar, renderStar ? (byte) 1 : (byte) 0);
-
+        dataWatcher.updateObject(DW_justBorn, justBorn ? (byte) 1 : (byte) 0);
+        
         if (eventName == null)
         {
             eventName = "";
@@ -187,6 +195,7 @@ public class EntityDust extends Entity
         renderBeam = (dataWatcher.getWatchableObjectByte(DW_renderBeam) == (byte) 1);
         beamType = dataWatcher.getWatchableObjectInt(DW_beamType);
         renderStar = (dataWatcher.getWatchableObjectByte(DW_renderStar) == (byte) 1);
+        justBorn = (dataWatcher.getWatchableObjectByte(DW_justBorn) == (byte) 1);
         eventName = dataWatcher.getWatchableObjectString(DW_eventName);
 
         if (eventName == null)
@@ -199,7 +208,7 @@ public class EntityDust extends Entity
     public void setStarScale(float scale){
     	this.starScale = scale;
     }
-    public void setStartScaleY(float scale){
+    public void setStarScaleY(float scale){
     	this.starScaleY = scale;
     }
     public void setColorStar(int r, int g, int b)
@@ -243,6 +252,9 @@ public class EntityDust extends Entity
     public void setRenderBeam(boolean b){
     	this.renderBeam = b;
     }
+    public void setBeamType(int i){
+    	this.beamType = i;
+    }
     public void setRenderStar(boolean b){
     	this.renderStar = b;
     }
@@ -253,6 +265,14 @@ public class EntityDust extends Entity
     	this.renderFlamesRut = b;
     }
     
+    public void setIgnoreRune(boolean b){
+    	this.ignoreRune = b;
+    }
+
+    public void setFollow(boolean b){
+    	this.follow = b;
+    }
+    
     public void setEvent(DustEvent evt, String name)
     {
         event = evt;
@@ -260,6 +280,23 @@ public class EntityDust extends Entity
         this.updateDataWatcher();
     }
 
+    public float getStarScale(){return starScale;}
+    public float getStarScaleY(){return starScaleY;}
+    
+    public int[] getColorStarInner(){return new int[]{ri,gi,bi};}
+    public int[] getColorStarOuter(){return new int[]{ro,go,bo};}
+    public int[] getColorBeam(){return new int[]{rb,gb,bb};}
+    public int[] getColorFire(){return new int[]{rf,gf,bf};}
+    
+    public boolean getRenderBeam(){return renderBeam;}
+    public int getBeamType(){return beamType;}
+    public boolean getRenderStar(){return renderStar;}
+    public boolean getRenderFireOnRune(){return renderFlamesDust;}
+    public boolean getRenderFireOnRuts(){return renderFlamesRut;}
+    public boolean getIgnoreRune(){return ignoreRune;}
+    public boolean getFollow(){return follow;}
+    public DustEvent getEvent(){return event;}
+    
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
@@ -512,6 +549,50 @@ public class EntityDust extends Entity
 //                }
 //            }
 
+
+            if (!ignoreRune)
+            {
+                for (Integer[] i : dustPoints)
+                {
+                    int id = worldObj.getBlockId(i[0], i[1], i[2]);
+
+                    if (!DustMod.isDust(id))
+                    {
+//                        System.out.println("Rune Broken!");
+                        kill();
+                        return;
+                    }
+                }
+            }
+            
+            if(ticksExisted < birthLength && justBorn){
+                super.onEntityUpdate();
+                if(doFizzle){
+                	ticksExisted += 2; //speed up!
+                	this.setRenderBeam(false);
+                	this.setRenderStar(false);
+                	this.updateDataWatcher();
+                }
+            	return;
+            }else if(justBorn) {
+            	justBorn = false;
+            	this.updateDataWatcher();
+            	ticksExisted = 0;
+            	for(Integer[] loc:dustPoints){
+            		if(worldObj.getBlockId(loc[0],loc[1], loc[2]) == DustMod.dust.blockID)
+            			worldObj.setBlockMetadataWithNotify(loc[0], loc[1], loc[2], 1);
+            	}
+            }
+            if(doFizzle){
+                int x = (int) Math.floor(posX);
+                int z = (int) Math.floor(posZ);
+
+                DustMod.spawnParticles(worldObj,"largesmoke", (double) x+0.5, (double) posY, (double) z+0.5, 0.0D, 0.0D, 0.0D, (int)(Math.random() * 3D + 4D) * runeWidth * runeLength, runeWidth,0.5,runeLength);
+
+                kill();
+                return;
+            }
+
             givenFuelThisTick = false;
 
             if (!this.hasSetTileEntities)
@@ -528,25 +609,6 @@ public class EntityDust extends Entity
 
                 this.hasSetTileEntities = true;
             }
-
-            //        if(this.isEntityInsideOpaqueBlock()){
-            //            System.out.println("HELP IM DROWNING " + posY);
-            ////            this.posY+= 0.2;
-            //        }
-//            if (lifetime != -1)
-//            {
-//                super.onEntityUpdate();
-//
-//                if (lifetime == 0)
-//                {
-//                    kill();
-//                }
-//
-//                lifetime--;
-//                return;
-//            }
-
-            this.ignoreFrustumCheck = true;
 
             if (dustPoints == null)
             {
@@ -572,21 +634,6 @@ public class EntityDust extends Entity
 
                 super.kill();
                 return;
-            }
-
-            if (!ignoreRune)
-            {
-                for (Integer[] i : dustPoints)
-                {
-                    int id = worldObj.getBlockId(i[0], i[1], i[2]);
-
-                    if (!DustMod.isDust(id))
-                    {
-//                        System.out.println("Rune Broken!");
-                        kill();
-                        return;
-                    }
-                }
             }
 
             if (event == null || eventName == null || eventName.isEmpty())
@@ -776,12 +823,7 @@ public class EntityDust extends Entity
      */
     public void fizzle()
     {
-        int x = (int) Math.floor(posX);
-        int z = (int) Math.floor(posZ);
-
-        DustMod.spawnParticles(worldObj,"largesmoke", (double) x, (double) posY - 1D - EntityDust.yOffset, (double) z, 0.0D, 0.0D, 0.0D, (int)(Math.random() * 5D + 3D), 2,0.5,2);
-
-        kill();
+    	doFizzle = true;
     }
 
     public int getX()

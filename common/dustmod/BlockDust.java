@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
@@ -67,6 +70,13 @@ public class BlockDust extends BlockContainer {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
+    /**
+     * Returns which pass should this block be rendered on. 0 for solids and 1 for alpha
+     */
+    public int getRenderBlockPass()
+    {
+        return 1;
+    }
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k,
@@ -151,7 +161,7 @@ public class BlockDust extends BlockContainer {
 
 			return ted.getRandomDustColor();
 
-		case 1:
+		case 1://case 3:
 			return 0xDD0000;
 
 		case 2:
@@ -652,7 +662,7 @@ public class BlockDust extends BlockContainer {
 
 		for (Integer[] iter : n) {
 			if (world.getBlockId(iter[0], j, iter[2]) == blockID) {
-				world.setBlockMetadataWithNotify(iter[0], j, iter[2], 1);
+				world.setBlockMetadataWithNotify(iter[0], j, iter[2], 3);
 			}
 		}
 
@@ -735,4 +745,15 @@ public class BlockDust extends BlockContainer {
 	public TileEntity createNewTileEntity(World var1) {
 		return new TileEntityDust();
 	}
+
+
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
+     */
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return 0;
+    }
 }

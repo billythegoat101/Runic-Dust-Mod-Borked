@@ -99,9 +99,9 @@ public class TileEntityDust extends TileEntity implements IInventory
         	float r =  (float)c.getRed()/255F;
         	float g =  (float)c.getGreen()/255F;
         	float b =  (float)c.getBlue()/255F;
-        	
+        	if(r == 0) r-=1;
         	for(int d = 0; d < Math.random()*3; d++){
-        		worldObj.spawnParticle("reddust", xCoord+ (double)i/4D + Math.random()*0.15, yCoord, zCoord+ (double)j/4D + Math.random()*0.15, r-1,g,b);
+        		worldObj.spawnParticle("reddust", xCoord+ (double)i/4D + Math.random()*0.15, yCoord, zCoord+ (double)j/4D + Math.random()*0.15, r,g,b);
         	}
         }
 //        System.out.println("Setting dust to " + dust + " [" + i + "," + j + "] " + this.getAmount());

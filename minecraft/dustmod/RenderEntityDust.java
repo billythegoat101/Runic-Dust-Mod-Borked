@@ -51,6 +51,17 @@ public class RenderEntityDust extends Render implements IRenderLast
         {
             f2 = (f1 - 0.7F) / 0.2F;
         }
+        
+        float yOffset = 0;
+        
+        if(g.justBorn && ticks < EntityDust.birthLength){
+        	double offset = g.posY - Math.floor(g.posY); 
+        	double offsetPerc = offset/(1-0.1875);
+        	double perc = ((double)ticks / (double) EntityDust.birthLength);
+        	scale *= Math.min(perc+0.2,1);
+//        	System.out.println(offset + " " + perc);
+        	yOffset = (float)perc*(float)offsetPerc-(float)offset;
+        }        
 
         Random random = new Random(432L);
         GL11.glPushAttrib(GL11.GL_LIGHTING_BIT | GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT);
@@ -62,11 +73,10 @@ public class RenderEntityDust extends Render implements IRenderLast
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
         GL11.glPushMatrix();
-        GL11.glTranslatef(0.0F, -1F, -2F);
+        GL11.glTranslatef(0.0F, -1F + yOffset, -2F);
         GL11.glScalef(0.02F, 0.02F, 0.02F);
         GL11.glScalef(scale,scale,scale);
         GL11.glScalef(1F, g.starScaleY, 1F);
-
         for (int i = 0; (float)i < ((f1 + f1 * f1) / 2F) * 90F + 30F; i++)
         {
             GL11.glRotatef(random.nextFloat() * 360F, 1.0F, 0.0F, 0.0F);
@@ -117,6 +127,12 @@ public class RenderEntityDust extends Render implements IRenderLast
         float f7 = MathHelper.sqrt_float(f4 * f4 + f6 * f6);
         float f8 = MathHelper.sqrt_float(f4 * f4 + f5 * f5 + f6 * f6);
         GL11.glPushMatrix();
+
+        if(e.justBorn && ticks < EntityDust.birthLength){
+        	double perc = ((double)ticks / (double) EntityDust.birthLength);
+        	y += 64 - perc*64D;
+        }  
+        
         GL11.glTranslatef((float)x, (float)y + 2.0F, (float)z);
         GL11.glRotatef(((float)(-Math.atan2(f6, f4)) * 180F) / (float)Math.PI - 90F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(((float)(-Math.atan2(f7, f5)) * 180F) / (float)Math.PI - 90F, 1.0F, 0.0F, 0.0F);
@@ -551,9 +567,9 @@ public class RenderEntityDust extends Render implements IRenderLast
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1 + 1.0F, (float)d2 + 2F);
         renderStar(dust, f, ri, gi, bi, ro, go, bo, dust.starScale);
-        dust.ticksExisted += 20;
-        renderStar(dust, f, ri, gi, bi, ro, go, bo, dust.starScale);
-        dust.ticksExisted -= 20;
+//        dust.ticksExisted += 20;
+//        renderStar(dust, f, ri, gi, bi, ro, go, bo, dust.starScale);
+//        dust.ticksExisted -= 20;
         GL11.glPopMatrix();
 //        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 //        GL11.glDisable(GL11.GL_DEPTH_TEST);

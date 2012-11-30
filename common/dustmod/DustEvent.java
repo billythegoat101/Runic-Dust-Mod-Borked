@@ -70,6 +70,9 @@ public abstract class DustEvent {
 		onInit(e);
 	}
 
+	protected void initGraphics(EntityDust e){
+		
+	}
 	protected void onInit(EntityDust e) {
 	}
 
@@ -429,6 +432,15 @@ public abstract class DustEvent {
 
 			if (is.stackSize <= 0) {
 				i.setDead();
+			}else {
+				double rx,rz;
+				double r = 0.1;
+				double min = 0.065;
+				rx = Math.random()*r*2 -r;
+				rx += (rx < 0)? -min:min;
+				rz = Math.random()*r*2 -r;
+				rz += (rz < 0)? -min:min;
+				i.addVelocity(rx, Math.random()*0.5, rz);
 			}
 		}
 
