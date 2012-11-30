@@ -19,6 +19,17 @@ public class DEXPStore extends DustEvent
     {
         super();
     }
+	
+	@Override
+    public void initGraphics(EntityDust e){
+    	super.initGraphics(e);
+
+		e.setRenderStar(true);
+        e.setColorStarInner(0, 255, 0);
+        e.setColorStarOuter(0, 255, 0);
+		
+    }
+	
     public void onInit(EntityDust e)
     {
         ItemStack[] req = new ItemStack[]
@@ -33,7 +44,7 @@ public class DEXPStore extends DustEvent
             return;
         }
 
-        e.renderStar = true;
+		e.setRenderStar(true);
         e.setColorStarInner(0, 255, 0);
         e.setColorStarOuter(0, 255, 0);
     }
@@ -91,11 +102,44 @@ public class DEXPStore extends DustEvent
                     //                    e.fallDistance +=0.01;
                     //                }else if(p.experience <= 0){
                     //                    p.experience = 0;
-                    if (p.experienceLevel > 0)
+
+                    if(p.experience > 0){
+                    	p.addExperience(-1);
+                    	e.data[1]++;
+                    }else if (p.experienceLevel > 0)
                     {
-                        p.addExperience(-1);
+                    	System.out.println("RAWR " + p.experienceTotal);
+                        p.addExperienceLevel(-1);
                         e.data[0]++;
                     }
+//            		System.out.println("Wat " + p.experience + " " + p.experienceTotal + " " + p.experienceLevel + " " + p.getScore());
+//                	if(p.experienceLevel > 0 || p.experience > 0){
+//                		int take = 0;
+//                		
+////                		p.addExperience(-1);
+//                		int dec = -1;
+//                        int var2 = Integer.MAX_VALUE - p.experienceTotal;
+//
+//                        if (dec > var2)
+//                        {
+//                            dec = var2;
+//                        }
+//
+//                        p.experience += (float)dec / (float)p.xpBarCap();
+//                        p.addExperience(0);
+//
+//
+//                        for (p.experienceTotal += dec; p.experience >= 1.0F; p.experience /= (float)p.xpBarCap())
+//                        {
+//                            p.experience = (p.experience - 1.0F) * (float)p.xpBarCap();
+//                            p.addExperienceLevel(1);
+//                        }
+//                        
+//                		if(p.experience <= 0 && p.experienceLevel > 0) {
+//                			p.addExperienceLevel(-1);
+//                			p.experience = 1;
+//                		}
+//                	}
 
                     //                }
                 }
@@ -176,7 +220,7 @@ public class DEXPStore extends DustEvent
         {
             EntityPlayer p = (EntityPlayer)i;
 //            p.experienceLevel += e.data[0];
-            p.addExperience(e.data[0]);
+            p.addExperienceLevel(e.data[0]);
             e.data[0] = 0;
             p.addExperience(e.data[1]);
             e.data[1] = 0;
