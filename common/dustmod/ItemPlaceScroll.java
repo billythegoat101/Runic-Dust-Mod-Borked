@@ -48,18 +48,21 @@ public class ItemPlaceScroll extends Item
     }
 
     @Override
-    public void onUpdate(ItemStack item, World world,
-    		Entity wielder, int meta, boolean isHeld) {
-    	super.onUpdate(item, world, wielder, meta, isHeld);
+    
+    	public boolean onItemUse(ItemStack item, EntityPlayer wielder, World world, int i, int j, int k, int l, float x, float y, float z){
+//    public void onUpdate(ItemStack item, World world,
+//    		Entity wielder, int meta, boolean isHeld) {
+//    	super.onUpdate(item, world, wielder, meta, isHeld);
+    	
 //    	System.out.println("ITEMUSE " + meta + " " + ((EntityPlayer)wielder).getItemInUseCount() + " " + ((EntityPlayer)wielder).getItemInUse());
-    	if(!(wielder instanceof EntityPlayer)) return;
+    	if(!(wielder instanceof EntityPlayer)) return false;
     	boolean inUse =  ((EntityPlayer)wielder).getItemInUse() == item;
-    	if(inUse && world.getWorldTime()%5 == 0){
-    		System.out.println("RAWR");
-    		int i,j,k;
+//    	if(inUse && world.getWorldTime()%5 == 0){
+//    		int i,j,k;
     		
-    		int[] block = this.getClickedBlock(wielder, item);
-    		i = block[0];j = block[1];k = block[2];
+//    		int[] block = this.getClickedBlock(wielder, item);
+//    		if(block == null) return;
+//    		i = block[0];j = block[1];k = block[2];
     		
     		DustShape ds = DustManager.getShapeFromID(item.getItemDamage());
             int r = (int)MathHelper.floor_double((double)((wielder.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -70,7 +73,7 @@ public class ItemPlaceScroll extends Item
             }
 
             try{
-            if (ds.drawOnWorldPart(world, i, j, k, (EntityPlayer)wielder, r, ((EntityPlayer)wielder).getItemInUseCount()))
+            if (ds.drawOnWorldWhole(world, i, j, k, (EntityPlayer)wielder, r/*, ((EntityPlayer)wielder).getItemInUseCount()*/))
             {
 //                itemstack.stackSize--;
 //                    System.out.println("Drawing success!");
@@ -80,7 +83,8 @@ public class ItemPlaceScroll extends Item
             	e.printStackTrace();
             }
             ((EntityPlayer)wielder).inventory.onInventoryChanged();
-    	}
+//    	}
+    	return true;
     }
     
     /**
@@ -109,6 +113,42 @@ public class ItemPlaceScroll extends Item
     public String getItemNameIS(ItemStack itemstack)
     {
         return "tile.scroll" + DustManager.getShapeFromID(itemstack.getItemDamage()).name;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack item,
+    		EntityPlayer player, List list, boolean flag) {
+    	super.addInformation(item, player, list, flag);
+    	DustShape shape = DustManager.getShapeFromID(item.getItemDamage());
+    	String sacr = shape.getNotes().replace("Sacrifice:\n", "");
+    	String[] split = sacr.split("\n");
+    	list.add("Requires:");
+    	for(String i:split){
+    		if(!i.isEmpty()){
+    			if(i.charAt(0) != '-') break;
+    			if(i.length() > 25){
+//    				System.out.println("TOO LONG " + i);
+    				String temp = i;
+    				while(temp.length() > 25){
+    					int index = temp.indexOf(' ', 25);
+    					if(index == -1) index = temp.length();
+    					
+    					String add = temp.substring(0, index); 
+        				if(!add.isEmpty()) list.add(add);
+        				temp = temp.substring(index);
+//    					list.add(temp);
+//        				index = temp.indexOf(' ', 25)+1;
+//            			if(index == -1) index = temp.length();
+//    					temp = "  "+temp.substring(index);
+//    					System.out.println("Splitting " + temp);
+    				}
+    				list.add(temp);
+    			}else{
+    				list.add(i);
+    			}
+    		}
+    	}
     }
 
     public String getLocalItemName(ItemStack itemstack)
