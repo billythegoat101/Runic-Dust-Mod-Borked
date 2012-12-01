@@ -713,11 +713,13 @@ public class EntityDust extends Entity
         float f1 = 0.7F;
         float f2 = 0;
 
+        
+        
         for (int j = 1; j <= 2; j++)
         {
             float f3 = f / (float) j;
 
-            for (double d3 = 0.0D; d3 < (Math.PI / 2D); d3 += 0.10000000000000001D)
+            for (double d3 = 0.0D; d3 < (Math.PI / 2D); d3 += 0.1D)
             {
                 float f4 = (float) ((double) f3 * Math.cos(d3));
                 float f5 = (float) ((double) f3 * Math.sin(d3));
@@ -754,24 +756,48 @@ public class EntityDust extends Entity
         String s = "reddust";
         float f3 = 0;
 
-        for (double d3 = 0.0D; d3 < (Math.PI / 2D); d3 += 0.05)
+        double max = Math.PI/2D;
+        double iter = 0.05;
+        
+        double[] locations = new double[12288];
+        int i = 0;
+        
+        for (double d3 = 0.0D; d3 < (3.14 / 2D); d3 += 0.05)
         {
             float f4 = (float) Math.sin(d3);
             float f5 = (float) Math.cos(d3);
             float f6 = f2 * f4;
 
-            for (double d4 = 0.0D; d4 < (Math.PI / 2D); d4 += 0.05)
+            for (double d4 = 0.0D; d4 < (3.14/ 2D); d4 += 0.05)
             {
                 float f7 = (float) Math.sin(d4);
                 float f8 = (float) Math.cos(d4);
                 float f9 = f2 * f8 * f5;
                 float f10 = f2 * f7 * f5;
-                worldObj.spawnParticle(s, ((float) posX + f9 + random.nextFloat() * f1) - 0.5F, (float) posY + f3 + f6 + random.nextFloat() * f1, ((float) posZ + f10 + random.nextFloat() * f1) - 0.5F, d, d1, d2);
-                worldObj.spawnParticle(s, (((float) posX - f9) + random.nextFloat() * f1) - 0.5F, (float) posY + f3 + f6 + random.nextFloat() * f1, ((float) posZ + f10 + random.nextFloat() * f1) - 0.5F, d, d1, d2);
-                worldObj.spawnParticle(s, ((float) posX + f9 + random.nextFloat() * f1) - 0.5F, (float) posY + f3 + f6 + random.nextFloat() * f1, (((float) posZ - f10) + random.nextFloat() * f1) - 0.5F, d, d1, d2);
-                worldObj.spawnParticle(s, (((float) posX - f9) + random.nextFloat() * f1) - 0.5F, (float) posY + f3 + f6 + random.nextFloat() * f1, (((float) posZ - f10) + random.nextFloat() * f1) - 0.5F, d, d1, d2);
+                locations[i] = ((double) posX + f9 + random.nextFloat() * f1) - 0.5D;
+                locations[i+1] = (double) posY + f3 + f6 + random.nextFloat() * f1;
+                locations[i+2] = ((double) posZ + f10 + random.nextFloat() * f1) - 0.5D;
+                i+=3;
+
+                locations[i] = (double)((((float) posX - f9) + random.nextFloat() * f1) - 0.5F);
+                locations[i+1] = (double) ((float) posY + f3 + f6 + random.nextFloat() * f1);
+                locations[i+2] = (double) (((float) posZ + f10 + random.nextFloat() * f1) - 0.5F);
+                i+=3;
+
+                locations[i] = (double)(((float) posX + f9 + random.nextFloat() * f1) - 0.5F);
+                locations[i+1] = (double) ((float) posY + f3 + f6 + random.nextFloat() * f1);
+                locations[i+2] = (double) ((((float) posZ - f10) + random.nextFloat() * f1) - 0.5F);
+                i+=3;
+
+                locations[i] = (double)((((float) posX - f9) + random.nextFloat() * f1) - 0.5F);
+                locations[i+1] = (double) ((float) posY + f3 + f6 + random.nextFloat() * f1);
+                locations[i+2] = (double) ((((float) posZ - f10) + random.nextFloat() * f1) - 0.5F);
+                i+=3;
             }
         }
+//        System.out.println("You bitch " + i + " " + locations.length);
+        
+        DustMod.spawnParticles(worldObj, s, locations, d, d1, d2, 1, 0.01,0.01,0.01);
     }
 
     public void onRightClick(TileEntityDust ted, EntityPlayer p)
