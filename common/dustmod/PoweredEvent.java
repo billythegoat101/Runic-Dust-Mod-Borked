@@ -48,6 +48,7 @@ public abstract class PoweredEvent extends DustEvent
 
             for (EntityDust i: ents)
             {
+            	if(i.event == null) continue;
                 if (i.event.getClass() == DEPowerRelay.class)
                 {
                     ((DEPowerRelay)i.event).registerSelfTo(i, e);
@@ -147,6 +148,7 @@ public abstract class PoweredEvent extends DustEvent
 
             for (EntityDust i: ents)
             {
+            	if(i.event == null) continue;
                 if (i.event.getClass() == DEPowerRelay.class)
                 {
                     ((DEPowerRelay)i.event).removeSelfFrom(i, e);
