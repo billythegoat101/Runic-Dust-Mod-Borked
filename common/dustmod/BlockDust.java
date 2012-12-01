@@ -752,8 +752,8 @@ public class BlockDust extends BlockContainer {
     /**
      * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
      */
-    public int idPicked(World par1World, int par2, int par3, int par4)
+    public int idPicked(World world, int i, int j, int k)
     {
-        return 0;
+        return world.getBlockId(i,j-1,k);
     }
 }
