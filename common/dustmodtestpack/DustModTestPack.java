@@ -21,7 +21,7 @@ import dustmodtestpack.inscriptions.VoidInscription;
  * @author billythegoat101
  *
  */
-@Mod(modid = "DustModTestPack", name = "Dust mod Test pack", version = "0.01", dependencies="after:DustMod")
+@Mod(modid = "DustModTestPack", name = "Dust mod Test pack", version = "0.02", dependencies="after:DustMod")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class DustModTestPack {
 
