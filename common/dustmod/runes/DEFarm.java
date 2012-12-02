@@ -4,16 +4,16 @@
  */
 package dustmod.runes;
 
+import java.util.ArrayList;
 import java.util.Random;
-
-import dustmod.DustEvent;
-import dustmod.DustMod;
-import dustmod.EntityDust;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import dustmod.DustEvent;
+import dustmod.DustMod;
+import dustmod.EntityDust;
 
 /**
  * 
@@ -88,6 +88,8 @@ public class DEFarm extends DustEvent {
 			world.setBlockWithNotify(i, j - 1, k, Block.waterStill.blockID);
 			Random rand = new Random();
 
+			ArrayList<Double> locs = new ArrayList<Double>();
+			
 			for (int di = -r; di <= r; di++) {
 				for (int dk = -r; dk <= r; dk++) {
 					layer:
@@ -112,6 +114,9 @@ public class DEFarm extends DustEvent {
 									k + dk, 0, 0);
 							world.setBlockAndMetadataWithNotify(i + di, j + dj,
 									k + dk, Block.crops.blockID, meta);
+							locs.add(i+di +0.5);
+							locs.add((double)j+dj);
+							locs.add(k+dk +0.5);
 							// System.out.println("setting");
 							break layer;
 						}// else
@@ -124,7 +129,16 @@ public class DEFarm extends DustEvent {
 				}
 			}
 
+			locs.add((double)i);
+			locs.add(j-1D);
+			locs.add((double)k);
 			world.setBlockWithNotify(i, j - 1, k, Block.waterStill.blockID);
+			
+			double[] locations = new double[locs.size()];
+			for(int d = 0; d < locs.size(); d++){
+				locations[d] = locs.get(d);
+			}
+			DustMod.spawnParticles(e.worldObj, "smoke", locations, 0,0,0, 8, 0.5,0.2,0.5);
 		}
 		e.fade();
 	}
