@@ -76,14 +76,18 @@ public class DustItemManager {
 	}
 	
 	public static void reloadLanguage(){
-		StringTranslate st = StringTranslate.getInstance();
-		String curLan = st.currentLanguage;
-		String trick = "ar_SA"; //I pick this one because its the second one I see a hard-coded reference to in StringTranslate >_>
-		if(curLan.equals(trick)){
-			trick = "en_us"; //in case someone is using ar_SA. Not even 100% sure what that is.
+		try{
+			StringTranslate st = StringTranslate.getInstance();
+			String curLan = st.currentLanguage;
+			String trick = "ar_SA"; //I pick this one because its the second one I see a hard-coded reference to in StringTranslate >_>
+			if(curLan.equals(trick)){
+				trick = "en_us"; //in case someone is using ar_SA. Not even 100% sure what that is.
+			}
+			st.setLanguage(trick);
+			st.setLanguage(curLan);
+		}catch(Exception e){
+			
 		}
-		st.setLanguage(trick);
-		st.setLanguage(curLan);
 	}
 	
 	public static String[] getNames(){
