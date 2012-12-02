@@ -125,13 +125,15 @@ public class ErfBendInscription extends InscriptionEvent {
 						int metaA = world.getBlockMetadata(cx, cy+i+1, cz);
 						if(isSolid(bid,meta) && !isSolid(bidA,metaA)){
 //								cy += i;
-							if(button == 0){
-								world.setBlockAndMetadataWithNotify(cx,cy+i+1,cz,bid,meta);
-								world.setBlockWithNotify(cx,cy+i,cz,getFillerMaterial(bid,meta));
-							}else {
-								world.setBlockAndMetadataWithNotify(cx,cy+i-1,cz,bid,meta);
-								world.setBlockWithNotify(cx,cy+i,cz,0);
-							}
+//							if(button == 0){
+//								world.setBlockAndMetadataWithNotify(cx,cy+i+1,cz,bid,meta);
+//								world.setBlockWithNotify(cx,cy+i,cz,getFillerMaterial(bid,meta));
+								DustMod.spawnParticles(wearer.worldObj, "tilecrack_" + bid + "_" + meta, cx, cy+i+1, cz, 0, 2, 0, 30, 0.5,0.1,0.5);
+//							}else {
+////								world.setBlockAndMetadataWithNotify(cx,cy+i-1,cz,bid,meta);
+////								world.setBlockWithNotify(cx,cy+i,cz,0);
+//								DustMod.spawnParticles(wearer.worldObj, "tilecrack_" + bid + "_" + meta, cx, cy+i, cz, 0, 1, 0, 5, 0.5,0.1,0.5);
+//							}
 							break;
 						}
 					}
