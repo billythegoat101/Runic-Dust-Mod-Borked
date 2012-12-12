@@ -56,7 +56,7 @@ public class ItemPlaceScroll extends Item
     	
 //    	System.out.println("ITEMUSE " + meta + " " + ((EntityPlayer)wielder).getItemInUseCount() + " " + ((EntityPlayer)wielder).getItemInUse());
     	if(!(wielder instanceof EntityPlayer)) return false;
-    	boolean inUse =  ((EntityPlayer)wielder).getItemInUse() == item;
+    	boolean inUse =  ((EntityPlayer)wielder).getCurrentEquippedItem() == item;
 //    	if(inUse && world.getWorldTime()%5 == 0){
 //    		int i,j,k;
     		
