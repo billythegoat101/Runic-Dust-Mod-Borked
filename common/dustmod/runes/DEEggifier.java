@@ -71,7 +71,10 @@ public class DEEggifier extends DustEvent
 //        }
         e.setStarScale(e.getStarScale() + 0.001F);
 
-        if (e.ticksExisted > 120)
+    	if(e.ticksExisted > 40 && !EntityList.entityEggs.containsKey(e.data[15])){
+    		e.fizzle();
+    		return;
+    	} else if (e.ticksExisted > 120)
         {
             EntityItem en = null;
             en = new EntityItem(e.worldObj, e.posX, e.posY, e.posZ, new ItemStack(Item.monsterPlacer, 1, e.data[15]));
