@@ -194,6 +194,7 @@ public class PageHelper
 
         try
         {
+            new File(insFolder).mkdirs();
             ImageIO.write(result, "PNG", new File(insFolder + name + ".png"));
         } catch (IOException ex)
         {
@@ -381,6 +382,7 @@ public class PageHelper
 
         try
         {
+            new File(runeFolder).mkdirs();
             ImageIO.write(result, "PNG", new File(runeFolder + name + ".png"));
         } catch (IOException ex)
         {
