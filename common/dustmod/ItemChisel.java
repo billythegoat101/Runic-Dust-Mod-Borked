@@ -34,7 +34,7 @@ public class ItemChisel extends Item
     }
 
     @Override
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int dir,float x,float y,float z)
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int face,float x,float y,float z)
     {
         int blockId = world.getBlockId(i, j, k);
         int meta = world.getBlockMetadata(i, j, k);
@@ -73,7 +73,7 @@ public class ItemChisel extends Item
             TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
             ter.maskBlock = blockId;
             ter.maskMeta = meta;
-            DustMod.rutBlock.onBlockActivated(world, i, j, k, p,0,0,0,0);
+            DustMod.rutBlock.onBlockActivated(world, i, j, k, p,face,x,y,z);
 //            System.out.println("Set");
 //        }
 

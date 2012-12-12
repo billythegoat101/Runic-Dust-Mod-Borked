@@ -40,42 +40,45 @@ public class ItemDust extends ItemReed
         //[forge]
         this.setTextureFile(DustMod.path + "/dustItems.png");
     }
-    public boolean tryPlaceIntoWorld(ItemStack item, EntityPlayer p, World world, int i, int j, int k, int dir, float x, float y, float z)
+   
+    
+    
+    public boolean onItemUse(ItemStack item, EntityPlayer p, World world, int i, int j, int k, int face, float x, float y, float z)
     {
         int var11 = world.getBlockId(i, j, k);
 
         if (var11 == Block.snow.blockID)
         {
-            dir = 1;
+            face = 1;
         }
         else if (var11 != Block.vine.blockID && var11 != Block.tallGrass.blockID && var11 != Block.deadBush.blockID)
         {
-            if (dir == 0)
+            if (face == 0)
             {
                 --j;
             }
 
-            if (dir == 1)
+            if (face == 1)
             {
                 ++j;
             }
 
-            if (dir == 2)
+            if (face == 2)
             {
                 --k;
             }
 
-            if (dir == 3)
+            if (face == 3)
             {
                 ++k;
             }
 
-            if (dir == 4)
+            if (face == 4)
             {
                 --i;
             }
 
-            if (dir == 5)
+            if (face == 5)
             {
                 ++i;
             }
@@ -91,10 +94,10 @@ public class ItemDust extends ItemReed
         }
         else
         {
-            if (world.canPlaceEntityOnSide(this.blockID, i, j, k, false, dir, (Entity)null))
+            if (world.canPlaceEntityOnSide(this.blockID, i, j, k, false, face, (Entity)null))
             {
                 Block var12 = Block.blocksList[this.blockID];
-                int var13 = var12.func_85104_a(world, i, j, k, dir, x, y, z, 0);
+                int var13 = var12.func_85104_a(world, i, j, k, face, x, y, z, 0);
 
 
                 if (world.setBlockWithNotify(i, j, k, this.blockID))
@@ -103,7 +106,9 @@ public class ItemDust extends ItemReed
                     {
                         Block.blocksList[this.blockID].onBlockPlacedBy(world, i, j, k, p);
                         Block.blocksList[this.blockID].func_85105_g(world, i, j, k, var13);
+                        
                     }
+                    DustMod.dust.onBlockActivated(world, i, j, k, p, face, x, y, z);
 
                     world.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), var12.stepSound.getStepSound(), (var12.stepSound.getVolume() + 1.0F) / 6.0F, var12.stepSound.getPitch() * 0.99F);
                     --item.stackSize;

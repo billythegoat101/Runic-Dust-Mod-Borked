@@ -10,7 +10,9 @@ import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.DustModBouncer;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemSpade;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
@@ -18,6 +20,8 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 /**
  *
@@ -28,7 +32,7 @@ public class BlockRut extends BlockContainer
     public BlockRut(int i)
     {
         super(i, 7, Material.wood);
-//        setLightOpacity(128);
+        this.setLightOpacity(128);
 //        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.9375F, 1.0F);
 //        standTex = ModLoader.addOverride("/terrain.png", mod_DustMod.path + "/standTop.png");
     }
@@ -107,44 +111,14 @@ public class BlockRut extends BlockContainer
 //        if(((TileEntityRut)world.getBlockTileEntity(i, j, k)).updateNeighbors() && !notified){
 //        	DustModBouncer.notifyBlockChange(world, i, j, k, 0);
 //        }
+        world.markBlockForRenderUpdate(i, j, k);
     }
     @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer p,int rot, float x, float y, float z)
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer p,int face, float x, float y, float z)
     {
+    	
         ItemStack pItem = p.getCurrentEquippedItem();
         boolean isNull = (pItem == null);
-//        if (world.getBlockMetadata(i, j, k) > 0) {
-//            return false;
-//        }
-//
-//        if (pItem != null && pItem.itemID == mod_DustMod.tome.shiftedIndex) {
-//            updatePattern(world, i, j, k, p);
-//            mod_DustMod.notifyBlockChange(world, i, j, k, 0);
-//            return true;
-//        }
-//        if (pItem != null && pItem.itemID == mod_DustMod.spiritSword.shiftedIndex) {
-//            this.onBlockClicked(world, i, j, k, p);
-//        }
-
-//        if (DustMod.debug && p != null && p.isSneaking())
-//        {
-//            Minecraft mc = ModLoader.getMinecraftInstance();
-//
-//            if (mc.playerController.isInCreativeMode())
-//            {
-//                mc.playerController = new PlayerControllerSP(mc);
-//                p.capabilities.isCreativeMode = false;
-//            }
-//            else
-//            {
-//                mc.playerController = new PlayerControllerCreative(mc);
-//                p.capabilities.isCreativeMode = true;
-//            }
-//
-////                mc.thePlayer = (EntityPlayerSP)mc.playerController.createPlayer(world);
-////                mc.thePlayer.preparePlayerToSpawn();
-////                mc.playerController.flipPlayer(mc.thePlayer);
-//        }
 
         TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
 
@@ -179,8 +153,8 @@ public class BlockRut extends BlockContainer
         if (!isNull && (ter.fluid == 0 || ter.fluidIsFluid()))
         {
             int bid = pItem.itemID;
-
-            if (bid < Block.blocksList.length && Block.blocksList[bid] != null)
+            
+            if (bid < Block.blocksList.length && Block.blocksList[bid] != null && pItem.getItem() instanceof ItemBlock)
             {
                 Block b = Block.blocksList[bid];
 
@@ -212,280 +186,21 @@ public class BlockRut extends BlockContainer
             return false;
         }
 
-//        System.out.println("ACTIVATED " + pItem.itemID  + " " +dust+ " derp " + mod_DustMod.ITEM_DustID+256);
-        Vec3 look = p.getLookVec();
-        double a = look.xCoord;//Math.cos((p.rotationYaw+90)*Math.PI/180);
-        double b = look.yCoord;//Math.sin(-p.rotationPitch*Math.PI/180);
-        double c = look.zCoord;//Math.sin((p.rotationYaw+90)*Math.PI/180);
-        double xi = p.posX - i;
-        double yi = p.posY + p.getEyeHeight() - j;
-        double zi = p.posZ - k;
-
-        if (a == 0)
-        {
-            a = 0.001D;
-        }
-
-        if (b == 0)
-        {
-            b = 0.001D;
-        }
-
-        if (c == 0)
-        {
-            c = 0.001D;
-        }
-
-        int dir = determineOrientation(world, i, j, k, p);
         Block block = Block.blocksList[ter.maskBlock];
         world.playSoundEffect((float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, block.stepSound.getStepSound(), (block.stepSound.getVolume() + 1.0F) / 6.0F, block.stepSound.getPitch() * 0.99F);
 
-        //<editor-fold defaultstate="collapsed" desc="Face0">
-        for (double test = 0; test < 4 && dir == 0; test += 0.01)
-        {
-            double tx = p.posX + a * test;
-            double ty = p.posY + p.getEyeHeight() + b * test;
-            double tz = p.posZ + c * test;
-            double testy = ty - (double) j;
-
-            if (testy >= 0.0 && testy <= 0.02)
-            {
-                double dx = Math.abs(tx - (double) i) - 0.02;
-                double dz = Math.abs(tz - (double) k) - 0.02;
-                int rx = (int) Math.floor(dx * 3);
-                int rz = (int) Math.floor(dz * 3);
-
-                if (rx >= 3)
-                {
-                    rx = 2;
-                }
-
-                if (rz >= 3)
-                {
-                    rz = 2;
-                }
-
-                if (rx < 0)
-                {
-                    rx = 0;
-                }
-
-                if (rz < 0)
-                {
-                    rz = 0;
-                }
-
-                toggleRut(ter, rx, 0, rz);
-                break;
-            }
-        }
-
-        //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Face1">
-        for (double test = 0; test < 4 && dir == 1; test += 0.01)
-        {
-            double tx = p.posX + a * test;
-            double ty = p.posY + p.getEyeHeight() + b * test;
-            double tz = p.posZ + c * test;
-            double testy = ty - (double) j;
-
-            if (testy >= 0.98 && testy <= 1.0)
-            {
-                double dx = Math.abs(tx - (double) i) - 0.02;
-                double dz = Math.abs(tz - (double) k) - 0.02;
-                int rx = (int) Math.floor(dx * 3);
-                int rz = (int) Math.floor(dz * 3);
-
-                if (rx >= 3)
-                {
-                    rx = 2;
-                }
-
-                if (rz >= 3)
-                {
-                    rz = 2;
-                }
-
-                if (rx < 0)
-                {
-                    rx = 0;
-                }
-
-                if (rz < 0)
-                {
-                    rz = 0;
-                }
-
-                toggleRut(ter, rx, 2, rz);
-                break;
-            }
-        }
-
-        //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Face2">
-        for (double test = 0; test < 4 && dir == 2; test += 0.01)
-        {
-            double tx = p.posX + a * test;
-            double ty = p.posY + p.getEyeHeight() + b * test;
-            double tz = p.posZ + c * test;
-            double testz = tz - (double) k;
-
-            if (testz >= 0.0 && testz <= 0.02)
-            {
-                double dy = Math.abs(ty - (double) j) - 0.02;
-                double dx = Math.abs(tx - (double) i) - 0.02;
-                int ry = (int) Math.floor(dy * 3);
-                int rx = (int) Math.floor(dx * 3);
-
-                if (ry >= 3)
-                {
-                    ry = 2;
-                }
-
-                if (rx >= 3)
-                {
-                    rx = 2;
-                }
-
-                if (ry < 0)
-                {
-                    ry = 0;
-                }
-
-                if (rx < 0)
-                {
-                    rx = 0;
-                }
-
-                toggleRut(ter, rx, ry, 0);
-                break;
-            }
-        }
-
-        //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Face3">
-        for (double test = 0; test < 4 && dir == 3; test += 0.01)
-        {
-            double tx = p.posX + a * test;
-            double ty = p.posY + p.getEyeHeight() + b * test;
-            double tz = p.posZ + c * test;
-            double testz = tz - (double) k;
-
-            if (testz >= 0.98 && testz <= 1.0)
-            {
-                double dy = Math.abs(ty - (double) j) - 0.02;
-                double dx = Math.abs(tx - (double) i) - 0.02;
-                int ry = (int) Math.floor(dy * 3);
-                int rx = (int) Math.floor(dx * 3);
-
-                if (ry >= 3)
-                {
-                    ry = 2;
-                }
-
-                if (rx >= 3)
-                {
-                    rx = 2;
-                }
-
-                if (ry < 0)
-                {
-                    ry = 0;
-                }
-
-                if (rx < 0)
-                {
-                    rx = 0;
-                }
-
-                toggleRut(ter, rx, ry, 2);
-                break;
-            }
-        }
-
-        //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Face4">
-        for (double test = 0; test < 4 && dir == 4; test += 0.01)
-        {
-            double tx = p.posX + a * test;
-            double ty = p.posY + p.getEyeHeight() + b * test;
-            double tz = p.posZ + c * test;
-            double testx = tx - (double) i;
-
-            if (testx >= 0.00 && testx <= 0.02)
-            {
-                double dy = Math.abs(ty - (double) j) - 0.02;
-                double dz = Math.abs(tz - (double) k) - 0.02;
-                int ry = (int) Math.floor(dy * 3);
-                int rz = (int) Math.floor(dz * 3);
-
-                if (ry >= 3)
-                {
-                    ry = 2;
-                }
-
-                if (rz >= 3)
-                {
-                    rz = 2;
-                }
-
-                if (ry < 0)
-                {
-                    ry = 0;
-                }
-
-                if (rz < 0)
-                {
-                    rz = 0;
-                }
-
-                toggleRut(ter, 0, ry, rz);
-                break;
-            }
-        }
-
-        //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Face5">
-        for (double test = 0; test < 4 && dir == 5; test += 0.01)
-        {
-            double tx = p.posX + a * test;
-            double ty = p.posY + p.getEyeHeight() + b * test;
-            double tz = p.posZ + c * test;
-            double testx = tx - (double) i;
-
-            if (testx >= 0.98 && testx <= 1.0)
-            {
-                double dy = Math.abs(ty - (double) j) - 0.02;
-                double dz = Math.abs(tz - (double) k) - 0.02;
-                int ry = (int) Math.floor(dy * 3);
-                int rz = (int) Math.floor(dz * 3);
-
-                if (ry >= 3)
-                {
-                    ry = 2;
-                }
-
-                if (rz >= 3)
-                {
-                    rz = 2;
-                }
-
-                if (ry < 0)
-                {
-                    ry = 0;
-                }
-
-                if (rz < 0)
-                {
-                    rz = 0;
-                }
-
-                toggleRut(ter, 2, ry, rz);
-                break;
-            }
-        }
-
-        //</editor-fold>
+        
+        int bx,by,bz;
+        bx = (int)Math.floor(x*3);
+        by = (int)Math.floor(y*3);
+        bz = (int)Math.floor(z*3);
+        
+        bx = (int)Math.min(2, bx);
+        by = (int)Math.min(2, by);
+        bz = (int)Math.min(2, bz);
+        
+        toggleRut(ter, bx,by,bz);
+        
         return true;
     }
 
@@ -539,12 +254,14 @@ public class BlockRut extends BlockContainer
     @Override
     public void breakBlock(World world, int i, int j, int k, int b, int m) {
 		if (world.isRemote) {
+        	super.breakBlock(world, i, j, k, b, m);
 			return;
 		}
         TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
 
         if (ter.isDead)
         {
+        	super.breakBlock(world, i, j, k, b, m);
             return;
         }
 
@@ -560,6 +277,7 @@ public class BlockRut extends BlockContainer
         {
             this.dropBlockAsItem_do(world, i, j, k, new ItemStack(ter.fluid, 1, 0));
         }
+    	super.breakBlock(world, i, j, k, b, m);
     }
 
     @Override
@@ -573,4 +291,37 @@ public class BlockRut extends BlockContainer
     {
         return new TileEntityRut();
     }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getBlockTexture(IBlockAccess world, int i,
+    		int j, int k, int meta) {
+    	TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
+    	Block b = Block.blocksList[ter.maskBlock];
+    	return b.getBlockTexture(world, i, j, k, ter.maskMeta);
+    }
+
+
+
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
+     */
+    public int idPicked(World world, int i, int j, int k)
+    {
+    	TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
+    	return ter.maskBlock;
+    }
+
+    /**
+     * Get the block's damage value (for use with pick block).
+     */
+    public int getDamageValue(World world, int i, int j, int k)
+    {
+    	TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
+    	return ter.maskMeta;
+    }
+    
+    
 }
