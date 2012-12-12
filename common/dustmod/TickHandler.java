@@ -13,14 +13,14 @@ public class TickHandler implements ITickHandler {
 	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		try{
-		DustMod.proxy.tickMouseManager();
-		DustMod.keyHandler.tick();
-		}catch(Exception e){}
 	}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		try{
+		DustMod.proxy.tickMouseManager();
+		DustMod.keyHandler.tick();
+		}catch(Exception e){}
 	}
 
 	@Override
