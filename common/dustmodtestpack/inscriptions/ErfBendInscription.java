@@ -378,7 +378,7 @@ public class ErfBendInscription extends InscriptionEvent {
 
 	
 	public synchronized void middleClickBlock(EntityLiving wearer, ItemStack item){
-		MovingObjectPosition click = DustMod.wornInscription.getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, false);
+		MovingObjectPosition click = DustMod.getWornInscription().getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, false);
 		if(click != null && click.typeOfHit == EnumMovingObjectType.TILE){
 			int tx = click.blockX;
 			int ty = click.blockY;
@@ -415,7 +415,7 @@ public class ErfBendInscription extends InscriptionEvent {
 //			tz = target.posZ;
 //			hasTarget = true;
 //		}else {
-//			MovingObjectPosition click = DustMod.wornInscription.getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, true);
+//			MovingObjectPosition click = DustMod.getWornInscription().getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, true);
 //			if(click != null){
 //				tx = click.blockX + 0.5;
 //				ty = click.blockY + 0.5;
@@ -478,7 +478,7 @@ public class ErfBendInscription extends InscriptionEvent {
 	}
 	
 	public synchronized void blockClick(EntityLiving wearer, ItemStack item){
-		MovingObjectPosition click = DustMod.wornInscription.getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, false);
+		MovingObjectPosition click = DustMod.getWornInscription().getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, false);
 		if(click != null && click.typeOfHit == EnumMovingObjectType.TILE){
 			int tx = click.blockX;
 			int ty = click.blockY;

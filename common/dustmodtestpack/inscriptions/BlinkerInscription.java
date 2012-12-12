@@ -162,7 +162,7 @@ public class BlinkerInscription extends InscriptionEvent {
 	}
 	
 	public int[] getClickedBlock(Entity wearer, ItemStack item){
-		MovingObjectPosition click = DustMod.wornInscription.getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, false);
+		MovingObjectPosition click = DustMod.getWornInscription().getMovingObjectPositionFromPlayer(wearer.worldObj, (EntityPlayer)wearer, false);
 		if(click != null && click.typeOfHit == EnumMovingObjectType.TILE){
 			int tx = click.blockX;
 			int ty = click.blockY;

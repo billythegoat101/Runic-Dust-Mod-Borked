@@ -53,7 +53,7 @@ public class DEXP extends PoweredEvent
                 EntityItem ei = (EntityItem)o;
                 ItemStack item = ei.item;
 
-                if (item.itemID == DustMod.negateSacrifice.shiftedIndex)
+                if (item.itemID == DustMod.getNegator().shiftedIndex)
                 {
                     hostile = passive = 0;
                     break;

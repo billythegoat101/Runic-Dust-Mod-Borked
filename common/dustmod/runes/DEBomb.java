@@ -37,7 +37,7 @@ public class DEBomb extends DustEvent
 
         if (sac[0].stackSize > 0)
         {
-            sac = new ItemStack[] {new ItemStack(DustMod.idust, 15, 2)};
+            sac = new ItemStack[] {new ItemStack(DustMod.getItemDust(), 15, 2)};
             sac = this.sacrifice(e, sac);
 
             if (sac[0].stackSize > 0)

@@ -56,7 +56,7 @@ public class MountainCutterInscription extends InscriptionEvent {
 //		if(ep.worldObj.getWorldTime() %3 == 0)
 		if (ep.getCurrentEquippedItem() == null && ep.isSneaking()) {
 			try {
-				MovingObjectPosition click = DustMod.wornInscription.getMovingObjectPositionFromPlayer(ep.worldObj, ep, true);
+				MovingObjectPosition click = DustMod.getWornInscription().getMovingObjectPositionFromPlayer(ep.worldObj, ep, true);
 				
 				if(click != null && click.typeOfHit == EnumMovingObjectType.TILE){
 

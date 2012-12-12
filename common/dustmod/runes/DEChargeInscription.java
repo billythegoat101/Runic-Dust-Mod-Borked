@@ -44,7 +44,7 @@ public class DEChargeInscription extends DustEvent {
         	
         	for(EntityItem ei:items){
         		ItemStack i = ei.item;
-        		if(i.itemID == DustMod.wornInscription.shiftedIndex){
+        		if(i.itemID == DustMod.getWornInscription().shiftedIndex){
         			InscriptionEvent evt = InscriptionManager.getEvent(i);
         			if(evt != null){
         				boolean sucess = evt.callSacrifice(this,e, i);
