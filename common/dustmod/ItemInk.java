@@ -125,7 +125,8 @@ public class ItemInk extends Item {
     	return (meta - (meta%maxAmount)) / maxAmount; 
     }
     
-    public static boolean reduce(ItemStack item, int amt){
+    public static boolean reduce(EntityPlayer p, ItemStack item, int amt){
+    	if(p.capabilities.isCreativeMode) return true;
     	int fill = item.getItemDamage()%maxAmount;
     	int level = item.getItemDamage() - fill;
     	if(fill < amt) return false;
