@@ -21,6 +21,8 @@ public class GuiInscription extends GuiContainer {
 	public boolean newInscription = true;
 	public boolean changed = false;
 	
+	public int buttonUpDelay = 0;
+	
 	
 	public GuiInscription(EntityPlayer player, InventoryInscription insc) {
 		super(new InscriptionGuiContainer(player.inventory, insc));
@@ -47,10 +49,13 @@ public class GuiInscription extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int a, int b) {
+		super.drawGuiContainerForegroundLayer(a, b);
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		GL11.glDisable(GL11.GL_LIGHTING);
         int texture = mc.renderEngine.getTexture(DustMod.path + "/inscription.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
-		
+
 		Slot info = this.inventorySlots.getSlot(0);
 		if(info.getHasStack() && insc.canEdit()){
 			ItemStack stack = info.getStack();
@@ -61,7 +66,6 @@ public class GuiInscription extends GuiContainer {
 			this.drawTexturedModalRect(highlightSlot.xDisplayPosition-2, highlightSlot.yDisplayPosition-2, 0, ySize+6, 20, 20);
 		}
 		
-		super.drawGuiContainerForegroundLayer(a, b);
 		for(int x = 0; x < 16; x++){
 			for(int y = 0; y < 16; y++){
 				if(getDust(x,y) != 0){
@@ -69,6 +73,8 @@ public class GuiInscription extends GuiContainer {
 				}
 			}
 		}
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glPopAttrib();
 	}
 	
 	@Override
@@ -131,9 +137,10 @@ public class GuiInscription extends GuiContainer {
         	insc.setInventorySlotContents(0, new ItemStack(DustMod.ink.shiftedIndex, id, slot.slotNumber-1));
         }
         if(isOnMap(x,y)){
-        	System.out.println("rawr");
+//        	System.out.println("rawr");
 			isDown = true;
 			button = b;
+			buttonUpDelay = 3;
         }
 //		super.mouseClicked(x, y, b);
 	}
@@ -142,6 +149,13 @@ public class GuiInscription extends GuiContainer {
 	public boolean isDown = false;
 	@Override //Stopped being constant. Would only call when mouse released
 	protected void mouseMovedOrUp(int x, int y, int b) {
+//		System.out.println("waat " + isDown + " " + b + " " + buttonUpDelay);
+		if(buttonUpDelay > 0) buttonUpDelay --;
+		
+		if(b != -1 && buttonUpDelay <= 0){
+			button = b;
+			isDown = false;
+		}
 		if(!insc.canEdit()) return;
 		if(isDown){
 	        int sx = this.guiLeft;
@@ -162,7 +176,7 @@ public class GuiInscription extends GuiContainer {
 				int slot = this.inventorySlots.getSlot(0).getStack().getItemDamage();
 				int id = this.inventorySlots.getSlot(0).getStack().stackSize;
 				ItemStack stack = this.playerInv.getStackInSlot(slot);
-				if(getDust(x,y) != id && ItemInk.reduce(stack, 1)){
+				if(getDust(x,y) != id && ItemInk.reduce(this.player,stack, 1)){
 					setDust(x,y,id);
 					FMLClientHandler.instance().sendPacket(PacketHandler.getUseInkPacket(slot, 1));
 //					this.inventorySlots.putStackInSlot(slot, stack);
@@ -183,11 +197,6 @@ public class GuiInscription extends GuiContainer {
 				}
 			}
 			
-		}
-		
-		if(b != -1){
-			button = b;
-			isDown = false;
 		}
 //		super.mouseMovedOrUp(x, y, b);
 	}
