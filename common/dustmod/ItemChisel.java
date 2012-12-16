@@ -56,7 +56,7 @@ public class ItemChisel extends Item
             return false;
         }
 
-        if (b.getBlockHardness(world,i,j,k) > Block.wood.getBlockHardness(world,i,j,k))
+        if ((b.getBlockHardness(world,i,j,k) > Block.wood.getBlockHardness(world,i,j,k) && !DustMod.Enable_Decorative_Ruts) || b == Block.bedrock)
         {
             return false;
         }
