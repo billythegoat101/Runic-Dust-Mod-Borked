@@ -103,13 +103,13 @@ public class DEHideout extends DustEvent
         
 //        world.setBlockID(x,y-thick,z, Block.brick.blockID);
 
-        Block b = Block.blocksList[world.getBlockId(x, y - h - thick - 1, z)];
+//        Block b = Block.blocksList[world.getBlockId(x, y - h - thick - 1, z)];
 
-        if (b != null && !(b instanceof BlockFluid))
-        {
+//        if (b != null && !(b instanceof BlockFluid))
+//        {
             world.setBlock(x, y - h - thick - 1, z, Block.cobblestone.blockID);
             world.setBlock(x, y - h - thick, z, Block.torchWood.blockID);
-        }
+//        }
 
         doCheck(e);
     }
