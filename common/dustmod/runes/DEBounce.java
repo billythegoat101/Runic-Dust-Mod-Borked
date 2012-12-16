@@ -83,5 +83,20 @@ public class DEBounce extends DustEvent
                 }
             }
         }
+        entities = this.getEntities(e, 3D);
+
+        for (Entity i: entities)
+        {
+            if (i instanceof EntityLiving)
+            {
+                EntityLiving el = (EntityLiving)i;
+                if (!el.onGround /*i.motionY < 0*/)
+                {
+                    i.fallDistance = 0;
+                }else{
+                    el.setJumping(false);
+                }
+            }
+        }
     }
 }
