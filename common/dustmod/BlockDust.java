@@ -81,8 +81,9 @@ public class BlockDust extends BlockContainer {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k,
 			Entity entity) {
+		int meta = world.getBlockMetadata(i,j,k);
 		// if(world.isRemote) return;
-		if (entity instanceof EntityItem) {
+		if (entity instanceof EntityItem && meta != 2) {
 			EntityItem ei = (EntityItem) entity;
 			ei.age = 0;
 			EntityPlayer p = world.getClosestPlayerToEntity(ei, 0.6);
@@ -102,7 +103,7 @@ public class BlockDust extends BlockContainer {
 //			}
 		}
 
-		if (entity instanceof EntityXPOrb) {
+		if (entity instanceof EntityXPOrb && meta != 2) {
 			EntityXPOrb orb = (EntityXPOrb) entity;
 			orb.xpOrbAge = 0;
 			EntityPlayer p = world.getClosestPlayerToEntity(orb, 3.0);
@@ -168,8 +169,8 @@ public class BlockDust extends BlockContainer {
 			return 0xEFEFEF;
 
 		default:
-			System.out.println("derp? "
-					+ iblockaccess.getBlockMetadata(i, j, k));
+//			System.out.println("derp? "
+//					+ iblockaccess.getBlockMetadata(i, j, k));
 			return 0;
 		}
 	}
