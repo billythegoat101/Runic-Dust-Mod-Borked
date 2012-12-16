@@ -54,9 +54,7 @@ public class DEEarthSprite  extends PoweredEvent
         for (int i = 0; i < 8; i++)
         {
             EntityBlock eb = new EntityBlock(e.worldObj, e.getX(), e.getY() + 2, e.getZ(), Block.glass.blockID);
-            eb.hasParentDust = true;
-            eb.parentDustID = e.entityDustID;
-            eb.parentDust = e;
+            eb.setParent(e);
             registerFollower(e, eb);
             eb.updateDataWatcher();
             e.worldObj.spawnEntityInWorld(eb);
@@ -90,7 +88,11 @@ public class DEEarthSprite  extends PoweredEvent
 //            Vec3D v = Vec3D.createVector(p.motionX, p.motionY, p.motionZ);
 //            double vel = v.lengthVector();
             float vel = DustModBouncer.getMoveForward(p);
-            boolean protect = (vel == 0) && p.isSneaking() && Math.abs(p.motionY) < 0.08D;
+            boolean wasSneaking = e.data[2] == 1;
+            boolean wasProtect = e.data[3] == 1;
+            boolean protect = (vel == 0) && p.isSneaking() && Math.abs(p.motionY) < 0.08D && p.onGround;
+            e.data[2] = (p.isSneaking() ? 1:0);
+            e.data[3] = protect ? 1:0;
 //            System.out.println("derp " + p.motionY);
             int px = MathHelper.floor_double(p.posX);
             int py = MathHelper.floor_double(p.posY);
@@ -101,9 +103,12 @@ public class DEEarthSprite  extends PoweredEvent
 //                p.posX = px+0.5D;
 //                p.posY = py + p.yOffset+0.1D;
 //                p.posZ = pz+0.5D;
-                p.setPositionAndUpdate((double)px + 0.5D, (double)py + p.yOffset, (double)pz + 0.5D);
+                if(p.isSneaking() && !wasSneaking) p.setPositionAndUpdate((double)px + 0.5D, (double)py + p.yOffset, (double)pz + 0.5D);
                 p.setMoveForward(0);
 //                p.setVelocity(0,0,0);
+            }
+            if(!protect && wasProtect){
+            	p.setPositionAndUpdate((double)px + 0.5D, (double)py + p.yOffset, (double)pz + 0.5D);
             }
 
 //            System.out.println("what the dick " + p.yOffset + " " + p.posX + " " + p.posY + " " + p.posZ);
@@ -137,6 +142,7 @@ public class DEEarthSprite  extends PoweredEvent
                 }
                 else
                 {
+//                	eb.unplace();
                     int period = 60;
                     double dist = 3D;
                     double ticks = (e.ticksExisted + ind * 8) % period;
@@ -147,7 +153,7 @@ public class DEEarthSprite  extends PoweredEvent
                     double dx = cos * dist;
                     double dz = sin * dist;
                     double dy = sinY * 1D + 1.5D;
-                    eb.goTo(2.8D, p.posX + dx, p.posY + dy, p.posZ + dz);
+                    eb.goTo(2.8D, p.posX + dx, p.posY + dy+0.5, p.posZ + dz);
                 }
 
                 ind++;
