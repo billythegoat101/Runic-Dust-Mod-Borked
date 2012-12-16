@@ -178,7 +178,7 @@ public class DEMiniTele extends DustEvent
 
             if (i instanceof EntityBlock)
             {
-                if (((EntityBlock)i).hasParentDust)
+                if (((EntityBlock)i).hasParent())
                 {
                     continue;
                 }
@@ -190,7 +190,7 @@ public class DEMiniTele extends DustEvent
 //                dx *= (dx < 0) ? -1 : 1;
 //                dz *= (dz < 0) ? -1 : 1;
 //                dy *= (dy < 0) ? -1 : 1;
-            double tol = 1.0D;
+            double tol = 3.2D;
 
             if (!(i instanceof EntityDust) && Math.abs(dx) < tol && Math.abs(dz) < tol && Math.abs(dy) < 3D/*i instanceof EntityLiving && e.getDistanceToEntity(i) <= 0.5F*/)
             {
