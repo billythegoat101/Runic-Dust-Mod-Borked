@@ -7,6 +7,7 @@ package dustmod.runes;
 import java.util.HashMap;
 import java.util.List;
 
+import dustmod.DustMod;
 import dustmod.EntityAIDustFollowBaitRune;
 import dustmod.EntityDust;
 import dustmod.PoweredEvent;
@@ -140,14 +141,21 @@ public class DEBait extends PoweredEvent
                     el.setTarget(e);
                     el.setPathToEntity(e.worldObj.getEntityPathToXYZ(el, e.getX(), e.getY(), e.getZ(), 10F, true, false, false, true));
                     DustModBouncer.updateState(el);
-                    el.motionY += 0.5;
+                    el.motionY += 0.015;
                     EntityLookHelper elh = el.getLookHelper();//func_46008_aG();
-                    elh.setLookPositionWithEntity(e, 1, 1);//func_46141_a(e, 1, 1);
+                    elh.setLookPositionWithEntity(e, 0, 1);//func_46141_a(e, 1, 1);
                     el.setMoveForward(16F);
                     el.velocityChanged = true;
                     DustModBouncer.setEntityToAttack(el, e);
                     el.setHomeArea(e.getX(), e.getY(), e.getZ(), 0);
                     DustModBouncer.setEntityToAttack(el, e);
+                    
+
+                    if(Math.random() < 0.2){
+                    	DustMod.spawnParticles(el.worldObj, "smoke", el.posX, el.posY+el.height/2, el.posZ,
+                    			0, Math.random() * 0.05, 0, (int)(Math.random()*20), 0.75, el.height/2, 0.75);
+                    }
+                    
                 }
                 else
                 {

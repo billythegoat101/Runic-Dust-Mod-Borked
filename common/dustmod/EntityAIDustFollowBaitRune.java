@@ -78,6 +78,13 @@ public class EntityAIDustFollowBaitRune extends EntityAIBase
     public void updateTask()
     {
         super.updateTask();
+        
+        if(!continueExecuting()){
+        	theEntity.getNavigator().clearPathEntity();
+        	theEntity.tasks.taskEntries.remove(this);
+        	return;
+        }
+        
         theEntity.getNavigator().tryMoveToXYZ(movePosX, movePosY, movePosZ, speed);
         
         if(Math.random() < 0.2){
@@ -91,7 +98,8 @@ public class EntityAIDustFollowBaitRune extends EntityAIBase
      */
     public boolean continueExecuting()
     {
-        return dust == null || !dust.isDead;
+        return (dust != null && !dust.isDead);
+//    	return false;
     }
 
     /**
