@@ -15,7 +15,7 @@ import dustmod.DustMod;
 
 //import cpw.mods.fml.common.Mod.Instance;
 
-@Mod(modid = "DustDeco", name = "Dust mod Decorative version", version = "1.0", dependencies="after:DustMod")
+@Mod(modid = "DustDeco", name = "Dust mod Decorative version", version = "2.1", dependencies="after:DustMod")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class DustDeco {
 
@@ -78,15 +78,15 @@ public class DustDeco {
 		DustItemManager.registerDust(17,"Light Gray",	"lgrdust", 	colors[7], 	colors[7],  floorcolors[7]);
 		DustItemManager.registerDust(18,"Gray", 		"grydust", 	colors[8], 	colors[8],  floorcolors[8]);
 		DustItemManager.registerDust(19,"Pink", 		"pnkdust",	colors[9], 	colors[9],  floorcolors[9]);
-		DustItemManager.registerDust(21,"Lime", 		"lmedust", 	colors[10], colors[10], floorcolors[10]);
-		DustItemManager.registerDust(22,"Yellow", 		"ylwdust", 	colors[11], colors[11], floorcolors[11]);
-		DustItemManager.registerDust(23,"Light Blue", 	"lbldust", 	colors[12], colors[12], floorcolors[12]);
-		DustItemManager.registerDust(24,"Magenta", 		"magdust", 	colors[13], colors[13], floorcolors[13]);
-		DustItemManager.registerDust(25,"Orange", 		"orndust", 	colors[14], colors[14], floorcolors[14]);
-		DustItemManager.registerDust(26,"White", 		"whtdust", 	colors[15], colors[15], floorcolors[15]);
+		DustItemManager.registerDust(20,"Lime", 		"lmedust", 	colors[10], colors[10], floorcolors[10]);
+		DustItemManager.registerDust(21,"Yellow", 		"ylwdust", 	colors[11], colors[11], floorcolors[11]);
+		DustItemManager.registerDust(22,"Light Blue", 	"lbldust", 	colors[12], colors[12], floorcolors[12]);
+		DustItemManager.registerDust(23,"Magenta", 		"magdust", 	colors[13], colors[13], floorcolors[13]);
+		DustItemManager.registerDust(24,"Orange", 		"orndust", 	colors[14], colors[14], floorcolors[14]);
+		DustItemManager.registerDust(25,"White", 		"whtdust", 	colors[15], colors[15], floorcolors[15]);
     	
 		for(int i = 0; i < 16; i++){
-			GameRegistry.addShapelessRecipe(new ItemStack(DustMod.idust,4,i+10), new ItemStack(Item.dyePowder,1,i), new ItemStack(Block.sand,1));
+			GameRegistry.addShapelessRecipe(new ItemStack(DustMod.getItemDust(),4,i+10), new ItemStack(Item.dyePowder,1,i), new ItemStack(Block.sand,1));
 		}
 		
 	}
