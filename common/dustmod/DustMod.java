@@ -43,7 +43,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1.4")
+@Mod(modid = "DustMod", name = "Runic Dust Mod", version = "1.1.6")
 @NetworkMod(
 	clientSideRequired = true, 
 	serverSideRequired = false, 
@@ -72,6 +72,7 @@ public class DustMod {
     public static int blazeDID = 4;
 
     public static String path = "/dust";
+    public static File suggestedConfig;
     public static int[] tex;
     public static int groundTex;
     public static boolean allTex = true;
@@ -99,6 +100,7 @@ public class DustMod {
     public static int ENTITY_BlockEntityID = 150;
     public static boolean Enable_Render_Flames_On_Dust = true;
     public static boolean Enable_Render_Flames_On_Ruts = true;
+    public static boolean Enable_Decorative_Ruts = false;
     
     public static Block dust;
     protected static Block dustTable;
@@ -134,30 +136,37 @@ public class DustMod {
 	public void preInit(FMLPreInitializationEvent evt){
 		if(hasLoaded) return;
 		hasLoaded = true;
-		Configuration config = new Configuration(evt.getSuggestedConfigurationFile());
+		suggestedConfig = new File(evt.getSuggestedConfigurationFile().getParent() + "\\DustModConfigv2.cfg");
+//		suggestedConfig.renameTo(new File("DustModConfigv2.cfg"));
+		
+		System.out.println("CONFIG " + suggestedConfig.getParent());
+		Configuration config = new Configuration(suggestedConfig);
 		try{
+//			File f = new File(configPath);
+//			f.mkdirs();
 			config.load();
 			
 			BLOCK_RutID = config.getBlock("RutBlock", BLOCK_RutID).getInt(BLOCK_RutID);
 			BLOCK_DustTableID = config.getBlock("DustTableBlock", BLOCK_DustTableID).getInt(BLOCK_DustTableID);
 			BLOCK_DustID = config.getBlock("DustBlock", BLOCK_DustID).getInt(BLOCK_DustID);
 			
-			ITEM_DustID = config.get("DustItem", Configuration.CATEGORY_ITEM, ITEM_DustID).getInt(ITEM_DustID);
-			ITEM_RunicTomeID = config.get("TomeItem", Configuration.CATEGORY_ITEM, ITEM_RunicTomeID).getInt(ITEM_RunicTomeID);
-			ITEM_DustScrollID = config.get("ScrollItem", Configuration.CATEGORY_ITEM, ITEM_DustScrollID).getInt(ITEM_DustScrollID);
-			ITEM_SpiritSwordID = config.get("SpirtSwordItem", Configuration.CATEGORY_ITEM, ITEM_SpiritSwordID).getInt(ITEM_SpiritSwordID);
-			ITEM_SpiritPickID = config.get("SpiritPickItem", Configuration.CATEGORY_ITEM, ITEM_SpiritPickID).getInt(ITEM_SpiritPickID);
-			ITEM_ChiselID = config.get("ChiselItem", Configuration.CATEGORY_ITEM, ITEM_ChiselID).getInt(ITEM_ChiselID);
-			ITEM_SacrificeNegationID = config.get("SacrificeNegatorItem", Configuration.CATEGORY_ITEM, ITEM_SacrificeNegationID).getInt(ITEM_SacrificeNegationID);
-			ITEM_RunicPaperID = config.get("RunicPaperItem", Configuration.CATEGORY_ITEM, ITEM_RunicPaperID).getInt(ITEM_RunicPaperID);
-			ITEM_InscriptionID = config.get("RunicInscriptionTag", Configuration.CATEGORY_ITEM, ITEM_InscriptionID).getInt(ITEM_InscriptionID);
-			ITEM_InkID = config.get("RunicInk", Configuration.CATEGORY_ITEM, ITEM_InkID).getInt(ITEM_InkID);
-			ITEM_WornInscriptionID = config.get("WearableInscription", Configuration.CATEGORY_ITEM, ITEM_WornInscriptionID).getInt(ITEM_WornInscriptionID);
-			ITEM_PouchID = config.get("DustPouch", Configuration.CATEGORY_ITEM, ITEM_PouchID).getInt(ITEM_PouchID);
+			ITEM_DustID = config.getItem("DustItem", ITEM_DustID).getInt(ITEM_DustID);
+			ITEM_RunicTomeID = config.get( Configuration.CATEGORY_ITEM, "TomeItem",ITEM_RunicTomeID).getInt(ITEM_RunicTomeID);
+			ITEM_DustScrollID = config.getItem("ScrollItem", ITEM_DustScrollID).getInt(ITEM_DustScrollID);
+			ITEM_SpiritSwordID = config.getItem("SpirtSwordItem", ITEM_SpiritSwordID).getInt(ITEM_SpiritSwordID);
+			ITEM_SpiritPickID = config.getItem("SpiritPickItem", ITEM_SpiritPickID).getInt(ITEM_SpiritPickID);
+			ITEM_ChiselID = config.getItem("ChiselItem", ITEM_ChiselID).getInt(ITEM_ChiselID);
+			ITEM_SacrificeNegationID = config.getItem("SacrificeNegatorItem", ITEM_SacrificeNegationID).getInt(ITEM_SacrificeNegationID);
+			ITEM_RunicPaperID = config.getItem("RunicPaperItem", ITEM_RunicPaperID).getInt(ITEM_RunicPaperID);
+			ITEM_InscriptionID = config.getItem("RunicInscriptionTag", ITEM_InscriptionID).getInt(ITEM_InscriptionID);
+			ITEM_InkID = config.getItem("RunicInk", ITEM_InkID).getInt(ITEM_InkID);
+			ITEM_WornInscriptionID = config.getItem("WearableInscription", ITEM_WornInscriptionID).getInt(ITEM_WornInscriptionID);
+			ITEM_PouchID = config.getItem("DustPouch", ITEM_PouchID).getInt(ITEM_PouchID);
 			
-			ENTITY_FireSpriteID = config.get("FireSpriteEntityID", Configuration.CATEGORY_GENERAL, ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
-			ENTITY_BlockEntityID = config.get("BlockEntityID", Configuration.CATEGORY_GENERAL, ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
-	        
+			ENTITY_FireSpriteID = config.get(Configuration.CATEGORY_GENERAL, "FireSpriteEntityID", ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
+			ENTITY_BlockEntityID = config.get(Configuration.CATEGORY_GENERAL, "BlockEntityID", ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
+			Enable_Decorative_Ruts = config.get("config", "DecorativeRuts", Enable_Decorative_Ruts).getBoolean(Enable_Decorative_Ruts);
+			
 		} catch (Exception e){
 			FMLLog.log(Level.SEVERE, e, "[DustMod]: Error loading config.");
 		} finally {
@@ -252,9 +261,9 @@ public class DustMod {
         
         
         EntityRegistry.registerModEntity(EntityDust.class, "dustentity", ENTITY_FireSpriteID, this, 192, 2, false);
-        EntityRegistry.registerGlobalEntityID(EntityDust.class, "dustentity", ENTITY_FireSpriteID);
+//        EntityRegistry.registerGlobalEntityID(EntityDust.class, "dustentity", ENTITY_FireSpriteID);
         EntityRegistry.registerModEntity(EntityBlock.class, "dustblockentity", ENTITY_BlockEntityID, this, 64, 1, false);
-        EntityRegistry.registerGlobalEntityID(EntityBlock.class, "dustblockentity", ENTITY_BlockEntityID);
+//        EntityRegistry.registerGlobalEntityID(EntityBlock.class, "dustblockentity", ENTITY_BlockEntityID);
 
 //		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		
@@ -447,15 +456,15 @@ public class DustMod {
     	return wornInscription;
     }
     public static Item getItemDust(){
-    	if(!hasLoaded){
-    		instance.preInit(null);
-    	}
+//    	if(!hasLoaded){
+//    		instance.preInit(null);
+//    	}
     	return idust;
     }
     public static Item getNegator(){
-    	if(!hasLoaded){
-    		instance.preInit(null);
-    	}
+//    	if(!hasLoaded){
+//    		instance.preInit(null);
+//    	}
     	return negateSacrifice;
     }
     

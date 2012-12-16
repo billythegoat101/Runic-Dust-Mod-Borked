@@ -110,14 +110,14 @@ public class DustManager
             return null;
         }
 
-        EntityDust result = new EntityDust(world);
+        EntityDust result = new EntityDust(world,points);
         result.entityDustID = EntityDustManager.getNextDustEntityID();
         EntityDustManager.registerEntityDust(result, result.entityDustID);
         result.setPosition(x, y - 0.8, z);
 //        result.posX = x;
 //        result.posY = y-0.8;//EntityDust.yOffset;
 //        result.posZ = z;
-        result.dustPoints = points;
+//        result.dustPoints = points;
         for(int i = 0; i < rot; i++){
         	map = DustShape.rotateMatrix(map);
         }
@@ -157,7 +157,7 @@ public class DustManager
         world.spawnEntityInWorld(result);
         
         
-        if (evt.canPlayerKnowRune(MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name)) && evt.permaAllowed)
+        if (evt.canPlayerKnowRune(username) && evt.permaAllowed)
         {
             evt.initGraphics(result);
             evt.init(result);
@@ -245,15 +245,18 @@ public class DustManager
         if(eventInstance != null && eventInstance instanceof PoweredEvent){
             shape.isPower = true;
         }
-        
+
+		System.out.println("Registering rune " + shape.name);
         
         if(config == null){
-            config = new Configuration(new File("./DustModConfig.cfg"));
+            config = new Configuration(DustMod.suggestedConfig);
             config.load();
+            config.addCustomCategoryComment("INSCRIPTIONS", "Allow specific inscriptions to be used. Options: ALL, NONE, OPS");
+            config.addCustomCategoryComment("RUNES", "Allow specific runes to be used. Options: ALL, NONE, OPS");
         }
             if (!eventInstance.secret)
             {
-            	String permission = config.get("[RUNE]Allow_" + shape.getRuneName().replace(' ', '_'), Configuration.CATEGORY_GENERAL, eventInstance.permission).value.toUpperCase();
+            	String permission = config.get( "RUNES", "Allow-" + shape.getRuneName().replace(' ', '_'),eventInstance.permission).value.toUpperCase();
 
             	if(permission.equals("TRUE")) permission = "ALL"; //For backwards-compatibilities sake. Permission used to be a boolean
             	else if(permission.equals("FALSE")) permission = "OPS";
@@ -262,6 +265,10 @@ public class DustManager
             		eventInstance.permission = permission;
             	}else
             		eventInstance.permission = "NONE";
+
+        		if(!eventInstance.permission.equals("ALL")){
+        			System.out.println("Rune permission for " + eventInstance.name + " set to " + eventInstance.permission);
+        		}
             }
 
         config.save();

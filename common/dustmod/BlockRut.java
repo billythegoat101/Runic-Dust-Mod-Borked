@@ -32,7 +32,7 @@ public class BlockRut extends BlockContainer
     public BlockRut(int i)
     {
         super(i, 7, Material.wood);
-        this.setLightOpacity(128);
+        this.setLightOpacity(0);
 //        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.9375F, 1.0F);
 //        standTex = ModLoader.addOverride("/terrain.png", mod_DustMod.path + "/standTop.png");
     }
@@ -128,7 +128,7 @@ public class BlockRut extends BlockContainer
         }
 
 //        ter.fluid = Block.obsidian.blockID;
-        if (ter.fluid == 0 && !isNull && pItem.itemID == Item.bucketWater.shiftedIndex)
+        if (/*ter.fluid == 0 && */!isNull && pItem.itemID == Item.bucketWater.shiftedIndex)
         {
             if (!p.capabilities.isCreativeMode)
             {
@@ -139,7 +139,7 @@ public class BlockRut extends BlockContainer
             return true;
         }
 
-        if (ter.fluid == 0 && !isNull && pItem.itemID == Item.bucketLava.shiftedIndex)
+        if (/*ter.fluid == 0 && */!isNull && pItem.itemID == Item.bucketLava.shiftedIndex)
         {
             if (!p.capabilities.isCreativeMode)
             {
@@ -158,7 +158,7 @@ public class BlockRut extends BlockContainer
             {
                 Block b = Block.blocksList[bid];
 
-                if (b.renderAsNormalBlock() && b.isOpaqueCube() && b.getBlockHardness(world, i,j,k) <= TileEntityRut.hardnessStandard)
+                if (b.renderAsNormalBlock() && b.isOpaqueCube() && (b.getBlockHardness(world, i,j,k) <= TileEntityRut.hardnessStandard || DustMod.Enable_Decorative_Ruts))
                 {
                     if (!p.capabilities.isCreativeMode)
                     {
@@ -171,7 +171,7 @@ public class BlockRut extends BlockContainer
             }
         }
 
-        if (!isNull && ter.fluid != 0 && !ter.fluidIsFluid() && Block.blocksList[ter.fluid].getBlockHardness(world, i,j,k) <= TileEntityRut.hardnessStandard)
+        if (!isNull && ter.fluid != 0 && !ter.fluidIsFluid() && (Block.blocksList[ter.fluid].getBlockHardness(world, i,j,k) <= TileEntityRut.hardnessStandard || DustMod.Enable_Decorative_Ruts))
         {
             if (Item.itemsList[pItem.itemID] instanceof ItemSpade)
             {
@@ -253,10 +253,10 @@ public class BlockRut extends BlockContainer
 
     @Override
     public void breakBlock(World world, int i, int j, int k, int b, int m) {
-		if (world.isRemote) {
-        	super.breakBlock(world, i, j, k, b, m);
-			return;
-		}
+//		if (world.isRemote) {
+//        	super.breakBlock(world, i, j, k, b, m);
+//			return;
+//		}
         TileEntityRut ter = (TileEntityRut)world.getBlockTileEntity(i, j, k);
 
         if (ter.isDead)

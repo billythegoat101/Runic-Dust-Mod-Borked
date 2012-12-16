@@ -37,18 +37,24 @@ public class InscriptionManager {
 		}
 		events.add(evt);
 		
+		System.out.println("Registering inscription " + evt.idName);
 		if(config == null){
-            config = new Configuration(new File("./DustModConfig.cfg"));
+            config = new Configuration(DustMod.suggestedConfig);
             config.load();
+            config.addCustomCategoryComment("INSCRIPTIONS", "Allow specific inscriptions to be used. Options: ALL, NONE, OPS");
+            config.addCustomCategoryComment("RUNES", "Allow specific runes to be used. Options: ALL, NONE, OPS");
         }
             if (!evt.secret)
             {
-            	String permission = config.get("[INSCRIPTION]Allow_" + evt.getInscriptionName().replace(' ', '_'), Configuration.CATEGORY_GENERAL, evt.permission).value.toUpperCase();
+            	String permission = config.get( "INSCRIPTIONS", "Allow-" + evt.getInscriptionName().replace(' ', '_'), evt.permission).value.toUpperCase();
             	
             	if(permission.equals("ALL") || permission.equals("NONE") || permission.equals("OPS")){
             		evt.permission = permission;
             	}else
             		evt.permission = "NONE";
+        		if(!evt.permission.equals("ALL")){
+        			System.out.println("Inscription permission for " + evt.idName + " set to " + evt.permission);
+        		}
             }
 
         config.save();
@@ -68,10 +74,10 @@ public class InscriptionManager {
 		eventsRemote = new ArrayList<InscriptionEvent>();
 	}
 
-	public static void tick(Player p, boolean[] buttons) {
+	public static void tick(Player p, boolean[] buttons, ItemStack item) {
 		InscriptionEvent event = getEvent(p);
 		InscriptionEvent last = getEvent(lastArmor.get(DustMod.getUsername(p)));
-		ItemStack item = ((EntityPlayer) p).inventory.getStackInSlot(38);
+//		ItemStack item = ((EntityPlayer) p).inventory.getStackInSlot(38);
 //		System.out.println("yo wtf " + DustMod.getUsername(p) + " " + event + " " + last);
 		if (event != null) {
 			if (last != event) {
@@ -234,7 +240,7 @@ public class InscriptionManager {
 					* distance, look.zCoord * distance);
 
 			if (look.yCoord < -0.95) {
-				System.out.println("Shield");
+//				System.out.println("Shield");
 				int x = (int) Math.round(ep.posX);
 				int y = (int) Math.round(ep.posY);
 				int z = (int) Math.round(ep.posZ);
