@@ -7,6 +7,7 @@ package dustmod;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.AxisAlignedBB;
@@ -15,9 +16,8 @@ import net.minecraft.src.Entity;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
+import net.minecraft.src.ServerConfigurationManager;
 import net.minecraft.src.World;
-import cpw.mods.fml.common.network.Player;
 
 /**
  * 
@@ -30,9 +30,11 @@ public abstract class DustEvent {
 	public String name;
 	public boolean secret = false;
 	public String permission = "ALL";
-	 //Set by the coder, unalterable by user configs. 
-	//Setting it to false disallows all use, but if true it will not affect anything
-	//This is for the case where something breaks, it gives the coder time to fix it later
+	// Set by the coder, unalterable by user configs.
+	// Setting it to false disallows all use, but if true it will not affect
+	// anything
+	// This is for the case where something breaks, it gives the coder time to
+	// fix it later
 	public boolean permaAllowed = true;
 
 	public DustEvent() {
@@ -70,9 +72,10 @@ public abstract class DustEvent {
 		onInit(e);
 	}
 
-	protected void initGraphics(EntityDust e){
-		
+	protected void initGraphics(EntityDust e) {
+
 	}
+
 	protected void onInit(EntityDust e) {
 	}
 
@@ -133,16 +136,25 @@ public abstract class DustEvent {
 	/**
 	 * Will the server send this rune's info to the player
 	 * 
-	 * @param player the player
+	 * @param player
+	 *            the player
 	 * @return true if can see, false otherwise
 	 */
-	public boolean canPlayerKnowRune(EntityPlayer player){
-		boolean isOP = true;
-		try{
-			isOP = MinecraftServer.getServer().getConfigurationManager().areCommandsAllowed(player.username);
-		}catch(Exception e){}
-    	return permaAllowed && (this.permission.equals("ALL") || (this.permission.equals("OP") && isOP));
-    }
+	public boolean canPlayerKnowRune(String player) {
+		boolean isOP = false;
+		if(player != null && !player.isEmpty())
+			try {
+				MinecraftServer server = MinecraftServer.getServer();
+				ServerConfigurationManager manager = server.getConfigurationManager();
+				Set ops = manager.getOps();
+				isOP = (ops == null || ops.contains(player.toLowerCase()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		return permaAllowed
+				&& (this.permission.equals("ALL") || (this.permission
+						.equals("OPS") && isOP));
+	}
 
 	/**
 	 * Take experience levels from the closest nearby player.
@@ -163,7 +175,7 @@ public abstract class DustEvent {
 
 		if (player != null) {
 			if (player.experienceLevel >= levels) {
-				player.experienceLevel -= levels;
+				player.addExperienceLevel(-levels);
 				return true;
 			}
 		}
@@ -432,15 +444,15 @@ public abstract class DustEvent {
 
 			if (is.stackSize <= 0) {
 				i.setDead();
-			}else {
-				double rx,rz;
+			} else {
+				double rx, rz;
 				double r = 0.1;
 				double min = 0.065;
-				rx = Math.random()*r*2 -r;
-				rx += (rx < 0)? -min:min;
-				rz = Math.random()*r*2 -r;
-				rz += (rz < 0)? -min:min;
-				i.addVelocity(rx, Math.random()*0.5, rz);
+				rx = Math.random() * r * 2 - r;
+				rx += (rx < 0) ? -min : min;
+				rz = Math.random() * r * 2 - r;
+				rz += (rz < 0) ? -min : min;
+				i.addVelocity(rx, Math.random() * 0.5, rz);
 			}
 		}
 
