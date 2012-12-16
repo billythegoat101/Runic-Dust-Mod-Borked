@@ -29,7 +29,10 @@ public class DEObelisk extends DustEvent
     	super.initGraphics(e);
 
 //      e.setRenderBeam(true);
-        e.setColorBeam(114, 53, 62);
+        e.setColorBeam(114, 114, 62);
+        e.setRenderBeam(true);
+        e.setBeamType(1);
+//        e.setRenderStar(true);
 		
     }
 
@@ -41,9 +44,7 @@ public class DEObelisk extends DustEvent
 //            e.fizzle();
 //            return;
 //        }
-
-        e.setRenderBeam(true);
-        e.setColorBeam(114, 53, 62);
+    	
         ItemStack[] sacrifice = new ItemStack[1];
         sacrifice[0] = new ItemStack(Block.oreIron, 2);
         this.sacrifice(e, sacrifice);
@@ -101,13 +102,13 @@ public class DEObelisk extends DustEvent
         {
             if (e.data[1] > 0)
             {
-                List<Entity> ents = getEntities(e.worldObj, (double)x + 0.5D, (double)y + /*(double)e.data[0] + */1D, (double)z + 0.5D, 1.5D);
+                List<Entity> ents = getEntities(e.worldObj, (double)x + 0.5D, (double)y + (double)e.data[0] + 1D, (double)z + 0.5D, 1.5D);
             	System.out.println("RAWR " + e.data[0] + " " + ents.size());
 
                 for (Entity i: ents)
                 {
                 	if(i != e)
-                		i.setPosition((double)x + 0.5D, (double)y + (double)e.data[0] + 2D, (double)z + 0.5D);
+                		i.setPosition((double)x + 0.5D, (double)y + (double)e.data[0] + 1D, (double)z + 0.5D);
                 }
             }
 
