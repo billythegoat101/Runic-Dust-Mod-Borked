@@ -220,7 +220,7 @@ public class DETeleportation extends PoweredEvent
 
                 if (i instanceof EntityBlock)
                 {
-                    if (((EntityBlock)i).hasParentDust)
+                    if (((EntityBlock)i).hasParent())
                     {
                         continue;
                     }
