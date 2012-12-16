@@ -28,25 +28,25 @@ import net.minecraft.src.World;
 public class EntityBlock extends EntityFallingSand
 {
 //    public int blockID;
-    public int meta;
+//    protected int meta;
 
     /** How long the block has been falling for. */
-    public int fallTime;
-    public boolean save = true;
-    public boolean hasParentDust = false;
-    public long parentDustID = -1L;
-    public EntityDust parentDust = null;
+    protected int fallTime;
+    protected boolean save = true;
+    protected boolean hasParentDust = false;
+    protected long parentDustID = -1L;
+    protected EntityDust parentDust = null;
 
-    public boolean throwing = false;
-    public boolean going = false;
-    public boolean placeWhenArrived = false;
-    public boolean lingerWhenArrived = false;
-    public boolean lingering = false;
-    public double gx, gy, gz;
-    public int lx, ly, lz;
-    public double gv;
+    protected boolean throwing = false;
+    protected boolean going = false;
+    protected boolean placeWhenArrived = false;
+    protected boolean lingerWhenArrived = false;
+    protected boolean lingering = false;
+    protected double gx, gy, gz;
+    protected int lx, ly, lz;
+    protected double gv;
 
-    public int origX, origY, origZ;
+    protected int origX, origY, origZ;
 
     boolean justBorn = true;
 
@@ -65,20 +65,20 @@ public class EntityBlock extends EntityFallingSand
     {
         super.entityInit();
         dataWatcher.addObject(10, new Integer(blockID));
-        dataWatcher.addObject(11, new Integer(meta));
+        dataWatcher.addObject(11, new Integer(metadata));
         dataWatcher.addObject(12, new Integer((lingering ? 1:0)));
     }
 
     public void updateDataWatcher()
     {
         dataWatcher.updateObject(10, new Integer(blockID));
-        dataWatcher.updateObject(11, new Integer(meta));
+        dataWatcher.updateObject(11, new Integer(metadata));
         dataWatcher.updateObject(12, new Integer((lingering ? 1:0)));
     }
     public void updateEntityFromDataWatcher()
     {
         blockID = dataWatcher.getWatchableObjectInt(10);
-        meta = dataWatcher.getWatchableObjectInt(11);
+        metadata = dataWatcher.getWatchableObjectInt(11);
         lingering = dataWatcher.getWatchableObjectInt(12) == 1;
     }
 
@@ -105,6 +105,8 @@ public class EntityBlock extends EntityFallingSand
             this.extinguish();
         }
 
+//        System.out.println("RAWR " + this.noClip + " " + this.going);
+        
 //        if (worldObj.isRemote)
 //        {
 //            super.onEntityUpdate();
@@ -125,7 +127,7 @@ public class EntityBlock extends EntityFallingSand
         if(!throwing) motionX = motionY = motionZ = 0;
         else {
 //        	System.out.println("wat " + motionX + " " + motionY + " " + motionZ);
-        	updateSand();
+//        	updateSand();
 //        	this.moveEntity(motionX, motionY, motionZ);
 //        	this.
         }
@@ -151,15 +153,9 @@ public class EntityBlock extends EntityFallingSand
             justBorn = false;
         }
 
-        if (lingering && worldObj.getBlockId(lx, ly, lz) != blockID)
-        {
-            setDead();
-            return;
-        }
-
         if (going)
         {
-            if (lingering && getDistance(lx, ly, lz) > 1.5D)
+            if (lingering && getDistance(lx, ly, lz) > 1.5D && canPlace(lx,ly,lz))
             {
                 worldObj.setBlockWithNotify(lx, ly, lz, 0);
                 lingering = false;
@@ -185,16 +181,29 @@ public class EntityBlock extends EntityFallingSand
             if (placeWhenArrived && (dist < 1.4D ||
                     (Math.abs(motionX) < velTol && Math.abs(motionY) < velTol && Math.abs(motionY) < velTol)))
             {
-                if (lingering)
+//            	placeWhenArrived = false;
+//                if (lingering)
+//                {
+//                    lingering = true;
+//                    this.updateDataWatcher();
+//                }
+
+
+                if (lingering && worldObj.getBlockId(lx, ly, lz) != blockID)
                 {
-                    worldObj.setBlockWithNotify(lx, ly, lz, 0);
-                    lingering = false;
-                    this.updateDataWatcher();
+//                	System.out.println("DEATH2");
+                    setDead();
+                    return;
                 }
-//                System.out.println("PLACE");
+                lingering = false;
+                if(canPlace(lx,ly,lz))
+                	worldObj.setBlockWithNotify(lx, ly, lz, 0);
+            	
                 this.setPosition(gx,gy,gz);
                 place();
+                updateDataWatcher();
             }
+            
         }
         else if (hasParentDust && parentDust == null)
         {
@@ -211,11 +220,13 @@ public class EntityBlock extends EntityFallingSand
             }
             else
             {
+//            	System.out.println("DEATH3");
                 setDead();
             }
         }
         else if ((parentDust != null && parentDust.isDead) || blockID == 0)
         {
+//        	System.out.println("DEATH4");
             setDead();
             return;
         }
@@ -366,7 +377,7 @@ public class EntityBlock extends EntityFallingSand
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
         tag.setInteger("tile", blockID);
-        tag.setInteger("meta", meta);
+        tag.setInteger("meta", metadata);
         tag.setBoolean("save", save);
         tag.setBoolean("hasparentdust", hasParentDust);
         tag.setLong("parentDustID", parentDustID);
@@ -409,6 +420,7 @@ public class EntityBlock extends EntityFallingSand
         lx = tag.getInteger("lx");
         ly = tag.getInteger("ly");
         lz = tag.getInteger("lz");
+        updateDataWatcher();
     }
 
     @Override
@@ -425,6 +437,7 @@ public class EntityBlock extends EntityFallingSand
     public void setSave(boolean save)
     {
         this.save = save;
+        updateDataWatcher();
     }
 
     public void placeAndLinger(double vel, double x, double y, double z)
@@ -438,12 +451,13 @@ public class EntityBlock extends EntityFallingSand
         origX = x;
         origY = y;
         origZ = z;
+        updateDataWatcher();
     }
 
     public void returnToOrigin(double vel)
     {
-        goTo(vel, origX, origY, origZ);
         placeWhenArrived = true;
+        goTo(vel, origX, origY, origZ);
     }
 
     public void place()
@@ -456,10 +470,9 @@ public class EntityBlock extends EntityFallingSand
         placeWhenArrived = false;
         gv = 0;
 
-//        System.out.println("placing " + ly);
-        if (worldObj.getBlockId(lx, ly, lz) == 0)
+        if (canPlace(lx,ly,lz))
         {
-            worldObj.setBlockAndMetadataWithNotify(lx, ly, lz, blockID, meta);
+            worldObj.setBlockAndMetadataWithNotify(lx, ly, lz, blockID, metadata);
 
             if (lingerWhenArrived)
             {
@@ -468,9 +481,11 @@ public class EntityBlock extends EntityFallingSand
             }
             else
             {
+//            	System.out.println("DEATH5");
                 setDead();
             }
         }
+        updateDataWatcher();
     }
 
     public double goToAndPlace(double vel, double x, double y, double z)
@@ -510,6 +525,7 @@ public class EntityBlock extends EntityFallingSand
         motionX = vx;
         motionY = vy;
         motionZ = vz;
+        updateDataWatcher();
         return dist;
     }
     
@@ -528,4 +544,40 @@ public class EntityBlock extends EntityFallingSand
     	}
     	return false;
     }
+
+
+    public void setParent(EntityDust e){
+    	this.parentDust = e;
+    	this.hasParentDust = true;
+    	this.parentDustID = e.entityDustID;
+    	this.updateDataWatcher();
+    }
+    
+    public boolean hasParent(){
+    	return hasParentDust;
+    }
+    
+    public void setThrowing(boolean throwing){
+    	this.throwing = true;
+    	this.updateDataWatcher();
+    }
+    
+    public void stopLingering(){
+    	lingering = false;
+    	this.updateDataWatcher();
+    }
+    
+    public boolean canPlace(int x, int y, int z){
+    	int blockID = worldObj.getBlockId(x, y, z);
+    	int metadata = worldObj.getBlockMetadata(x,y,z);
+    	
+    	if(blockID == 0) return true;
+    	if(blockID == this.blockID && metadata == this.metadata) return true;
+    	
+    	Block block = Block.blocksList[blockID];
+    	
+    	
+    	return block.blockMaterial.isReplaceable();
+    }
+    
 }

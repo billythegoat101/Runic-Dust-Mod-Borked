@@ -4,6 +4,8 @@
  */
 package dustmod;
 
+import org.lwjgl.opengl.GL11;
+
 import dustmod.EntityBlock;
 import net.minecraft.src.Entity;
 import net.minecraft.src.RenderFallingSand;
@@ -26,7 +28,10 @@ public class RenderEntityBlock extends RenderFallingSand
         {
             if (((EntityBlock)ent).blockID != 0)
             {
+            	GL11.glPushMatrix();
+            	GL11.glTranslated(0.5, -0.5, 0.5);
                 super.doRender(ent, par2, par4, par6, par8, par9);
+            	GL11.glPopMatrix();
             }
         }
     }
