@@ -5,6 +5,7 @@
 package dustmod.runes;
 
 import dustmod.DustEvent;
+import dustmod.DustMod;
 import dustmod.EntityDust;
 import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
@@ -36,7 +37,13 @@ public class DECompression extends DustEvent
 
     public void onInit(EntityDust e)
     {
-        if (!this.takeItems(e, new ItemStack(Block.blockSteel.blockID, 1, -1)))
+    	if (!this.takeItems(e, new ItemStack(Block.blockSteel.blockID, 1, -1)))
+        {
+            e.fizzle();
+            return;
+        }
+    	//Cant use negator
+    	if (this.takeItems(e, new ItemStack(DustMod.getNegator().shiftedIndex, 1, -1)))
         {
             e.fizzle();
             return;
@@ -58,7 +65,7 @@ public class DECompression extends DustEvent
                 diamondAmt++;
             }
 
-            System.out.println("DERP : " + diamondAmt + " " + req[0].stackSize);
+//            System.out.println("DERP : " + diamondAmt + " " + req[0].stackSize);
         }
 
         System.out.println("Diamond amt " + diamondAmt);
