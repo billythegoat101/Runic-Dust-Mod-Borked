@@ -13,6 +13,7 @@ public class ItemInscription extends Item {
 
 	protected ItemInscription(int par1) {
 		super(par1);
+		this.setMaxStackSize(1);
 		this.setIconIndex(37);
 		this.setMaxDamage(181);
 	}
