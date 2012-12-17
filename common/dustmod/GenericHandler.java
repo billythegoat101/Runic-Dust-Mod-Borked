@@ -1,12 +1,15 @@
 package dustmod;
 
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import cpw.mods.fml.common.ICraftingHandler;
+import cpw.mods.fml.common.network.Player;
 
 public class GenericHandler implements ICraftingHandler{
 
@@ -71,5 +74,21 @@ public class GenericHandler implements ICraftingHandler{
 		}
 		
 		evt.item.item = InscriptionManager.onItemPickup(player, item);
+	}
+	
+	
+	@ForgeSubscribe
+	public void onLivingUpdate(LivingUpdateEvent evt){
+
+		Entity ent = evt.entityLiving;
+    	if(ent instanceof EntityPlayer){
+    		EntityPlayer p = (EntityPlayer) ent;
+    		ItemStack item = p.inventory.getStackInSlot(38);
+
+    		if(item != null && item.itemID == DustMod.wornInscription.shiftedIndex){	
+    			boolean[] buttons = DustMod.keyHandler.getButtons(p.username); 
+    			InscriptionManager.tick((Player)p, buttons, p.inventory.getStackInSlot(38));
+    		}
+    	}
 	}
 }
