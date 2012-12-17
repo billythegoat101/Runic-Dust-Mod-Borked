@@ -4,6 +4,7 @@
  */
 package dustmod;
 
+import java.io.File;
 import java.util.Random;
 
 import net.minecraft.src.EntityPlayer;
@@ -103,7 +104,7 @@ public class GuiTome extends GuiScreen
     		"Hope you enjoy!", "Make some runes!","Space for rent.", 
     		"Modders: Make custom runes!", "Insert joke here.","Direwolf20 is cool!",
     		"Notch is cool!","Jeb_ is cool!", "Stop annoying LexManos!","Go play Thaumcraft.", 
-    		"Don't play tekkit!"};
+    		"The QubeTubers are cool!", "Try Ars Magica!", "Play outside!"};
     int randAuthor = (int)(Math.random()*derp.length);
     /**
      * Draw the foreground layer for the GuiContainer (everythin in front of the items)
@@ -207,23 +208,23 @@ public class GuiTome extends GuiScreen
             advancePage();
         }
 
-        if (DustMod.debug && key == mc.gameSettings.keyBindChat.keyCode)
-        {
-            EntityPlayer player = ModLoader.getMinecraftInstance().thePlayer;
-            int scroll = 0;
-
-            if (getRunePage() != 0)
-            {
-                scroll = DustManager.getShape(getRunePage() - 1).id;
-                ItemStack to = new ItemStack(DustMod.dustScroll, 1, scroll);
-                player.inventory.addItemStackToInventory(to);
-            }
-            else
-            {
-                ItemStack to = new ItemStack(DustMod.negateSacrifice, 64);
-                player.inventory.addItemStackToInventory(to);
-            }
-        }
+//        if (DustMod.debug && key == mc.gameSettings.keyBindChat.keyCode)
+//        {
+//            EntityPlayer player = ModLoader.getMinecraftInstance().thePlayer;
+//            int scroll = 0;
+//
+//            if (getRunePage() != 0)
+//            {
+//                scroll = DustManager.getShape(getRunePage() - 1).id;
+//                ItemStack to = new ItemStack(DustMod.dustScroll, 1, scroll);
+//                player.inventory.addItemStackToInventory(to);
+//            }
+//            else
+//            {
+//                ItemStack to = new ItemStack(DustMod.negateSacrifice, 64);
+//                player.inventory.addItemStackToInventory(to);
+//            }
+//        }
     }
     /**
      * Called when the mouse is clicked.
@@ -303,7 +304,7 @@ public class GuiTome extends GuiScreen
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
 //    	System.out.println("RAWR " + DustManager.isEmpty() + " " + InscriptionManager.isEmpty());
-        int i = mc.renderEngine.getTexture("/dust/tomeGui.png");
+        int i = mc.renderEngine.getTexture(DustMod.path + "/tomeGui.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(i);
 //        mc.renderEngine.bindTexture(mc.renderEngine.getTexture(RenderDustTable.getPagePath(page)));
@@ -327,7 +328,7 @@ public class GuiTome extends GuiScreen
         if(isRunes()){
 	        if(getRunePage() == 0){
 	        	if(DustManager.isEmpty()){
-	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/no_runes.png"));
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages" + "/no_runes.png"));
 	        	}else {
 	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
 	        	}
@@ -336,9 +337,9 @@ public class GuiTome extends GuiScreen
         }else {
 	        if(getInsPage() == 0){
 	        	if(InscriptionManager.isEmpty()){
-	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/no_inscriptions.png"));
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages" + "/no_inscriptions.png"));
 	        	}else {
-	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages/info.png"));
+	        		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(DustMod.path + "/pages" + "/info.png"));
 	        	}
 	        }
 	        else PageHelper.bindExternalTexture(PageHelper.insFolder + InscriptionManager.getEventInOrder(getInsPage() -1).getIDName() + ".png");

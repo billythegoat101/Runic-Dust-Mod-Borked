@@ -26,8 +26,8 @@ public class DEXP extends PoweredEvent
 
 		e.setRenderStar(true);
 		e.setRenderBeam(true);
-		e.setRenderFireOnRune(true);
         e.setColorFire(0,255,0);
+		e.setRenderFireOnRune(true);
         e.setColorBeam(255, 255, 255);
 		
     }
@@ -37,8 +37,6 @@ public class DEXP extends PoweredEvent
         super.onInit(e);
 		e.setRenderStar(true);
 		e.setRenderBeam(true);
-		e.setRenderFireOnRune(true);
-        e.setColorFire(0,255,0);
         e.setColorBeam(255, 255, 255);
         e.data[0] = 24000;
         e.posY += 1D;

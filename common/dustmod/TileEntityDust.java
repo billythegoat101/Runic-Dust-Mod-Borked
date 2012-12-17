@@ -33,6 +33,11 @@ public class TileEntityDust extends TileEntity implements IInventory
     private int toDestroy = -1;
     private int ticksExisted = 0;
     private EntityDust entityDust = null;
+    
+    public int dustEntID;
+    
+    private boolean hasFlame = false;
+    private int fr,fg,fb; //flame rgb
 
     public TileEntityDust()
     {
@@ -42,6 +47,7 @@ public class TileEntityDust extends TileEntity implements IInventory
     public void setEntityDust(EntityDust ed)
     {
         this.entityDust = ed;
+        this.dustEntID = ed.entityId;
     }
 
     public void writeToNBT(NBTTagCompound tag)
@@ -58,6 +64,11 @@ public class TileEntityDust extends TileEntity implements IInventory
 
         tag.setInteger("toDestroy", toDestroy);
         tag.setInteger("ticks", ticksExisted);
+        
+        tag.setBoolean("flame", hasFlame);
+        tag.setInteger("flameR", fr);
+        tag.setInteger("flameG", fg);
+        tag.setInteger("flameB", fb);
     }
 
     public void readFromNBT(NBTTagCompound tag)
@@ -82,6 +93,13 @@ public class TileEntityDust extends TileEntity implements IInventory
         if (tag.hasKey("ticks"))
         {
             ticksExisted = tag.getInteger("ticks");
+        }
+        
+        if(tag.hasKey("flame")){
+        	this.hasFlame = tag.getBoolean("flame");
+        	fr = tag.getInteger("flameR");
+        	fg = tag.getInteger("flameG");
+        	fb = tag.getInteger("flameB");
         }
     }
 
@@ -513,6 +531,21 @@ public class TileEntityDust extends TileEntity implements IInventory
     {
     }
 
+    public void setRenderFlame(boolean val, int r, int g, int b){
+    	this.hasFlame = val;
+    	this.fr = r;
+    	this.fg = g;
+    	this.fb = b;
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+	public boolean hasFlame() {
+		return hasFlame;
+	}
+	public int[] getFlameColor(){
+		return new int[]{fr,fg,fb};
+	}
+    
     @Override
     public Packet getDescriptionPacket()
     {

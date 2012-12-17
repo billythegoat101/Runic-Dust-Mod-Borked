@@ -1,4 +1,5 @@
 package dustmod;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -85,7 +86,7 @@ public class RenderDustTable extends TileEntitySpecialRenderer
         
         int page = (int)Math.round(tedt.pageFlipping * 2);
         if(page == 0)
-            bindTextureByName(DustMod.path + "/pages/info.png");
+            bindTextureByName(DustMod.path + File.separator + "pages" + File.separator + "info.png");
         else PageHelper.bindExternalTexture(PageHelper.runeFolder + getRunePageName(page) + ".png");
         
 //        bindTextureByName(PageHelper.g//getPagePath((int)Math.round(tedt.pageFlipping * 2)));

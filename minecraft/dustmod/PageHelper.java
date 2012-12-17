@@ -55,10 +55,10 @@ public class PageHelper
         images = new HashMap<String, BufferedImage>();
         try
         {
-            background = getImage(DustMod.path + "/pages/background.png");
-            backgroundIns = getImage(DustMod.path + "/pages/backgroundIns.png");
-            shade = getImage(DustMod.path + "/pages/shade.png");
-            colors = getImage(DustMod.path + "/pages/colors.png");
+            background = getImage(DustMod.path + "/pages" + "/background.png");
+            backgroundIns = getImage(DustMod.path + "/pages" + "/backgroundIns.png");
+            shade = getImage(DustMod.path + "/pages" + "/shade.png");
+            colors = getImage(DustMod.path + "/pages" + "/colors.png");
 
             bgw = background.getWidth();
             bgh = background.getHeight();
@@ -66,7 +66,8 @@ public class PageHelper
             boolean success = new File(folder).mkdir();
             if (success)
             {
-                System.out.println("Lexicon Folder " + new File(folder).getAbsolutePath() + " created.");
+            	DustMod.log(Level.INFO,"Lexicon Folder " + new File(folder).getAbsolutePath() + " created.");
+//                System.out.println("[DustMod] Lexicon Folder " + new File(folder).getAbsolutePath() + " created.");
             }
             new File(runeFolder).mkdirs();
             new File(insFolder).mkdirs();
@@ -90,7 +91,8 @@ public class PageHelper
         
         File file = new File(insFolder + name + ".png");
         if(file.exists()) return;
-        System.out.println("Lexicon Inscription entry for " + name + " not found! Generating...");
+        DustMod.log(Level.FINER, "Lexicon Inscription entry for " + name + " not found! Generating...");
+//        System.out.println("[DustMod] Lexicon Inscription entry for " + name + " not found! Generating...");
         
         int[][]values = event.referenceDesign;
         int width = values.length;
@@ -217,7 +219,8 @@ public class PageHelper
         
         File file = new File(runeFolder + name + ".png");
         if(file.exists()) return;
-        System.out.println("Lexicon Rune entry for " + name + " not found! Generating...");
+        DustMod.log(Level.FINEST, "Lexicon Rune entry for " + name + " not found! Generating...");
+//        System.out.println("[DustMod] Lexicon Rune entry for " + name + " not found! Generating...");
         
         int[][][] values = shape.data;
         int width = shape.data[0][0].length;
@@ -533,6 +536,7 @@ public class PageHelper
 
     public static void bindExternalTexture(String file)
     {
+    	file = file.replace('/', File.separatorChar);
         Minecraft mc = ModLoader.getMinecraftInstance();
         RenderEngine re = mc.renderEngine;
 

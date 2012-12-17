@@ -28,7 +28,12 @@ public class TileEntityRut extends TileEntity
     public boolean isBeingUsed = false;
     public boolean isDead = false;
     public int ticksExisted = 0;
+    
+    public int dustEntID;
 
+    private boolean hasFlame = false;
+    private int fr,fg,fb; //flame rgb
+    
     public boolean[][][] neighborSolid = null;
 
     public boolean changed = true;
@@ -216,6 +221,11 @@ public class TileEntityRut extends TileEntity
                 }
             }
         }
+        
+        tag.setBoolean("flame", hasFlame);
+        tag.setInteger("flameR", fr);
+        tag.setInteger("flameG", fg);
+        tag.setInteger("flameB", fb);
     }
     public void readFromNBT(NBTTagCompound tag)
     {
@@ -228,7 +238,6 @@ public class TileEntityRut extends TileEntity
         else
         {
             maskBlock = Block.workbench.blockID;
-            System.out.println("damn block");
         }
 
         if (tag.hasKey("maskMeta"))
@@ -269,6 +278,13 @@ public class TileEntityRut extends TileEntity
                 }
             }
         }
+        
+        if(tag.hasKey("flame")){
+        	this.hasFlame = tag.getBoolean("flame");
+        	fr = tag.getInteger("flameR");
+        	fg = tag.getInteger("flameG");
+        	fb = tag.getInteger("flameB");
+        }
     }
 
 //    public void onNeighborChange(){
@@ -302,7 +318,7 @@ public class TileEntityRut extends TileEntity
             ruts[i][j][k] = l;
         }
 
-        System.out.println("Setting [" + i + "," + j + "," + k + "]");
+//        System.out.println("Setting [" + i + "," + j + "," + k + "]");
         DustModBouncer.notifyBlockChange(worldObj, xCoord, yCoord, zCoord, 0);
     }
     public int getRut(int i, int j, int k)
@@ -310,6 +326,21 @@ public class TileEntityRut extends TileEntity
         return ruts[i][j][k];
     }
 
+    public void setRenderFlame(boolean val, int r, int g, int b){
+    	this.hasFlame = val;
+    	this.fr = r;
+    	this.fg = g;
+    	this.fb = b;
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+	public boolean hasFlame() {
+		return hasFlame;
+	}
+	public int[] getFlameColor(){
+		return new int[]{fr,fg,fb};
+	}
+    
     public void resetBlock()
     {
         isDead = true;
@@ -334,7 +365,7 @@ public class TileEntityRut extends TileEntity
     public boolean canEdit()
     {
         Block f = Block.blocksList[fluid];
-        return (fluidIsFluid() || f.getBlockHardness(worldObj,xCoord,yCoord,zCoord) <= hardnessStandard) && !isBeingUsed;
+        return (fluidIsFluid() || f.getBlockHardness(worldObj,xCoord,yCoord,zCoord) <= hardnessStandard || DustMod.Enable_Decorative_Ruts) && !isBeingUsed;
     }
 
     public boolean isEmpty()

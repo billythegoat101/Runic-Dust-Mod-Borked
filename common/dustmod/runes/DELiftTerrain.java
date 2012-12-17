@@ -28,8 +28,8 @@ public class DELiftTerrain extends DustEvent
 
 		e.setRenderBeam(true);
         e.setColorStar(255, 255, 0);
-		e.setRenderFireOnRuts(true);
         e.setColorFire(0,0,255);
+		e.setRenderFireOnRuts(true);
 		
     }
 
@@ -89,9 +89,6 @@ public class DELiftTerrain extends DustEvent
                 e.data[1] = 32;
                 break;
         }
-
-		e.setRenderFireOnRuts(true);
-        e.setColorFire(0,0,255);
 //        List<Entity> ents = this.getEntities(e, 3D);
 //        boolean found = false;
 //        for (Entity i : ents) {
@@ -109,6 +106,9 @@ public class DELiftTerrain extends DustEvent
         e.sacrificeWaiting = 600;
         this.addSacrificeList(new Sacrifice(99));
         loadArea(e);
+
+		e.setRenderFireOnRuts(true);
+        e.setColorFire(0,0,255);
 //        e.fade();
     }
 

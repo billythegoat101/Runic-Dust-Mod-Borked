@@ -10,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.DustModBouncer;
@@ -53,12 +54,22 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         int x = ted.xCoord;
         int y = ted.yCoord;
         int z = ted.zCoord;
+        int entID = ted.dustEntID;
+        
+        boolean hasFlame = ted.hasFlame();
+        int[] flamecolor = ted.getFlameColor();
 
         try
         {
             dos.writeInt(x);
             dos.writeInt(y);
             dos.writeInt(z);
+            dos.writeInt(entID);
+
+            dos.writeBoolean(hasFlame);
+            dos.writeInt(flamecolor[0]);
+            dos.writeInt(flamecolor[1]);
+            dos.writeInt(flamecolor[2]);
 
             for (int i = 0; i < ted.size; i++)
                 for (int j = 0; j < ted.size; j++)
@@ -114,6 +125,10 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         int x = ter.xCoord;
         int y = ter.yCoord;
         int z = ter.zCoord;
+        int entID = ter.dustEntID;
+        
+        boolean hasFlame = ter.hasFlame();
+        int[] flamecolor = ter.getFlameColor();
 
         try
         {
@@ -123,7 +138,13 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             dos.writeInt(ter.maskBlock);
             dos.writeInt(ter.maskMeta);
             dos.writeInt(ter.fluid);
+            dos.writeInt(entID);
 
+            dos.writeBoolean(hasFlame);
+            dos.writeInt(flamecolor[0]);
+            dos.writeInt(flamecolor[1]);
+            dos.writeInt(flamecolor[2]);
+            
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -396,6 +417,9 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     private static void onTEDPacket(byte[] data, Player player){
     	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
         int x, y, z;
+        int entID;
+        boolean hasFlame;
+        int r,g,b;
         TileEntityDust ted;
         World world = DustMod.proxy.getClientWorld();
 
@@ -404,6 +428,13 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             x = dis.readInt();
             y = dis.readInt();
             z = dis.readInt();
+            entID = dis.readInt();
+            
+            hasFlame = dis.readBoolean();
+            r = dis.readInt();
+            g = dis.readInt();
+            b = dis.readInt();
+            
             ted = (TileEntityDust)world.getBlockTileEntity(x, y, z);
 
             if (ted == null)
@@ -411,6 +442,8 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
                 return;
             }
 
+            ted.dustEntID = entID;
+            ted.setRenderFlame(hasFlame, r, g, b);
             int[][] pattern = ted.getPattern();
 
             for (int i = 0; i < TileEntityDust.size; i++)
@@ -457,6 +490,9 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     private static void onTERPacket(byte[] data, Player player){
     	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
         int x, y, z;
+        int entID;
+        boolean hasFlame;
+        int r,g,b;
         TileEntityRut ter;
         World world = DustMod.proxy.getClientWorld();
 
@@ -475,7 +511,16 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
             ter.maskBlock = dis.readInt();
             ter.maskMeta = dis.readInt();
             ter.fluid = dis.readInt();
+            entID = dis.readInt();
+            
+            hasFlame = dis.readBoolean();
+            r = dis.readInt();
+            g = dis.readInt();
+            b = dis.readInt();
 
+            ter.dustEntID = entID;
+            ter.setRenderFlame(hasFlame, r, g, b);
+            
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -572,7 +617,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         }
     }
     private static void onInscriptionDeclarationPacket(byte[] data, Player player){
-    	System.out.println("Insc recieved");
+//    	System.out.println("[DustMod] Inscription recieved");
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
 
         int w,h,id,idNameLen, nameLen,authorLen, notesLen, descLen;
@@ -719,7 +764,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         	
         	EntityPlayer ep = (EntityPlayer)player;
         	ItemStack stack = ep.inventory.getStackInSlot(slot);
-        	ItemInk.reduce(stack, amt);
+        	ItemInk.reduce((EntityPlayer)player, stack, amt);
         	ep.inventory.setInventorySlotContents(slot, stack);
         }
         catch (IOException e)
@@ -729,6 +774,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
     }
     private static void onParticlePacket(byte[] data, Player player){
 
+    	if(data == null || data.length == 0) return;
     	DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
     	int locLength;
     	double[] locations;
@@ -829,7 +875,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 		}
         for(DustShape shape:DustManager.shapes){
         	DustEvent e = DustManager.getEvents().get(shape.name); 
-        	if(e.canPlayerKnowRune((EntityPlayer)player) && !e.secret)
+        	if(e.canPlayerKnowRune(((EntityPlayer)player).username) && !e.secret)
         		manager.addToSendQueue(getRuneDeclarationPacket(shape));
         }
 
@@ -837,7 +883,6 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
         	if(evt.canPlayerKnowInscription((EntityPlayer)player) && !evt.secret)
         		manager.addToSendQueue(getInscriptionDeclarationPacket(evt));
         }
-		
 	}
 
 	@Override
@@ -850,6 +895,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server,
 			int port, INetworkManager manager) {
+		DustMod.log(Level.FINER, "Resetting due to opened connection.1");
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
 		InscriptionManager.resetRemoteInscriptions();
@@ -858,6 +904,7 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 	@Override
 	public void connectionOpened(NetHandler netClientHandler,
 			MinecraftServer server, INetworkManager manager) {
+		DustMod.log(Level.FINER, "Resetting due to opened connection.2");
 		DustManager.resetMultiplayerRunes();
 		DustItemManager.reset();
 		InscriptionManager.resetRemoteInscriptions();
@@ -865,9 +912,10 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler
 
 	@Override
 	public void connectionClosed(INetworkManager manager) {
-		DustManager.resetMultiplayerRunes();
-		DustItemManager.reset();
-		InscriptionManager.resetRemoteInscriptions();
+//		System.out.println("[DustMod] Resetting due to closed connection.");
+//		DustManager.resetMultiplayerRunes();
+//		DustItemManager.reset();
+//		InscriptionManager.resetRemoteInscriptions();
 //		DustManager.registerDefaultShapes();
 //		DustItemManager.registerDefaultDusts();
 //		System.out.println("Connection closed");
