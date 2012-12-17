@@ -1,6 +1,7 @@
 package dustmod;
 
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -66,7 +67,7 @@ import dustmodtestpack.inscriptions.VoidInscription;
  * @author billythegoat101
  *
  */
-@Mod(modid = "DustModDefaults", name = "Dust mod default Rune Pack", version = "1.2", dependencies="after:DustMod")
+@Mod(modid = "DustModDefaults", name = "Dust mod default Rune Pack", version = "1.4", dependencies="after:DustMod")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class DustModDefaults {
 
@@ -799,7 +800,7 @@ public class DustModDefaults {
                 + "-1xMobEgg + 1xGoldBlock + 5XP\n\n"
                 + "Notes:\n\n"
                 + "-Will last seven days unless fueled.\n\n"
-                + "Current bug: Does not detect entities who do not utilize the new AI system.");
+                + "Will not attract flying mobs, swimming mobs, or slimes.");
         s.setDesc("Description:\n\n"
                 + "Attracts any mobs with the specified drop type.");
         s.setAuthor("billythegoat101");
@@ -994,7 +995,9 @@ public class DustModDefaults {
         s.setNotes("Sacrifice:\n\n"
                 + "-5XP");
         s.setDesc("Description:\n\n"
-                + "Teleports you to a teleporation network rune location. The teleportation network frequency on which to send you depends on the block beneath the blaze square in the rune design.");
+                + "Teleports you to a teleporation network rune location. " +
+                "The teleportation network frequency on which to send you " +
+                "depends on the block beneath the blaze square in the rune design.");
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {-1, 0, 0, 0, -1, 0, 0, 0});
         DustManager.registerLocalDustShape(s, new DEMiniTele());
@@ -1373,7 +1376,8 @@ public class DustModDefaults {
                 + "Notes:\n\n"
                 + "-The area you want to lift should be outline with etchings filled with clay blocks.");
         s.setDesc("Description:\n\n"
-                + "Lifts the earth specified by the clay-filled etchings up high into the sky.");
+                + "Lifts the earth specified by the clay-filled etchings up high into the sky." +
+                "The ruts must be connected to the rune.");
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {-1, 1, 0, 0, -1, 1, 0, 0});
         
