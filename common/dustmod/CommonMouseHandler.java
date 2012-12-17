@@ -22,14 +22,10 @@ public class CommonMouseHandler {
 		buttonsPressed.put(DustMod.getUsername(p), new boolean[3]);
 	}
 	
-	public void tick(){
-//		System.out.println("first tick?");
-		for(String username: buttonsPressed.keySet()){
-//			System.out.println("rawr");
-			Player p = (Player)MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(username);
-			boolean[] buttons = buttonsPressed.get(username);
-			DustMod.inscriptionManager.tick(p, buttons);
-		}
+	public boolean[] getButtons(String player){
+		boolean[] rtn = buttonsPressed.get(player);
+		if(rtn == null) rtn = new boolean[3];
+		return rtn;
 	}
 	public void setKey(Player p, int key, boolean pressed){
 		String un = DustMod.getUsername(p);
