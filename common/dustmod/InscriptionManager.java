@@ -3,6 +3,7 @@ package dustmod;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.DamageSource;
@@ -37,7 +38,8 @@ public class InscriptionManager {
 		}
 		events.add(evt);
 		
-		System.out.println("Registering inscription " + evt.idName);
+		DustMod.log(Level.FINER,"Registering inscription " + evt.idName);
+//		System.out.println("[DustMod] Registering inscription " + evt.idName);
 		if(config == null){
             config = new Configuration(DustMod.suggestedConfig);
             config.load();
@@ -53,7 +55,8 @@ public class InscriptionManager {
             	}else
             		evt.permission = "NONE";
         		if(!evt.permission.equals("ALL")){
-        			System.out.println("Inscription permission for " + evt.idName + " set to " + evt.permission);
+        			DustMod.log(Level.FINE, "Inscription permission for " + evt.idName + " set to " + evt.permission);
+//        			System.out.println("[DustMod] Inscription permission for " + evt.idName + " set to " + evt.permission);
         		}
             }
 
@@ -62,6 +65,8 @@ public class InscriptionManager {
 
 	public static void registerRemoteInscriptionEvent(InscriptionEvent evt) {
 		eventsRemote.add(evt);
+		DustMod.log(Level.FINER, "Registering remote inscription " + evt.idName);
+//		System.out.println("[DustMod] Registering remote inscription " + evt.idName);
 		LanguageRegistry.instance().addStringLocalization(
 				"insc." + evt.idName + ".name", "en_US",
 				evt.properName + " Inscription");
@@ -71,6 +76,9 @@ public class InscriptionManager {
 	}
 
 	public static void resetRemoteInscriptions() {
+		DustMod.log(Level.FINE,"Reseting remote inscriptions.");
+//		System.out.println("[DustMod] Reseting remote inscriptions.");
+		
 		eventsRemote = new ArrayList<InscriptionEvent>();
 	}
 
@@ -142,8 +150,8 @@ public class InscriptionManager {
 				}
 
 				if (event != null) {
-					System.out.println("Inscription Identified: "
-							+ event.idName);
+					DustMod.log(Level.FINER, "Inscription Identified: " + event.idName);
+//					System.out.println("[DustMod] Inscription Identified: " + event.idName);
 					tag.setInteger("eventID", event.id);
 					return event;
 				}

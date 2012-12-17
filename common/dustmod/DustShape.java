@@ -6,6 +6,7 @@ package dustmod;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
@@ -930,24 +931,24 @@ public class DustShape
             int meta = w.getBlockMetadata(si + x, j, sk + z);
             if (blockID != 0 && !(DustMod.isDust(blockID)/* && meta == 2*/) && blockID != Block.tallGrass.blockID)
             {
-            	System.out.println("Check1");
+//            	System.out.println("Check1");
                 continue;
             }//return false;
 
             if (w.getBlockId(si + x, j - 1, sk + z) == 0)
             {
-            	System.out.println("Check2");
+//            	System.out.println("Check2");
                 continue;
             }//return false;
 
             if (!DustMod.dust.canPlaceBlockAt(w, si+x, j, sk+z))
             {
-            	System.out.println("Check3");
+//            	System.out.println("Check3");
                 continue;
             }//return false;
             
             if(blockID != DustMod.dust.blockID){
-            	System.out.println("check4 " + blockID);
+//            	System.out.println("check4 " + blockID);
 	            w.setBlockWithNotify(si + x, j, sk + z, 0);
 	            w.setBlockWithNotify(si + x, j, sk + z, DustMod.dust.blockID);
             }
@@ -971,7 +972,7 @@ public class DustShape
             int iz = rand.nextInt(4);
 
             if(ted.getDust(ix,iz) != 0 && block[ix][iz] == 0){
-            	System.out.println("wat");
+//            	System.out.println("wat");
             	continue;
             }
             
@@ -1154,7 +1155,8 @@ public class DustShape
         {
             if (dust[i] < dustAmt[i])
             {
-            	System.out.println("Not enough " + i); 
+            	DustMod.log(Level.FINER, "Not enough dust: " + i);
+//            	System.out.println("[DustMod] Not enough dust:" + i); 
                 return false;
             }
         }

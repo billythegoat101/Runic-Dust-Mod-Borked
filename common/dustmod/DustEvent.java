@@ -100,7 +100,7 @@ public abstract class DustEvent {
 				}
 			}
 		} else if (e.sacrificeWaiting == 0) {
-			System.out.println("Waiting sacrifice = 0 death");
+//			System.out.println("Waiting sacrifice = 0 death");
 			e.fizzle();
 			return;
 		} else {
@@ -506,8 +506,8 @@ public abstract class DustEvent {
 						s.isComplete = true;
 					}
 
-					System.out.println("Sacrifice matched to " + i + " "
-							+ s.isComplete);
+//					System.out.println("Sacrifice matched to " + i + " "
+//							+ s.isComplete);
 					s.entity = i;
 					break;
 				}
@@ -818,8 +818,8 @@ public abstract class DustEvent {
 			temp.add(farea.get(i));
 		}
 
-		System.out.println("Area : " + farea.size() + " " + temp.size() + " "
-				+ remove.size());
+//		System.out.println("Area : " + farea.size() + " " + temp.size() + " "
+//				+ remove.size());
 		farea = temp;
 		// if(farea.size() > 10000) return false;
 		e.rutAreaPoints = farea;
@@ -1060,8 +1060,8 @@ public abstract class DustEvent {
 			temp.add(farea.get(i));
 		}
 
-		System.out.println("Area : " + farea.size() + " " + temp.size() + " "
-				+ remove.size());
+//		System.out.println("Area : " + farea.size() + " " + temp.size() + " "
+//				+ remove.size());
 		farea = temp;
 		// if(farea.size() > 10000) return false;
 		e.rutAreaPoints = farea;
@@ -1201,8 +1201,8 @@ public abstract class DustEvent {
 			temp.add(farea.get(i));
 		}
 
-		System.out.println("Area : " + farea.size() + " " + temp.size() + " "
-				+ remove.size());
+//		System.out.println("Area : " + farea.size() + " " + temp.size() + " "
+//				+ remove.size());
 		farea = temp;
 		// if(farea.size() > 10000) return false;
 		e.rutAreaPoints = farea;

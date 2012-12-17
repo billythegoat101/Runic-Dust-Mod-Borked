@@ -21,7 +21,8 @@ public class EntityDustManager {
 	public static Long getNextDustEntityID() {
 		nextDustEntID++;
 		if (propGeneral == null) {
-			System.out.println("[DustMod] General property file is null!");
+			DustMod.log(Level.WARNING, "General property file is null!");
+//			System.out.println("[DustMod] General property file is null!");
 		}
 		propGeneral.setProperty("entDustNID", "" + nextDustEntID);
 
@@ -30,7 +31,7 @@ public class EntityDustManager {
 					null);
 		} catch (Exception e) {
 			FMLLog.log(Level.SEVERE, e,
-					"[DustMod]: Error loading world properties.");
+					"[DustMod] : Error loading world properties.");
 		}
 
 		return nextDustEntID - 1;

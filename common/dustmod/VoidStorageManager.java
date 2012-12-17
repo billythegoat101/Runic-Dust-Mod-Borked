@@ -142,7 +142,8 @@ public class VoidStorageManager {
                         voidInventory.put(key, new ArrayList<ItemStack>());
                     }
                     voidInventory.get(key).add(new ItemStack(id, size, dam));
-                    System.out.println("Void Inventory loading: " + key + "[" + id + "," + size + "," + dam + "]");
+                    DustMod.log(Level.FINER, "Void Inventory loading: " + key + "[" + id + "," + size + "," + dam + "]");
+//                    System.out.println("[DustMod] Void Inventory loading: " + key + "[" + id + "," + size + "," + dam + "]");
                 }
             }
         } catch (IOException e){

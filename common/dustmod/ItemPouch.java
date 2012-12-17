@@ -113,7 +113,7 @@ public class ItemPouch extends ItemReed {
 		int dust = getValue(itemstack);
     	String id = DustItemManager.getIDS()[dust];
     	if(id != null) return "pouch." + DustItemManager.idsRemote[dust];
-    	System.out.println("Dammit " + dust + " " + itemstack.getItemDamage());
+//    	System.out.println("Dammit " + dust + " " + itemstack.getItemDamage());
         return "pouchblank";
     }
     

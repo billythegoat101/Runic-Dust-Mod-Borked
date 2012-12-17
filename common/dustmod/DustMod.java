@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.Block;
@@ -102,6 +103,8 @@ public class DustMod {
     public static boolean Enable_Render_Flames_On_Ruts = true;
     public static boolean Enable_Decorative_Ruts = false;
     
+    public static boolean verbose = false;
+    
     public static Block dust;
     protected static Block dustTable;
     protected static Block rutBlock;
@@ -129,17 +132,16 @@ public class DustMod {
     public static CommonProxy proxy;
     public static CommonMouseHandler keyHandler = new CommonMouseHandler();
 	public static InscriptionManager inscriptionManager = new InscriptionManager();
-    
 	
 	private static boolean hasLoaded = false;
 	@PreInit
 	public void preInit(FMLPreInitializationEvent evt){
 		if(hasLoaded) return;
 		hasLoaded = true;
-		suggestedConfig = new File(evt.getSuggestedConfigurationFile().getParent() + "\\DustModConfigv2.cfg");
+		suggestedConfig = new File(evt.getSuggestedConfigurationFile().getParent() + File.separator + "DustModConfigv2.cfg");
 //		suggestedConfig.renameTo(new File("DustModConfigv2.cfg"));
 		
-		System.out.println("CONFIG " + suggestedConfig.getParent());
+//		System.out.println("CONFIG " + suggestedConfig.getParent());
 		Configuration config = new Configuration(suggestedConfig);
 		try{
 //			File f = new File(configPath);
@@ -166,9 +168,9 @@ public class DustMod {
 			ENTITY_FireSpriteID = config.get(Configuration.CATEGORY_GENERAL, "FireSpriteEntityID", ENTITY_FireSpriteID).getInt(ENTITY_FireSpriteID);
 			ENTITY_BlockEntityID = config.get(Configuration.CATEGORY_GENERAL, "BlockEntityID", ENTITY_BlockEntityID).getInt(ENTITY_BlockEntityID);
 			Enable_Decorative_Ruts = config.get("config", "DecorativeRuts", Enable_Decorative_Ruts).getBoolean(Enable_Decorative_Ruts);
-			
+			verbose = config.get("config", "verbose", verbose).getBoolean(verbose);
 		} catch (Exception e){
-			FMLLog.log(Level.SEVERE, e, "[DustMod]: Error loading config.");
+			FMLLog.log(Level.SEVERE, e, "[DustMod] : Error loading config.");
 		} finally {
 			config.save();
 		}
@@ -213,7 +215,7 @@ public class DustMod {
 		proxy.registerTileEntityRenderers();
 		
 		LanguageRegistry lang = LanguageRegistry.instance();
-		lang.addStringLocalization("tile.dust.name", "en_US", "[DustMod]:Do not use this");
+		lang.addStringLocalization("tile.dust.name", "en_US", "[DustMod] :Do not use this");
 
         lang.addStringLocalization(dustTable.getBlockName() + ".name", "en_US", "Runic Lexicon");
         lang.addStringLocalization(tome.getItemName() + ".name", "en_US", "Runic Tome");
@@ -272,7 +274,7 @@ public class DustMod {
         DustItemManager.registerDefaultDusts();
         DustManager.registerDefaultShapes();
         InscriptionManager.registerDefaultInscriptions();
-        lang.addStringLocalization("inscblank.name", "Worthless Scribble");
+        lang.addStringLocalization("inscblank.name", "Doodle");
         
         MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -283,7 +285,7 @@ public class DustMod {
 //			try{//Debugging
 //				Class c = Class.forName("net.minecraft.src.World");
 //				Minecraft.getMinecraft().session.username = "BILLYTG101";
-//				System.err.println("[DUSTMOD] WARNING: This is being run in a debug environment!");
+//				System.err.println("[DustMod] WARNING: This is being run in a debug environment!");
 //			}catch(Exception e){
 //				//not debugging
 //			}
@@ -471,6 +473,10 @@ public class DustMod {
     
     public static HashMap<ItemStack, Integer> entdrops;
 
+    public static void log(Level level, String msg){
+    	if(verbose) System.out.println("[DustMod] " + msg);
+    }
+    
     static
     {
         entdrops = new HashMap<ItemStack, Integer>();

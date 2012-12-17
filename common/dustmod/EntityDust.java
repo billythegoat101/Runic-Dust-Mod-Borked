@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 /*
  * To change this template, choose Tools | Templates
@@ -107,6 +107,11 @@ public class EntityDust extends Entity
         this.noClip = true;
         renderDistanceWeight = 50.0D;
         data = new int[16];
+    }
+    
+    public EntityDust(World world, List<Integer[]> dustPoints){
+    	this(world);
+    	this.dustPoints = dustPoints;
     }
     
 
@@ -260,9 +265,23 @@ public class EntityDust extends Entity
     }
     public void setRenderFireOnRune(boolean b){
     	this.renderFlamesDust = b;
+    	for(Integer[] i:dustPoints){
+    		TileEntity te = worldObj.getBlockTileEntity(i[0], i[1], i[2]);
+    		if(te instanceof TileEntityDust){
+        		TileEntityDust ted = (TileEntityDust)te;
+        		ted.setRenderFlame(b, rf, gf, bf);
+    		}
+    	}
     }
     public void setRenderFireOnRuts(boolean b){
     	this.renderFlamesRut = b;
+    	for(Integer[] i:rutPoints){
+    		TileEntity te = worldObj.getBlockTileEntity(i[0], i[1], i[2]);
+    		if(te instanceof TileEntityRut){
+        		TileEntityRut ter = (TileEntityRut)te;
+        		ter.setRenderFlame(b, rf, gf, bf);
+    		}
+    	}
     }
     
     public void setIgnoreRune(boolean b){
@@ -378,11 +397,13 @@ public class EntityDust extends Entity
         if (event == null)
         {
             reanimate = true;
-            System.out.println("This rune has been updated!");
+            DustMod.log(Level.INFO, "This rune has been updated! Reactivating...");
+//            System.out.println("[DustMod] This rune has been updated! Reactivating...");
         }
 
         dustPoints = new ArrayList<Integer[]>();
         int size = tag.getInteger("pointsize");
+
 
         for (int i = 0; i < size; i++)
         {
@@ -392,6 +413,7 @@ public class EntityDust extends Entity
             inPos[2] = tag.getInteger(i + "z");
             dustPoints.add(inPos);
         }
+//        System.out.println("READ " + dustPoints.size());
 
         if (tag.hasKey("rutsize"))
         {
@@ -487,6 +509,8 @@ public class EntityDust extends Entity
         tag.setLong("entityDustID", entityDustID);
         tag.setInteger("pointsize", dustPoints.size());
 
+//        System.out.println("WRITE " + dustPoints.size());
+        
         for (int i = 0; i < dustPoints.size(); i++)
         {
             Integer[] coord = dustPoints.get(i);
@@ -525,6 +549,18 @@ public class EntityDust extends Entity
             updateEntityFromDataWatcher();
         }
 
+        if(dustPoints == null && ticksExisted > 10) {
+        	
+        	int x = this.getX();
+        	int y = this.getY();
+        	int z = this.getZ();
+        	
+        	dustPoints = new ArrayList<Integer[]>();
+        	rutPoints = new ArrayList<Integer[]>();
+        	
+        	this.checkConnections(x, y, z);
+        }
+        
         if (event == null)
         {
         	//updateDataWatcher();
@@ -700,6 +736,41 @@ public class EntityDust extends Entity
         super.onEntityUpdate();
     }
 
+    private void checkConnections(int x, int y, int z){
+    	for(int i = -1; i <= 1; i++){
+			for(int k = -1; k <= 1; k++){
+				if(hasDustPoint(x+i,y,z+k)) continue;
+				
+				int blockID = worldObj.getBlockId(x+i, y, z+k);
+				int meta = worldObj.getBlockMetadata(x+i, y, z+k);
+				
+				if(blockID == DustMod.dust.blockID && (meta == 1 || meta == 3)){
+					TileEntityDust ted = (TileEntityDust)worldObj.getBlockTileEntity(x+i, y, z+k);
+					
+					if(ted.dustEntID == this.entityId){
+						dustPoints.add(new Integer[]{x+i,y,z+k});
+						checkConnections(x+i,y,z+k);
+					}
+				} else if(blockID == DustMod.rutBlock.blockID){
+					TileEntityRut ter = (TileEntityRut)worldObj.getBlockTileEntity(x+i, y, z+k);
+					if(ter.dustEntID == this.entityId){
+						rutPoints.add(new Integer[]{x+i,y,z+k});
+						checkConnections(x+i,y,z+k);
+					}
+				}
+			}
+    		
+    	}
+    }
+    
+    private boolean hasDustPoint(int x,int y,int z){
+    	for(Integer[] i:dustPoints){
+    		if(i[0] == x && i[1] == y && i[2] == z)
+    			return true;
+    	}
+    	return false;
+    }
+    
     public void shineRadius(float f, double d, double d1, double d2)
     {
         shineRadius(f, d, d1, d2, 2, "reddust");
@@ -759,8 +830,7 @@ public class EntityDust extends Entity
         double max = Math.PI/2D;
         double iter = 0.05;
         
-        double[] locations = new double[12288];
-        int i = 0;
+//        double[] locations = new double[12288];
         
         for (double d3 = 0.0D; d3 < (3.14 / 2D); d3 += 0.05)
         {
@@ -770,6 +840,8 @@ public class EntityDust extends Entity
 
             for (double d4 = 0.0D; d4 < (3.14/ 2D); d4 += 0.05)
             {
+                double[] locations = new double[12];
+                int i = 0;
                 float f7 = (float) Math.sin(d4);
                 float f8 = (float) Math.cos(d4);
                 float f9 = f2 * f8 * f5;
@@ -793,11 +865,11 @@ public class EntityDust extends Entity
                 locations[i+1] = (double) ((float) posY + f3 + f6 + random.nextFloat() * f1);
                 locations[i+2] = (double) ((((float) posZ - f10) + random.nextFloat() * f1) - 0.5F);
                 i+=3;
+                DustMod.spawnParticles(worldObj, s, locations, d, d1, d2, 1, 0.01,0.01,0.01);
             }
         }
 //        System.out.println("You bitch " + i + " " + locations.length);
         
-        DustMod.spawnParticles(worldObj, s, locations, d, d1, d2, 1, 0.01,0.01,0.01);
     }
 
     public void onRightClick(TileEntityDust ted, EntityPlayer p)

@@ -1,9 +1,12 @@
 package dustmod;
 
+import java.io.File;
 import java.util.List;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.DamageSource;
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EnumArmorMaterial;
@@ -18,6 +21,7 @@ import net.minecraftforge.common.IArmorTextureProvider;
 import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.network.Player;
 
 public class ItemWornInscription extends ItemArmor implements IArmorTextureProvider, ISpecialArmor{
 	
@@ -85,17 +89,17 @@ public class ItemWornInscription extends ItemArmor implements IArmorTextureProvi
 //    	super.getSubItems(par1, par2CreativeTabs, list);
     }
     
-
+    
 
     protected MovingObjectPosition lastMOP = null;
     protected long lastCheck = 0; 
     
     public MovingObjectPosition getMovingObjectPositionFromPlayer(World world, EntityPlayer par2EntityPlayer, boolean par3)
     {
-    	System.out.println("MOP Check " + world.getWorldTime() + " " + lastCheck);
+//    	System.out.println("MOP Check " + world.getWorldTime() + " " + lastCheck);
     	if(lastCheck > world.getWorldTime()) lastCheck = world.getWorldTime();
     	if(lastMOP != null && world.getWorldTime()-lastCheck < 0){
-    		System.out.println("MOP Cache");
+//    		System.out.println("MOP Cache");
     		return lastMOP;
     	}
         lastCheck = world.getWorldTime();

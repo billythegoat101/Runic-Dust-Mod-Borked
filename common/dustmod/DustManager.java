@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.EntityPlayer;
@@ -218,7 +219,8 @@ public class DustManager
      * 
      */
     public static void resetMultiplayerRunes(){
-//    	System.out.println("Reset multiplayer runes");
+		DustMod.log(Level.FINE, "Reseting remote runes.");
+//		System.out.println("[DustMod] Resetting remote runes.");
         namesRemote = new ArrayList<String>();
         shapesRemote = new ArrayList<DustShape>();
         DustMod.proxy.resetPlayerTomePage();
@@ -246,7 +248,8 @@ public class DustManager
             shape.isPower = true;
         }
 
-		System.out.println("Registering rune " + shape.name);
+		DustMod.log(Level.FINER, "Registering rune: " + shape.name);
+//		System.out.println("[DustMod] Registering rune " + shape.name);
         
         if(config == null){
             config = new Configuration(DustMod.suggestedConfig);
@@ -267,7 +270,8 @@ public class DustManager
             		eventInstance.permission = "NONE";
 
         		if(!eventInstance.permission.equals("ALL")){
-        			System.out.println("Rune permission for " + eventInstance.name + " set to " + eventInstance.permission);
+        			DustMod.log(Level.FINE, "Rune permission for " + eventInstance.name + " set to " + eventInstance.permission);
+//        			System.out.println("[DustMod] Rune permission for " + eventInstance.name + " set to " + eventInstance.permission);
         		}
             }
 
@@ -290,7 +294,8 @@ public class DustManager
         shapesRemote.add(shape);
         namesRemote.add(shape.name);
         DustMod.proxy.checkRunePage(shape);
-//        System.out.println("Registering temporary remote DustShape " + shape.name);
+		DustMod.log(Level.FINER, "Registering remote rune: " + shape.name);
+//        System.out.println("[DustMod] Registering remote rune " + shape.name);
         LanguageRegistry.instance().addStringLocalization("tile.scroll" + shape.name + ".name", "en_US", shape.getRuneName() + " Placing Scroll");
         DustItemManager.reloadLanguage();
     }
@@ -389,7 +394,8 @@ public class DustManager
 						}
 					}
 
-					System.out.println("derp left variable dust.");
+					DustMod.log(Level.FINER, "Left variable dust in rune.");
+//					System.out.println("[DustMod] Left variable dust in rune.");
 					return;
 				}
 			}
@@ -409,7 +415,7 @@ public class DustManager
 		}
 
 		if (found != null) {
-			System.out.println("Found: " + found.name);
+			DustMod.log(Level.FINER, "Found rune: " + found.name);
 			DustManager.initiate(found, found.name, i, j, k, world, points,
 					trim, username, rot);
 		} else {
@@ -422,7 +428,7 @@ public class DustManager
 				}
 			}
 
-			System.out.println("nothing found.");
+			DustMod.log(Level.FINER, "No rune found.");
 		}
 	}
     
