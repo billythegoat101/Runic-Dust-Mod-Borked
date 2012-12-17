@@ -48,13 +48,21 @@ public class DEHideout extends DustEvent
         int z = e.getZ();
         World world = e.worldObj;
 
-        if(world.getBlockId(x,y-thick-1,z) == 0){
-            doCheck(e);
-            return;
-        }
-
         int r = 1;
         int h = 3;
+
+        Block b = Block.blocksList[world.getBlockId(x, y - h - thick - 1, z)];
+
+        
+        if(world.getBlockId(x,y-thick-1,z) == 0){
+            doCheck(e);
+//            if (b != null && !(b instanceof BlockFluid))
+//            {
+                world.setBlock(x, y - h - thick - 1, z, Block.cobblestone.blockID);
+                world.setBlock(x, y - h - thick, z, Block.torchWood.blockID);
+//            }
+            return;
+        }
         
         switch(e.dustID){
             case 100:
@@ -104,12 +112,12 @@ public class DEHideout extends DustEvent
 //        world.setBlockID(x,y-thick,z, Block.brick.blockID);
 
 //        Block b = Block.blocksList[world.getBlockId(x, y - h - thick - 1, z)];
-
-//        if (b != null && !(b instanceof BlockFluid))
-//        {
+//
+        if (b != null && !(b instanceof BlockFluid))
+        {
             world.setBlock(x, y - h - thick - 1, z, Block.cobblestone.blockID);
             world.setBlock(x, y - h - thick, z, Block.torchWood.blockID);
-//        }
+        }
 
         doCheck(e);
     }

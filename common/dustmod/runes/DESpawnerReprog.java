@@ -6,6 +6,8 @@ package dustmod.runes;
 
 import java.util.List;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 
@@ -32,8 +34,8 @@ public class DESpawnerReprog extends DustEvent
     	super.initGraphics(e);
 
 		e.setRenderStar(true);
-		e.setRenderBeam(true);
-        e.setStarScale(1.05F);
+//		e.setRenderBeam(true);
+        e.setStarScale(1.75F);
 		
     }
 
@@ -169,11 +171,18 @@ public class DESpawnerReprog extends DustEvent
             fin[1] /= 8;
             fin[2] /= 8;
 
-            if (e.worldObj.getBlockId(fin[0], fin[1], fin[2]) == Block.mobSpawner.blockID)
+            if (true || e.worldObj.getBlockId(fin[0], fin[1], fin[2]) == Block.mobSpawner.blockID)
             {
                 TileEntityMobSpawner tems = ((TileEntityMobSpawner)e.worldObj.getBlockTileEntity(fin[0], fin[1], fin[2]));
                 tems.setMobID(mob);
                 tems.validate();
+                
+//                e.worldObj.setBlockWithNotify(fin[0], fin[1], fin[2],0);
+//                e.worldObj.setBlockWithNotify(fin[0], fin[1], fin[2], Block.mobSpawner.blockID);
+                e.worldObj.markBlockForUpdate(fin[0], fin[1], fin[2]);
+                e.worldObj.setBlockTileEntity(fin[0], fin[1], fin[2],tems);
+                e.worldObj.notifyBlockChange(fin[0], fin[1], fin[2],0);
+                PacketDispatcher.sendPacketToAllAround(fin[0], fin[1], fin[2], 64, e.worldObj.getWorldInfo().getDimension(), tems.getDescriptionPacket());
 //                if(e.ticksExisted > 100){
 //                    e.worldObj.setBlockWithNotify(fin[0],fin[1],fin[2],0);
 //                    e.worldObj.markBlockNeedsUpdate(fin[0],fin[1],fin[2]);
