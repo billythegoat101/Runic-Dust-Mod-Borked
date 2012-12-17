@@ -463,7 +463,7 @@ public class ErfBendInscription extends InscriptionEvent {
 						
 
 						EntityBlock eb = new EntityBlock(world,(double)x+0.5,(double)y+0.5,(double)z+0.5,bid);
-						eb.throwing = true;
+						eb.setThrowing(true);
 //						eb.noClip = true;
 						eb.motionX = vel.xCoord/1;
 						eb.motionY = vel.yCoord/1;

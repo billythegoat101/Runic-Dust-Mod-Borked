@@ -15,9 +15,12 @@ import dustmod.InscriptionEvent;
 
 public class BlinkerInscription extends InscriptionEvent {
 
+	public int power;
+	
 	public BlinkerInscription(int[][] design, String idName, String properName,
-			int id) {
+			int id, int power) {
 		super(design, idName, properName, id);
+		this.power = power;
 		this.setAuthor("billythegoat101");
 		this.setDescription("Description:\n" +
 				"Blink like an enderman to whever you look. Shift+RightClick with a bare hand to activate. It will cost 1 heart per blink but you will not take fall damage.");
@@ -91,10 +94,10 @@ public class BlinkerInscription extends InscriptionEvent {
 			
 			double rad =0.5;
 			boolean canTele = canTele(item,wearer);
-			canTele &= dist > 3;
+			canTele &= dist > 2.5;
 			
-			DustMod.spawnParticles(wearer.worldObj, "mobSpell", testLoc, canTele ? -1:1, canTele ? 0.6:0, canTele ? 1:0, 10 / (dist < 3 ? 4:1), 0.1, 0.1,0.1);
-			DustMod.spawnParticles(wearer.worldObj, "reddust", Math.floor(testLoc[0]) +0.5, newY, Math.floor(testLoc[2]) +0.5, canTele ? -1:0, canTele ? 0.8:0, canTele ? 0.8:0, 2 / (dist < 3 ? 2:1), 0.5, 0.1,0.5);
+			DustMod.spawnParticles(wearer.worldObj, "reddust", testLoc, canTele ? -1:1, canTele ? 0.6:0, canTele ? 1:0, 6 / (dist < 3 ? 6:1), 0.1, 0.1,0.1);
+			DustMod.spawnParticles(wearer.worldObj, "reddust", Math.floor(testLoc[0]) +0.5, newY, Math.floor(testLoc[2]) +0.5, canTele ? -1:0, canTele ? 0.8:0, canTele ? 0.8:0, 2, 0.5, 0.1,0.5);
 			
 			if(buttons[0] && !getLastMouse(item) && canTele){
 				onTele(item,wearer);
