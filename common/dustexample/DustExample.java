@@ -48,9 +48,9 @@ public class DustExample
     
 	@PostInit
 	public void postInit(FMLPostInitializationEvent evt){
-		registerDusts();
-		registerRunes();
-		registerInscriptions();
+//		registerDusts();
+//		registerRunes();
+//		registerInscriptions();
 	}
 	
     
@@ -58,7 +58,7 @@ public class DustExample
 		DustItemManager.registerDust(350, "Glowing Runic Dust", "glowdust", 0xEEEE00, 0xFFFF00, 0xFFFF00);
 		
 		//Register recipe for our dust (2xGlowstoneDust + 1xCoal)
-		GameRegistry.addShapelessRecipe(new ItemStack(DustMod.idust,4,350), new ItemStack(Item.lightStoneDust,1),new ItemStack(Item.lightStoneDust,1),new ItemStack(Item.coal,1,-1));
+		GameRegistry.addShapelessRecipe(new ItemStack(DustMod.getItemDust(),4,350), new ItemStack(Item.lightStoneDust,1),new ItemStack(Item.lightStoneDust,1),new ItemStack(Item.coal,1,-1));
 	}
 	
     /**
