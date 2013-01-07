@@ -35,26 +35,27 @@ public class DustModBouncer {
     {
         return e.targetTasks;
     }
-    public static void setCantSee(EntityLiving e, EntityLiving target)
-    {
-        EntitySenses senses = e.getEntitySenses();
-
-        if (senses.canSee(target))
-        {
-            senses./*canSeeCachePositive*/field_75524_b.remove(target);
-            senses./*canSeeCacheNegative*/field_75525_c.add(target);
-        }
-    }
-    public static void setCanSee(EntityLiving e, EntityLiving target)
-    {
-        EntitySenses senses = e.getEntitySenses();
-
-        if (!senses.canSee(target))
-        {
-            senses./*canSeeCacheNegative*/field_75525_c.remove(target);
-            senses./*canSeeCachePositive*/field_75524_b.add(target);
-        }
-    }
+    //Unused/unavailable?
+//    public static void setCantSee(EntityLiving e, EntityLiving target)
+//    {
+//        EntitySenses senses = e.getEntitySenses();
+//
+//        if (senses.canSee(target))
+//        {
+//            senses./*canSeeCachePositive*/field_75524_b.remove(target);
+//            senses./*canSeeCacheNegative*/field_75525_c.add(target);
+//        }
+//    }
+//    public static void setCanSee(EntityLiving e, EntityLiving target)
+//    {
+//        EntitySenses senses = e.getEntitySenses();
+//
+//        if (!senses.canSee(target))
+//        {
+//           senses./*canSeeCacheNegative*/field_75525_c.remove(target);
+//            senses./*canSeeCachePositive*/field_75524_b.add(target);
+//        }
+//    }
     public static void addAITask(EntityLiving e, EntityAIBase ai, int priority)
     {
         e.tasks.addTask(priority, ai);

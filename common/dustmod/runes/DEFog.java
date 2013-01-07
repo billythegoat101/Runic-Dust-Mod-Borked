@@ -114,11 +114,11 @@ public class DEFog extends PoweredEvent
                         ec.setPathToEntity(null);
                         DustModBouncer.setHasAttacked(ec, true);
                         ec.attackTime = 30;
-
-                        if (player != null)
+                        //TODO: Is this necessary as the Attack target is already set differently? TEST THIS!
+                        /*if (player != null)
                         {
                         	DustModBouncer.setCantSee(ec, player);
-                        }
+                        }*/
 
 //                                ec.worldObj.setEntityState(ec, (byte)2);
 ////                                ec.setBeenAttacked();

@@ -17,8 +17,9 @@ import dustmodtestpack.inscriptions.GlideInscription;
 import dustmodtestpack.inscriptions.MountainCutterInscription;
 import dustmodtestpack.inscriptions.RespawnInscription;
 import dustmodtestpack.inscriptions.VoidInscription;
-import dustmodtestpack.inscriptions.WaterAffinity;
-import dustmodtestpack.runes.LaunchTestRune;
+//TODO: Missing sources, disabled this
+//import dustmodtestpack.inscriptions.WaterAffinity;
+//import dustmodtestpack.runes.LaunchTestRune;
 
 /**
  * This pack is meant for testing runes & inscriptions as a separate download 
@@ -80,7 +81,8 @@ public class DustModTestPack {
                 + "Spawns a torch or, if a piece of flint is sacrficed, a beacon.");
         s.setAuthor("billythegoat101");
         s.setManualRotationDerp(new int[] {00, 00, 0, 0, 0, 0, 0, 0});
-        DustManager.registerLocalDustShape(s, new LaunchTestRune());
+        //TODO: Missing source, disabled
+        //DustManager.registerLocalDustShape(s, new LaunchTestRune());
 	}
 	
 	public void registerInscriptions(){
@@ -188,9 +190,10 @@ public class DustModTestPack {
 				{G,B,B,G},
 				{0,G,G,0}
 		};
-		evt = new WaterAffinity(design, "watertest","Water Affinity", 7);
-		MinecraftForge.EVENT_BUS.register(evt);
-		InscriptionManager.registerInscriptionEvent(evt);
+		//TODO: Missing source, disabled
+		//evt = new WaterAffinity(design, "watertest","Water Affinity", 7);
+		//MinecraftForge.EVENT_BUS.register(evt);
+		//InscriptionManager.registerInscriptionEvent(evt);
 		
 		
 		
