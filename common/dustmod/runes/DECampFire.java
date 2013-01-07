@@ -10,13 +10,13 @@ import dustmod.EntityDust;
 import dustmod.PoweredEvent;
 import dustmod.TileEntityDust;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.FurnaceRecipes;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
 /**
@@ -117,7 +117,7 @@ public class DECampFire extends PoweredEvent
                 EntityItem ei = (EntityItem)i;
                 ei.attackEntityFrom(null, -20);
 //                ei.delayBeforeCanPickup = 20;
-                ItemStack is = ei.item;
+                ItemStack is = ei./*item*/func_92014_d();
                 ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(is);
 
                 if (e.ticksExisted % 3 == 0)
@@ -125,7 +125,7 @@ public class DECampFire extends PoweredEvent
 //                    double burnChance = 0.1D * (double)ei.item.stackSize;
 
 //                    System.out.println("Chance " + burnChance + " " + rand);
-                    if (ei.item.stackSize > 1 && result != null)
+                    if (ei./*item*/func_92014_d().stackSize > 1 && result != null)
                     {
                     	System.out.println("Stack size too big");
                         ei.setDead();
@@ -134,12 +134,12 @@ public class DECampFire extends PoweredEvent
                     {
                         if (result != null)
                         {
-                            ei.item.itemID = result.itemID;
-                            ei.item.stackSize *= result.stackSize *  + ((Math.random() > 0.85) ? 2:1);
-                            System.out.println("Resulting stacksize: " + ei.item.stackSize);
-                            ei.item.setItemDamage(result.getItemDamage());
+                            ei./*item*/func_92014_d().itemID = result.itemID;
+                            ei./*item*/func_92014_d().stackSize *= result.stackSize *  + ((Math.random() > 0.85) ? 2:1);
+                            System.out.println("Resulting stacksize: " + ei./*item*/func_92014_d().stackSize);
+                            ei./*item*/func_92014_d().setItemDamage(result.getItemDamage());
                             
-                            EntityItem spawn = new EntityItem(e.worldObj, e.posX, e.posY, e.posZ, ei.item);
+                            EntityItem spawn = new EntityItem(e.worldObj, e.posX, e.posY, e.posZ, ei./*item*/func_92014_d());
                             e.worldObj.spawnEntityInWorld(spawn);
                             shoot(spawn);
                             ei.setDead();

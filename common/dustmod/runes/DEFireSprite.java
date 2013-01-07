@@ -9,12 +9,12 @@ import java.util.List;
 import dustmod.EntityDust;
 import dustmod.PoweredEvent;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *

@@ -6,15 +6,15 @@ package dustmod;
 
 import java.util.Random;
 
-import net.minecraft.src.Enchantment;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EnumRarity;
-import net.minecraft.src.EnumToolMaterial;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ItemSword;
-import net.minecraft.src.World;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.world.World;
 
 /**
  *

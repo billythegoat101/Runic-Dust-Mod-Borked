@@ -6,19 +6,19 @@ package dustmod;
 
 import java.util.Random;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EnumAction;
-import net.minecraft.src.EnumRarity;
-import net.minecraft.src.EnumToolMaterial;
-import net.minecraft.src.ItemPickaxe;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.MovingObjectPosition;
-import net.minecraft.src.Vec3;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 /**
  *

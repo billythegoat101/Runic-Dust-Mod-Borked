@@ -2,8 +2,8 @@ package dustmod.runes;
 
 import java.util.List;
 
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;
@@ -43,7 +43,8 @@ public class DEChargeInscription extends DustEvent {
         	List<EntityItem> items = this.getItems(e);
         	
         	for(EntityItem ei:items){
-        		ItemStack i = ei.item;
+        		//TODO: Check if this func is correct
+        		ItemStack i = ei.func_92014_d();
         		if(i.itemID == DustMod.getWornInscription().shiftedIndex){
         			InscriptionEvent evt = InscriptionManager.getEvent(i);
         			if(evt != null){

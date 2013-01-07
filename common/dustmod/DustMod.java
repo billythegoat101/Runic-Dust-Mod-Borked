@@ -7,20 +7,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityList;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntityPlayerMP;
-import net.minecraft.src.EnumToolMaterial;
-import net.minecraft.src.IMob;
-import net.minecraft.src.ISaveHandler;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Packet;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -283,7 +283,7 @@ public class DustMod {
 	public void modsLoaded(FMLPostInitializationEvent evt){
 //		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
 //			try{//Debugging
-//				Class c = Class.forName("net.minecraft.src.World");
+//				Class c = Class.forName("net.minecraft.world.World");
 //				Minecraft.getMinecraft().session.username = "BILLYTG101";
 //				System.err.println("[DustMod] WARNING: This is being run in a debug environment!");
 //			}catch(Exception e){

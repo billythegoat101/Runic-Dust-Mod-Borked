@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.DamageSource;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ServerConfigurationManager;
-import net.minecraft.src.World;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.world.World;
 
 /**
  * 
@@ -389,19 +389,19 @@ public abstract class DustEvent {
 
 		for (EntityItem i : sacrifice) {
 			for (ItemStack item : items) {
-				if (i.item.itemID == DustMod.negateSacrifice.shiftedIndex) {
+				if (i./*item*/func_92014_d().itemID == DustMod.negateSacrifice.shiftedIndex) {
 					return true;
 				}
 
-				if (i.item.itemID == item.itemID
-						&& (item.getItemDamage() == -1 || i.item
+				if (i./*item*/func_92014_d().itemID == item.itemID
+						&& (item.getItemDamage() == -1 || i./*item*/func_92014_d()
 								.getItemDamage() == item.getItemDamage())) {
-					if (i.item.stackSize <= item.stackSize
+					if (i./*item*/func_92014_d().stackSize <= item.stackSize
 							&& item.stackSize > 0) {
-						item.stackSize -= i.item.stackSize;
+						item.stackSize -= i./*item*/func_92014_d().stackSize;
 						i.setDead();
 					} else {
-						i.item.stackSize -= item.stackSize;
+						i./*item*/func_92014_d().stackSize -= item.stackSize;
 						break;
 					}
 				}
@@ -424,7 +424,7 @@ public abstract class DustEvent {
 		boolean negate = false;
 
 		for (EntityItem i : sacrifice) {
-			ItemStack is = i.item;
+			ItemStack is = i./*item*/func_92014_d();
 
 			if (is.itemID == DustMod.negateSacrifice.shiftedIndex) {
 				negate = true;
@@ -484,7 +484,7 @@ public abstract class DustEvent {
 			}
 
 			if (ei != null
-					&& ei.item.itemID == DustMod.negateSacrifice.shiftedIndex) {
+					&& ei./*item*/func_92014_d().itemID == DustMod.negateSacrifice.shiftedIndex) {
 				negate = true;
 				break;
 			}
@@ -497,7 +497,7 @@ public abstract class DustEvent {
 				if (!(i instanceof EntityPlayer || i instanceof EntityDust)
 						&& s.matchObject(i)) {
 					if (ei != null) {
-						s.itemType.stackSize -= ei.item.stackSize;
+						s.itemType.stackSize -= ei./*item*/func_92014_d().stackSize;
 
 						if (s.itemType.stackSize == 0) {
 							s.isComplete = true;

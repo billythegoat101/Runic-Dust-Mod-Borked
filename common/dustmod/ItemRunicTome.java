@@ -4,11 +4,11 @@
  */
 package dustmod;
 
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.World;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 /**
  *
@@ -51,7 +51,7 @@ public class ItemRunicTome  extends Item
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int l)
+    public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer p, World world, int i, int j, int k, int l, float hitX, float hitY, float hitZ)
     {
     	
 

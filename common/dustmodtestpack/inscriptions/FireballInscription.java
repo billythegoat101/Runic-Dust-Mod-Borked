@@ -1,14 +1,14 @@
 package dustmodtestpack.inscriptions;
 
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntitySmallFireball;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.Potion;
-import net.minecraft.src.PotionEffect;
-import net.minecraft.src.Vec3;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntitySmallFireball;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.MathHelper;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.Vec3;
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 import dustmod.InscriptionEvent;

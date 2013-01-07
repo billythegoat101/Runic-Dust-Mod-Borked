@@ -6,9 +6,9 @@ package dustexample.examplerunes;
 
 import java.util.List;
 
-import net.minecraft.src.DamageSource;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import dustmod.EntityDust;
 import dustmod.PoweredEvent;
 import dustmod.TileEntityDust;

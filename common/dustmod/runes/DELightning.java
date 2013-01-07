@@ -6,8 +6,13 @@ package dustmod.runes;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *

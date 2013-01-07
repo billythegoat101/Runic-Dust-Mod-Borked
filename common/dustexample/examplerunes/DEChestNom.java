@@ -6,13 +6,13 @@ package dustexample.examplerunes;
 
 import java.util.List;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntityChest;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.World;
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 import dustmod.TileEntityDust;
@@ -149,7 +149,7 @@ public class DEChestNom extends DustEvent
             for(EntityItem ei:items)
             {
                 //Getting the actual ItemStack of the dropped item.
-                ItemStack item = ei.item;
+                ItemStack item = ei./*item*/func_92014_d();
                 
                 //Loop through all the slots in the chest
                 for(int i = 0; i < tec.getSizeInventory() && item.stackSize > 0; i++)

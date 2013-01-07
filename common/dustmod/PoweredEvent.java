@@ -8,11 +8,11 @@ import java.util.List;
 
 import dustmod.runes.DEPowerRelay;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntityFurnace;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 /**
  *
@@ -90,7 +90,7 @@ public abstract class PoweredEvent extends DustEvent
                     EntityItem ei = (EntityItem)i;
                     ei.attackEntityFrom(null, -20);
                     //                ei.delayBeforeCanPickup = 20;
-                    ItemStack is = ei.item;
+                    ItemStack is = ei./*item*/func_92014_d();
 
                     if (TileEntityFurnace.getItemBurnTime(is) != 0)
                     {

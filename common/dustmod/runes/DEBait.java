@@ -12,15 +12,15 @@ import dustmod.EntityAIDustFollowBaitRune;
 import dustmod.EntityDust;
 import dustmod.PoweredEvent;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityCreature;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityList;
-import net.minecraft.src.EntityLookHelper;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.ai.EntityLookHelper;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *
@@ -90,7 +90,7 @@ public class DEBait extends PoweredEvent
             if (o instanceof EntityItem)
             {
                 EntityItem ei = (EntityItem)o;
-                ItemStack item = ei.item;
+                ItemStack item = ei./*item*/func_92014_d();
 
                 if (item.itemID == Item.monsterPlacer.shiftedIndex)
                 {

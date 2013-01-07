@@ -4,8 +4,8 @@
  */
 package dustexample;
 
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;

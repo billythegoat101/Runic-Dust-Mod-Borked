@@ -6,8 +6,13 @@ package dustmod.runes;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *
@@ -75,7 +80,7 @@ public class DESpawnTorch extends DustEvent
         if(e.data[0] == 1 && e.ticksExisted%10 == 0){
             List<EntityItem> items = this.getItems(e);
             for(EntityItem i:items){
-                ItemStack item = i.item;
+                ItemStack item = i./*item*/func_92014_d();
                 if(item.itemID == Item.dyePowder.shiftedIndex && e.data[1] != item.getItemDamage()){
                     e.data[1] = item.getItemDamage();
                     int[] color = this.getColor(item.getItemDamage());

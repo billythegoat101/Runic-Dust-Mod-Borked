@@ -1,7 +1,7 @@
 package dustmod;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

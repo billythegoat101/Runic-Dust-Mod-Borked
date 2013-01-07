@@ -7,19 +7,19 @@ package dustmod;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockSand;
-import net.minecraft.src.DamageSource;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityFallingSand;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.MovingObjectPosition;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Vec3;
-import net.minecraft.src.World;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSand;
+import net.minecraft.util.DamageSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 /**
  *

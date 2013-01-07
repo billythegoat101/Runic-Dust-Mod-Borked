@@ -9,11 +9,11 @@ import java.util.List;
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 
-import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *

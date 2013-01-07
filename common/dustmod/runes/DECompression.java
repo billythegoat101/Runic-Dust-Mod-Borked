@@ -7,11 +7,11 @@ package dustmod.runes;
 import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;
-import net.minecraft.src.Block;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *

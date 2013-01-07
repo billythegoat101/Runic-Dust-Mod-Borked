@@ -4,8 +4,12 @@
  */
 package dustmod.runes;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *
@@ -64,7 +68,7 @@ public class DESpawnerCollector extends DustEvent
         if (e.worldObj.getBlockId(fin[0], fin[1], fin[2]) == Block.mobSpawner.blockID)
         {
         	TileEntityMobSpawner tems =(TileEntityMobSpawner)e.worldObj.getBlockTileEntity(fin[0], fin[1], fin[2]);
-        	String entID = tems.getMobID();
+        	String entID = tems./*getMobID*/func_92015_a();
             tems.invalidate();
 
             if (e.ticksExisted > 100)
@@ -72,9 +76,9 @@ public class DESpawnerCollector extends DustEvent
                 e.worldObj.setBlockWithNotify(fin[0], fin[1], fin[2], 0);
                 EntityItem ei = new EntityItem(e.worldObj);
                 ei.setPosition(e.posX, e.posY - e.yOffset, e.posZ);
-                ei.item = new ItemStack(Block.mobSpawner, 1);
+                ei./*item*/func_92013_a(new ItemStack(Block.mobSpawner, 1));
                 NBTTagCompound nbt = new NBTTagCompound();
-                ei.item.setTagCompound(nbt);
+                ei./*item*/func_92014_d().setTagCompound(nbt);
                 nbt.setString("EntityID", entID);
                 e.worldObj.spawnEntityInWorld(ei);
                 e.worldObj.markBlockForUpdate(fin[0], fin[1], fin[2]);

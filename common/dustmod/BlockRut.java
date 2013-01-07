@@ -6,22 +6,22 @@ package dustmod;
 
 import java.util.Random;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockContainer;
-import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemBlock;
-import net.minecraft.src.ItemSpade;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.Vec3;
-import net.minecraft.src.World;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.MathHelper;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *

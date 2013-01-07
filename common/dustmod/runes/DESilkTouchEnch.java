@@ -7,6 +7,12 @@ package dustmod.runes;
 import java.util.List;
 
 import dustmod.*;
+import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.src.*;
 
 /**
@@ -38,7 +44,7 @@ public class DESilkTouchEnch extends DustEvent
 
         for (EntityItem i: sacrifice)
         {
-            ItemStack is = i.item;
+            ItemStack is = i./*item*/func_92014_d();
 
             if (is.itemID == Item.pickaxeDiamond.shiftedIndex || is.itemID == Item.shovelDiamond.shiftedIndex)
             {

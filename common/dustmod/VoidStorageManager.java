@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.FMLLog;
 
 public class VoidStorageManager {

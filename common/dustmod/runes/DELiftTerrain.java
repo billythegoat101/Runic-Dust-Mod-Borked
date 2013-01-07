@@ -7,7 +7,13 @@ package dustmod.runes;
 import java.util.List;
 
 import dustmod.*;
-import net.minecraft.src.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 /**
  *

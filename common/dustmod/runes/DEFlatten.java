@@ -4,8 +4,11 @@
  */
 package dustmod.runes;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *

@@ -7,10 +7,10 @@ package dustmod.runes;
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;

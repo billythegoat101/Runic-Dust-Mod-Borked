@@ -4,8 +4,10 @@
  */
 package dustmod.runes;
 
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *

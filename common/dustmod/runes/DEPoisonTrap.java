@@ -6,8 +6,14 @@ package dustmod.runes;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *

@@ -1,10 +1,10 @@
 package dustmod;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -57,7 +57,7 @@ public class GenericHandler implements ICraftingHandler{
 	@ForgeSubscribe
 	public void onItemPickup(EntityItemPickupEvent evt){
 		EntityPlayer player = evt.entityPlayer;
-		ItemStack item = evt.item.item;
+		ItemStack item = evt.item./*item*/func_92014_d();
 		
 		int dust = item.getItemDamage();
 		if(item.itemID == DustMod.idust.shiftedIndex && 
@@ -73,7 +73,7 @@ public class GenericHandler implements ICraftingHandler{
 			}
 		}
 		
-		evt.item.item = InscriptionManager.onItemPickup(player, item);
+		evt.item./*item*/func_92013_a(InscriptionManager.onItemPickup(player, item));
 	}
 	
 	

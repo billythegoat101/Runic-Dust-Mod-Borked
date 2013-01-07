@@ -8,8 +8,8 @@ import java.util.List;
 
 import dustmod.DustEvent;
 import dustmod.EntityDust;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *

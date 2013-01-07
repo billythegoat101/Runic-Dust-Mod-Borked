@@ -1,9 +1,22 @@
-package net.minecraft.src;
+package net.minecraft.entity;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+//TODO: use Forge events instead of this Bouncer
 import cpw.mods.fml.common.FMLLog;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntitySenses;
+import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.EntityAITaskEntry;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.src.ModLoader;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class DustModBouncer {
 	public static void setEntityToAttack(EntityCreature e, Entity target)
