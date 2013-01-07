@@ -1,10 +1,12 @@
 package dustmod;
 
-import net.minecraft.src.RenderEngine;
+import net.minecraft.client.renderer.RenderEngine;
 
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLTextureFX;
+
+import dustmod.DustMod;
 
 public class TextureGlowFX extends FMLTextureFX {
 

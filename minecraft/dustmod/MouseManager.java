@@ -1,11 +1,13 @@
 package dustmod;
 
-import net.minecraft.src.EntityClientPlayerMP;
-import net.minecraft.src.GuiScreen;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiScreen;
 
 import org.lwjgl.input.Mouse;
 
 import cpw.mods.fml.client.FMLClientHandler;
+
+import dustmod.PacketHandler;
 
 public class MouseManager {
 	

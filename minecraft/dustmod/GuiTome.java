@@ -7,10 +7,10 @@ package dustmod;
 import java.io.File;
 import java.util.Random;
 
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
 import net.minecraft.src.ModLoader;
 
 import org.lwjgl.opengl.GL11;
@@ -18,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 import dustmod.DustManager;
 import dustmod.DustMod;
 import dustmod.DustShape;
+import dustmod.InscriptionEvent;
+import dustmod.InscriptionManager;
 
 /**
  *

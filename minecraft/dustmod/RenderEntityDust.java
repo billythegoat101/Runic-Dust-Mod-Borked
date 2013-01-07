@@ -14,16 +14,16 @@ import static net.minecraftforge.common.ForgeDirection.WEST;
 import java.util.HashMap;
 import java.util.Random;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockAnvil;
-import net.minecraft.src.Entity;
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.Render;
-import net.minecraft.src.RenderHelper;
-import net.minecraft.src.RenderManager;
-import net.minecraft.src.Tessellator;
-import net.minecraft.src.TileEntityBeacon;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAnvil;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer;
+import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
