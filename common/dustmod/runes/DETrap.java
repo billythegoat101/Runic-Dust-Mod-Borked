@@ -10,7 +10,7 @@ import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;
 
-import net.minecraft.src.Entity;
+import net.minecraft.entity.Entity;
 
 /**
  *

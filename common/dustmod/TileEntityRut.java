@@ -6,12 +6,12 @@ package dustmod;
 
 import java.util.Arrays;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockSand;
-import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Packet;
-import net.minecraft.src.TileEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSand;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  *

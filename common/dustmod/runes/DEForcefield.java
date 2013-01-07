@@ -6,8 +6,11 @@ package dustmod.runes;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.util.MathHelper;
+
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *

@@ -20,10 +20,15 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.GLAllocation;
-import net.minecraft.src.ITexturePack;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.texturepacks.ITexturePack;
 import net.minecraft.src.ModLoader;
-import net.minecraft.src.RenderEngine;
+import net.minecraft.client.renderer.RenderEngine;
+
+import dustmod.DustItemManager;
+import dustmod.DustMod;
+import dustmod.DustShape;
+import dustmod.InscriptionEvent;
 
 /**
  *

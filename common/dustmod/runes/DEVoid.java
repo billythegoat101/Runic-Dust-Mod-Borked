@@ -11,9 +11,9 @@ import dustmod.DustEvent;
 import dustmod.EntityDust;
 import dustmod.VoidStorageManager;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 
 /**
  *
@@ -58,7 +58,7 @@ public class DEVoid extends DustEvent
         {
             for (EntityItem i: sacrifice)
             {
-            	VoidStorageManager.addItemToVoidInventory(e, i.item);
+            	VoidStorageManager.addItemToVoidInventory(e, i./*item*/func_92014_d());
                 i.setDead();
             }
 

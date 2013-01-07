@@ -4,7 +4,12 @@
  */
 package dustmod;
 
-import net.minecraft.src.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 
 /**
  *
@@ -43,7 +48,7 @@ public class Sacrifice
 
         if (ent instanceof EntityItem)
         {
-            ItemStack in = ((EntityItem)ent).item;
+            ItemStack in = ((EntityItem)ent)./*item*/func_92014_d();
 
             if (in.itemID == itemType.itemID && itemType.stackSize > 0 &&
                     (in.getItemDamage() == itemType.getItemDamage() || itemType.getItemDamage() == -1))
@@ -95,7 +100,7 @@ public class Sacrifice
 
         if (ent instanceof EntityItem && itemType != null)
         {
-            ItemStack in = ((EntityItem)ent).item;
+            ItemStack in = ((EntityItem)ent)./*item*/func_92014_d();
 
             if (in.itemID == itemType.itemID &&
                     (in.getItemDamage() == itemType.getItemDamage() || itemType.getItemDamage() == -1))

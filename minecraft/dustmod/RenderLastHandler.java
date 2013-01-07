@@ -6,7 +6,7 @@ package dustmod;
 
 import java.util.HashMap;
 
-import net.minecraft.src.RenderGlobal;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 //forge

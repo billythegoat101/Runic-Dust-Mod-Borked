@@ -6,8 +6,15 @@ package dustmod.runes;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *

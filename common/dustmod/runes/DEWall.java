@@ -6,12 +6,12 @@ package dustmod.runes;
 
 import java.util.List;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockContainer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityFallingSand;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;

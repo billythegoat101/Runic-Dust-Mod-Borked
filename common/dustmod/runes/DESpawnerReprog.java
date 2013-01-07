@@ -11,12 +11,12 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityList;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntityMobSpawner;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 
 /**
  *
@@ -126,7 +126,7 @@ public class DESpawnerReprog extends DustEvent
             if (o instanceof EntityItem)
             {
                 EntityItem ei = (EntityItem)o;
-                ItemStack item = ei.item;
+                ItemStack item = ei./*item*/func_92014_d();
 
                 if (item.itemID == Item.monsterPlacer.shiftedIndex)
                 {

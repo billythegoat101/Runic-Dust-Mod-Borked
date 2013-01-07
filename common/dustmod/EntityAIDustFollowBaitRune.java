@@ -4,10 +4,10 @@
  */
 package dustmod;
 
-import net.minecraft.src.DustModBouncer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityAIBase;
-import net.minecraft.src.EntityCreature;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.EntityCreature;
 
 /**
  *

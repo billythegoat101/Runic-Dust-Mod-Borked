@@ -6,8 +6,17 @@ package dustmod.runes;
 
 import java.util.List;
 
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+
 import dustmod.*;
-import net.minecraft.src.*;
 
 /**
  *
@@ -49,7 +58,7 @@ public class DEXP extends PoweredEvent
             if (o instanceof EntityItem)
             {
                 EntityItem ei = (EntityItem)o;
-                ItemStack item = ei.item;
+                ItemStack item = ei./*item*/func_92014_d();
 
                 if (item.itemID == DustMod.getNegator().shiftedIndex)
                 {
@@ -143,7 +152,7 @@ public class DEXP extends PoweredEvent
             if (et instanceof EntityItem)
             {
                 et.setDead();
-                this.addFuel(e, ((EntityItem)et).item.stackSize * 10);
+                this.addFuel(e, ((EntityItem)et)./*item*/func_92014_d().stackSize * 10);
             }
 
             if (et instanceof EntityLiving && et != player)

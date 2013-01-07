@@ -8,11 +8,11 @@ import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;
 import dustmod.TileEntityDust;
-import net.minecraft.src.Block;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 /**
  *

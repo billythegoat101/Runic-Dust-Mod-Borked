@@ -7,7 +7,17 @@ package dustmod.runes;
 import java.util.List;
 
 import dustmod.*;
+import net.minecraft.block.Block;
+import net.minecraft.entity.DustModBouncer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.src.*;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.EnumSkyBlock;
 
 /**
  *
@@ -104,11 +114,11 @@ public class DEFog extends PoweredEvent
                         ec.setPathToEntity(null);
                         DustModBouncer.setHasAttacked(ec, true);
                         ec.attackTime = 30;
-
-                        if (player != null)
+                        //TODO: Is this necessary as the Attack target is already set differently? TEST THIS!
+                        /*if (player != null)
                         {
                         	DustModBouncer.setCantSee(ec, player);
-                        }
+                        }*/
 
 //                                ec.worldObj.setEntityState(ec, (byte)2);
 ////                                ec.setBeenAttacked();

@@ -4,9 +4,9 @@
  */
 package dustexample.examplerunes;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 import dustmod.TileEntityDust;

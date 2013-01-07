@@ -7,9 +7,9 @@ package dustmod;
 import org.lwjgl.opengl.GL11;
 
 import dustmod.EntityBlock;
-import net.minecraft.src.Entity;
-import net.minecraft.src.RenderFallingSand;
-import net.minecraft.src.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.RenderFallingSand;
+import net.minecraft.client.renderer.entity.RenderManager;
 
 /**
  *

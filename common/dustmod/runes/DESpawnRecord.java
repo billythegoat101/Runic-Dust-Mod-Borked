@@ -9,9 +9,9 @@ import java.util.Random;
 import dustmod.DustEvent;
 import dustmod.EntityDust;
 
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *

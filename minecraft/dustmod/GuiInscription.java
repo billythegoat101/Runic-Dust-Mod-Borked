@@ -1,16 +1,22 @@
 package dustmod;
 
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Packet5PlayerInventory;
-import net.minecraft.src.Slot;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet5PlayerInventory;
+import net.minecraft.inventory.Slot;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import dustmod.DustItemManager;
+import dustmod.DustMod;
+import dustmod.InscriptionGuiContainer;
+import dustmod.InventoryInscription;
+import dustmod.ItemInk;
+import dustmod.PacketHandler;
 
 public class GuiInscription extends GuiContainer {
 

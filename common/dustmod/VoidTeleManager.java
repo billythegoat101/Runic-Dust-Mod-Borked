@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.Entity;
-import net.minecraft.src.World;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLLog;
 
 public class VoidTeleManager {

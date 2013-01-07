@@ -1,11 +1,11 @@
 package dustmodtestpack.inscriptions;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EnumMovingObjectType;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.MovingObjectPosition;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
 import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;

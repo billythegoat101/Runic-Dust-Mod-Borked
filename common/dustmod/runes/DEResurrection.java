@@ -11,13 +11,13 @@ import dustmod.DustEvent;
 import dustmod.DustMod;
 import dustmod.EntityDust;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityList;
-import net.minecraft.src.EntitySkeleton;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *
@@ -78,16 +78,16 @@ public class DEResurrection extends DustEvent
                 break;
             }
 
-            int id = ei.item.itemID;
-            int m = ei.item.getItemDamage();
+            int id = ei./*item*/func_92014_d().itemID;
+            int m = ei./*item*/func_92014_d().getItemDamage();
             int amount;
             int amt = amount = 2;
 
             for (EntityItem ent: itemstacks)
             {
-                if (ent.item.itemID == id && ent.item.getItemDamage() == m)
+                if (ent./*item*/func_92014_d().itemID == id && ent./*item*/func_92014_d().getItemDamage() == m)
                 {
-                    amount -= ent.item.stackSize;
+                    amount -= ent./*item*/func_92014_d().stackSize;
                 }
             }
 
@@ -95,14 +95,14 @@ public class DEResurrection extends DustEvent
             {
                 for (EntityItem ent: itemstacks)
                 {
-                    if (ent.item.itemID == id && ent.item.getItemDamage() == m)
+                    if (ent./*item*/func_92014_d().itemID == id && ent./*item*/func_92014_d().getItemDamage() == m)
                     {
-                        while (amt > 0 && ent.item.stackSize > 0)
+                        while (amt > 0 && ent./*item*/func_92014_d().stackSize > 0)
                         {
                             amt--;
-                            ent.item.stackSize--;
+                            ent./*item*/func_92014_d().stackSize--;
 
-                            if (ent.item.stackSize <= 0)
+                            if (ent./*item*/func_92014_d().stackSize <= 0)
                             {
                                 ent.setDead();
                             }
